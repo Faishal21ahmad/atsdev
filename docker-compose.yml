@@ -1,0 +1,51 @@
+version: '3.9'
+services:
+  ats_dev:
+    container_name: ats_dev
+    image: ats_dev
+    build: .
+    restart: always
+    volumes:
+      - ./apps:/app
+    ports:
+      - "7772:80"
+      - "774:443"
+      - "774:443/udp"
+    tty: true
+    networks:
+      laravel:
+        ipv4_address: 172.20.0.2
+        
+  mariadb_ats:
+    image: mariadb:latest
+    container_name: mariadb_ats
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: C354XqQW
+      MYSQL_DATABASE: ATS_db_V1
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      laravel:
+        ipv4_address: 172.20.0.3
+
+  phpmyadmin_ats:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_ats
+    restart: always
+    environment:
+      PMA_HOST: 172.20.0.3
+      PMA_USER: root
+      PMA_PASSWORD: C354XqQW
+    ports:
+      - "7773:80"
+    networks:
+      laravel:
+        ipv4_address: 172.20.0.4
+
+networks:
+  laravel:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
