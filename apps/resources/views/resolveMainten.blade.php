@@ -1,10 +1,5 @@
-
-
 <x-layoutdsbd title="{{ $title }}" user="{{ $user['name'] }}" role="{{ $user['role'] }}">
-    
-    
-    <x-btnback href="javascript:history.back()" />
-   
+    <x-btnback href="javascript:history.back()" />   
     <div id="containerInfo" class="container mt-2 w-full  text-gray-900 dark:text-gray-100 grid grid-cols-1 lg:grid-cols-2 gap-4">
         <!-- Informasi Maintenance -->
         <div id="infoMainten" class="">
@@ -44,9 +39,7 @@
                 <p class="text-md">{{ $dataMainten->status_mainten }}</p>
             </div>
             <div class="w-full h-1 my-4 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
-
         </div> 
-    
 
         <!-- Gambar -->
         <div id="default-carousel" class="relative w-full hover:cursor-pointer  " data-carousel="slide">
@@ -59,14 +52,12 @@
                             <img src="{{ asset('storage/fileMainten/' . $file->nameFile) }}" class="absolute object-cover h-full w-full -translate-x-1/2 -translate-y-1/2 top-[50%] left-1/2" alt="...">
                         </div>
                     @endforeach
-                
                 @else
-                     <!-- Item 1 -->
-                     <div class="duration-700 ease-in-out" data-carousel-item>
+                    <!-- Item 1 -->
+                    <div class="duration-700 ease-in-out" data-carousel-item>
                         <img src="{{ asset('storage/Default.jpg') }}" class="absolute object-cover h-full w-full -translate-x-1/2 -translate-y-1/2 top-[50%] left-1/2" alt="...">
                     </div>
                 @endif
-
             </div>
             <!-- Slider indicators -->
             <div class="absolute z-30 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse bottom-5 left-1/2">
@@ -76,7 +67,6 @@
                     @endforeach
                 @endif
             </div>
-         
 
             <!-- Slider controls -->
             <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
@@ -108,14 +98,8 @@
                     </button>
                 </div>
             @endif
-
-            
-            
         </div>
     </div>
-
-
-
 
     <form id="formResolveMainten" action="{{ route('mainten.resolve.action') }}" method="post" enctype="multipart/form-data">
         @csrf
@@ -214,10 +198,8 @@
                         </svg>
                     </label>
                 </li>
-                
             </ul>
         </div>
-
         <br>
         <button type="submit" class="py-1 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">Finish</button>
     </form>
@@ -327,8 +309,6 @@
             });
         });
 
-
-
     // Fungsi untuk validasi client-side
     function validateForm() {
         const codeMaintence = document.getElementById('codeMaintence').value.trim();
@@ -359,7 +339,6 @@
                 }
             }
         }
-
 
         // Cek apakah ada radio button yang dipilih
         let isstatusResolveChecked = false;
@@ -452,46 +431,6 @@
                 }
             });
         });
-
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     const modal = document.getElementById("imageModal");
-        //     const openModalBtn = document.getElementById("openModalBtn");
-        //     const closeModalBtn = document.getElementById("closeModalBtn");
-
-        //     // Buka Modal
-        //     openModalBtn.addEventListener("click", function () {
-        //         modal.classList.remove("hidden");
-        //     });
-
-        //     // Tutup Modal
-        //     closeModalBtn.addEventListener("click", function () {
-        //         modal.classList.add("hidden");
-        //     });
-
-        //     // Carousel dalam Modal
-        //     let slides = document.querySelectorAll(".carousel-slide");
-        //     let currentIndex = 0;
-
-        //     function showSlide(index) {
-        //         slides.forEach((slide, i) => {
-        //             slide.classList.toggle("hidden", i !== index);
-        //         });
-        //     }
-
-        //     document.getElementById("prevSlide").addEventListener("click", function () {
-        //         currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-        //         showSlide(currentIndex);
-        //     });
-
-        //     document.getElementById("nextSlide").addEventListener("click", function () {
-        //         currentIndex = (currentIndex + 1) % slides.length;
-        //         showSlide(currentIndex);
-        //     });
-
-        //     // Tampilkan slide pertama
-        //     showSlide(currentIndex);
-        // });
-
 
     </script>
 </x-layoutdsbd>

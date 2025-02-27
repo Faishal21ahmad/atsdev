@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Department;
+use Exception;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Department;
 use Illuminate\Http\Request;
+use App\Imports\AccountsImport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 class AccountCtrl extends Controller
@@ -116,11 +119,11 @@ class AccountCtrl extends Controller
         ]);
     }
 
-    public function actionResetPassword(Request $request){
+    public function actionResetAccount(Request $request){
         $validator = Validator::make($request->all(), [
-            'ResetID' => 'required',
+            'idexedata' => 'required',
         ], [
-            'ResetID.required' => 'ID tidak boleh kosong',
+            'idexedata.required' => 'ID tidak boleh kosong',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -137,16 +140,86 @@ class AccountCtrl extends Controller
             'updated_at' => now(),
         ];
 
-        User::where('id', $request->ResetID)->update($dataUpdateAccount);
+        User::where('id', $request->idexedata)->update($dataUpdateAccount);
 
         return redirect()->route('account')->with('alert', [
             'type' => 'success',
             'messages' => ['Reset Account berhasil dilakukan'],
         ]);
     }
+    public function actionDisableAccount(Request $request){
+        $validator = Validator::make($request->all(), [
+            'idexedata' => 'required',
+        ], [
+            'idexedata.required' => 'ID tidak boleh kosong',
+        ]);
 
-    public function actionDeleteAccount($id){
-        User::where('id', $id)->delete();
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ])->onlyInput();
+        }
+
+        $dataUpdateAccount = [
+            'is_active' => 0,
+            'is_disable' => 1,
+            'updated_at' => now(),
+        ];
+
+        User::where('id', $request->idexedata)->update($dataUpdateAccount);
+
+        return redirect()->route('account')->with('alert', [
+            'type' => 'success',
+            'messages' => ['Disable Account berhasil dilakukan'],
+        ]);
+    }
+
+    public function actionEnableAccount(Request $request){
+        $validator = Validator::make($request->all(), [
+            'idexedata' => 'required',
+        ], [
+            'idexedata.required' => 'ID tidak boleh kosong',
+        ]);
+
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ])->onlyInput();
+        }
+
+        $dataUpdateAccount = [
+            'is_disable' => 0,
+            'updated_at' => now(),
+        ];
+
+        User::where('id', $request->idexedata)->update($dataUpdateAccount);
+
+        return redirect()->route('account')->with('alert', [
+            'type' => 'success',
+            'messages' => ['Enable Account berhasil dilakukan'],
+        ]);
+    }
+
+
+    public function actionDeleteAccount(Request $request){
+        $validator = Validator::make($request->all(), [
+            'deleteID' =>'required',
+        ], [
+            'deleteID.required' => 'ID tidak boleh kosong',
+        ]);
+         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ])->onlyInput();
+        }
+
+        User::where('id', $request->deleteID)->delete();
 
         return redirect()->route('account')->with('alert', [
             'type' => 'success',
@@ -154,53 +227,23 @@ class AccountCtrl extends Controller
         ]);
     }
 
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function importAccountExcel(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        try {
+            Excel::import(new AccountsImport, $request->file('file'));
+            return back()->with('alert', [
+                'type' => 'success',
+                'messages' => ['Data berhasil diimport!'],
+            ]);
+        } catch (Exception $e) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => ['Import Gagal', $e->getMessage()],
+            ]);
+        }
     }
 }

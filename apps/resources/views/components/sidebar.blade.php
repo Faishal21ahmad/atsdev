@@ -51,6 +51,14 @@
                     <span class="flex-1 ms-3 whitespace-nowrap">Vendor</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ url('maintenence') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" fill="currentColor"  viewBox="0 0 24 24">
+                        <path d="M18,7c0-2.757-2.243-5-5-5h-.171c-.413-1.164-1.525-2-2.829-2h-2c-1.304,0-2.416,.836-2.829,2h-.171C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5H13c.068,0,.131-.017,.199-.02-1.652-1.466-2.699-3.598-2.699-5.98,0-.34,.029-.672,.07-1H5c-.552,0-1-.447-1-1s.448-1,1-1h6.083c.295-.727,.697-1.398,1.181-2H5c-.552,0-1-.447-1-1s.448-1,1-1H14.657c1.004-.551,2.135-.9,3.343-.975v-3.025Zm-5,2H5c-.552,0-1-.447-1-1s.448-1,1-1H13c.552,0,1,.447,1,1s-.448,1-1,1Zm10.332,10.63l-.55-.317c.129-.418,.218-.853,.218-1.312s-.089-.895-.218-1.312l.55-.317c.479-.276,.643-.887,.367-1.366-.276-.478-.887-.643-1.365-.367l-.544,.314c-.605-.652-1.393-1.126-2.289-1.331v-.621c0-.552-.448-1-1-1h0c-.552,0-1,.448-1,1v.621c-.896,.205-1.685,.678-2.289,1.331l-.544-.314c-.478-.276-1.09-.111-1.365,.367-.276,.479-.112,1.09,.367,1.366l.55,.317c-.129,.418-.218,.853-.218,1.312s.089,.895,.218,1.312l-.55,.317c-.479,.276-.643,.887-.367,1.366,.276,.478,.887,.643,1.365,.367l.544-.314c.605,.652,1.393,1.126,2.289,1.331v.621c0,.552,.448,1,1,1h0c.552,0,1-.448,1-1v-.621c.896-.205,1.685-.678,2.289-1.331l.544,.314c.478,.276,1.09,.111,1.365-.367,.276-.479,.112-1.09-.367-1.366Zm-4.832-.13c-.827,0-1.5-.673-1.5-1.5s.673-1.5,1.5-1.5,1.5,.673,1.5,1.5-.673,1.5-1.5,1.5Z"/>
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Maintenance</span>
+                </a>
+            </li>
             
             <div class="w-full h-5 border-b-4 border-gray-200 dark:border-gray-700 rounded-md"></div>
 
@@ -80,11 +88,18 @@
             </li>
             
             <div class="w-full h-5 border-b-4 border-gray-200 dark:border-gray-700 rounded-md"></div>
-            
+            <li>
+                <a href="{{ url('profile') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9,12c-3.309,0-6-2.691-6-6S5.691,0,9,0s6,2.691,6,6-2.691,6-6,6Zm4.27,7.48c-.813,.813-1.27,1.915-1.27,3.065v1.455h1.455c1.15,0,2.252-.457,3.065-1.27l6.807-6.807c.897-.897,.897-2.353,0-3.25-.897-.897-2.353-.897-3.25,0l-6.807,6.807Zm-3.27,3.065c0-1.692,.659-3.283,1.855-4.479l2.376-2.376c-1.476-1.06-3.279-1.691-5.231-1.691C4.038,14,0,18.038,0,23c0,.552,.448,1,1,1H10v-1.455Z"/>
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Pofile</span>
+                </a>
+            </li>
             <li>
                 <a href="{{ url('logout') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
                     </svg>
                     <span class="flex-1 ms-3 whitespace-nowrap">Log Out</span>
                 </a>

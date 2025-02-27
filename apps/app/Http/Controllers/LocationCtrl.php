@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Location;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use App\Imports\LocationsImport;
 use PhpParser\Node\Expr\FuncCall;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 class LocationCtrl extends Controller
 {
@@ -27,14 +30,6 @@ class LocationCtrl extends Controller
         ];
 
         return view('location', $data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -109,30 +104,6 @@ class LocationCtrl extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function actionDeleteLocation(Request $request, $id)
@@ -163,5 +134,24 @@ class LocationCtrl extends Controller
             'type' => 'success',
             'messages' => ['Location deleted !!'],
         ]);
+    }
+
+    public function importLocationExcel(Request $request){
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx,csv'
+        ]);
+
+        try {
+            Excel::import(new LocationsImport, $request->file('file'));
+            return back()->with('alert', [
+                'type' => 'success',
+                'messages' => ['Data berhasil diimport!'],
+            ]);
+        } catch (Exception $e) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => ['Import Gagal',$e->getMessage()],
+            ]);
+        }
     }
 }

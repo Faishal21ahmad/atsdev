@@ -37,7 +37,11 @@
             <div class="w-1/2 lg:w-1/4">
                 <div class="flex flex-col items-start gap-2 text-lg">
                     <button id="updateItemAssetButton" data-modal-target="updateItemAssetModal" data-modal-toggle="updateItemAssetModal" class="p-2 w-full text-center border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">Edit</button>
-                    <button class="p-2 w-full  text-center border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">Print QR</button>
+                    
+                    <a href="{{ route('printbycode', $dataItem->code_assets ) }}"  target="blank"  class="w-full">
+                        <button class="p-2 w-full  text-center border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">Print QR</button>
+                    </a>
+                   
                     @if ($dataItem->status == 'Available')
                         <a href="{{ route('mainten.report', $dataItem->code_assets ) }}" 
                             class="p-2 w-full text-center border-2 bg-slate-100 hover:bg-slate-200 
@@ -57,10 +61,7 @@
             <p class="text-lg text-gray-900 dark:text-gray-100">{{ $dataItem->description ?? 'Unknown'}}</p>
         </div>
         <div id="qr" class="flex-non lg:hidden block">
-           
-            
         </div>
-       
     </div>
     <div class="w-full h-1 my-4 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
 
@@ -112,7 +113,7 @@
                                 {{ $item->vendor->vendor_name ?? 'Reported' }}
                             </td>
                             <td class="py-3 px-1 whitespace-nowrap">
-                                <a href="{{ route('mainten', $item->code_maintenance ) }}" class="py-1 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">
+                                <a href="{{ route('showDetailMainten', $item->code_maintenance ) }}" class="py-1 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">
                                     Detail
                                 </a>
                             </td>

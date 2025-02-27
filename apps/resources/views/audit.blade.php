@@ -56,7 +56,7 @@
                                 <td class="py-3 px-1 whitespace-nowrap">50</td>
                                 <td class="py-3 px-1 whitespace-nowrap">Rp {{ number_format($item['total'], 0, ',', '.') }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">Success</td>
-                                <td class="py-3 px-1 whitespace-nowrap">
+                                <td class="py-2 px-1 whitespace-nowrap">
                                     <form action="{{ route('checkin.remove.action', $item['id']) }}" method="POST">
                                         @csrf
                                         <button type="submit" class="px-4 sm:px-5 py-1 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Delete</button>
@@ -110,7 +110,7 @@
                             <td class="py-3 px-1 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->created_at)->format('d / m / Y') }} </td>
                             <td class="py-3 px-1 whitespace-nowrap">50</td>
                             <td class="py-3 px-1 whitespace-nowrap">Success</td>
-                            <td class="py-3 px-1 whitespace-nowrap">
+                            <td class="py-2 px-1 whitespace-nowrap">
                                 <form action="{{ route('checkin.remove.action', $item['id']) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="px-4 sm:px-5 py-1 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Delete</button>
@@ -166,7 +166,7 @@
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item->masterAsset->asset_name }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item->itemAsset->code_assets }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item->status_mainten }}</td>
-                                <td class="py-3 px-1 whitespace-nowrap">
+                                <td class="py-2 px-1 whitespace-nowrap">
                                     <form action="{{ route('checkin.remove.action', $item['id']) }}" method="POST">
                                         @csrf
                                         <button type="submit" class="px-4 sm:px-5 py-1 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Delete</button>
@@ -178,10 +178,5 @@
                 </tbody>
             </table>
         </div>
-      
     </section>
-
-    
-
-
 </x-layoutdsbd>

@@ -1,10 +1,13 @@
 <x-layoutdsbd title="{{ $title }}" user="{{ $user['name'] }}" role="{{ $user['role'] }}">
     
-    
     <div class="flex gap-4 justify-between">
         <x-btnback href="{{ route('asset') }}" /> 
         <div class="h-full">
             <button id="updateMasterAssetButton" data-modal-target="updateMasterAssetModal" data-modal-toggle="updateMasterAssetModal"  class="px-8 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">EDIT</button>
+        
+            <a href="{{ route('print', $assetMaster->slug ) }}" target="blank" >
+                <button class="px-8 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Print QR</button>
+            </a>
         </div>
     </div>
 
@@ -122,9 +125,7 @@
         </div>
     </div>
 
-
 {{-- ============================================== --}}
-
 <div class="container mx-auto w-full mt-5">
     {{-- {{ $location }} --}}
 
@@ -199,10 +200,6 @@
         </div>
     </div>
 
-
-
-
-
     @if ($assetMaster->image_name != null)
     <!-- Main modal -->
     <div id="modal_imgMasterAsset" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -237,13 +234,9 @@
         </div>
     </div>
     @endif
-
 </div>
 
-
-
 <script>
-
     // Fungsi untuk validasi client-side
     function validateForm() {
         const slug = document.getElementById('slug').value;
@@ -261,8 +254,6 @@
         if (slug === '') {
             errors.push('Slug tidak boleh kosong');
         }
-
-     
 
         if (nameAsset === '') {
             errors.push('Name Asset tidak boleh kosong');
@@ -303,9 +294,6 @@
                 errors.push('Ukuran file terlalu besar (maks. 2 MB)');
             }
         }
-
-
-
         return errors;
     }
 
@@ -323,9 +311,5 @@
             this.submit();
         }
     });
-
 </script>
-
-
-
 </x-layoutdsbd>

@@ -1,5 +1,6 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 const plugin = require("tailwind-scrollbar");
+import { Html5QrcodeScanner } from "html5-qrcode";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -17,12 +18,14 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                
             },
         },
     },
     plugins: [
         require('flowbite/plugin'),
         require('tailwind-scrollbar')({ preferredStrategy: 'pseudoelements' }),
+        
         
     ],
     

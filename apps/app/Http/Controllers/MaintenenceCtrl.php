@@ -2,22 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Vendor;
 use App\Models\ItemAsset;
+use App\Models\FileMainten;
 use App\Models\Maintenance;
 use App\Services\DocService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\FileMainten;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class MaintenenceCtrl extends Controller
 {
+    public function showMaintenence()
+    {
+        $user = Auth::user();
+        $mainten = Maintenance::active()->get();
+        $maintenReportProgress = Maintenance::getReportedAndProgresMaintenances();
+        $maintenFinish = Maintenance::getMaintenFinish();
+        $data = [
+            'title' => 'Maintenance',
+            'maintenReportProgress' => $maintenReportProgress,
+            'mainten'  => $mainten,
+            'maintenFinish' => $maintenFinish,
+            'user' => [
+                'name' => $user->username,
+                'role' => $user->department->department_name,
+                ]
+            ];
+        return view('maintenance', $data);
+    }
     /**
      * Display a listing of the resource.
      */
-    public function showMaintenence(string $codeMainten)
+    public function showDetailMaintenence(string $codeMainten)
     {
         $user = Auth::user();
         $mainten = Maintenance::getByCodeMainten($codeMainten)->firstOrFail();
@@ -28,9 +49,8 @@ class MaintenenceCtrl extends Controller
         $fileProblem = $fileProblem->isEmpty() ? null : $fileProblem;
         $fileRepaire = $fileRepaire->isEmpty() ? null : $fileRepaire;
         
-        
         $data = [
-            'title' => 'Maintenance',
+            'title' => 'Detail Maintenance',
             'mainten'  => $mainten,
             'fileProblem' => $fileProblem,
             'fileRepaire' => $fileRepaire,
@@ -39,13 +59,20 @@ class MaintenenceCtrl extends Controller
                 'role' => $user->department->department_name,
                 ]
         ];
-        return view('maintenance', $data);
+        return view('detailmaintenance', $data);
     }
 
     public function showReportMaintenence(string $codeAsset)
     {
         $user = Auth::user();
-        $ItemAsset = ItemAsset::getBycodeItemAssets($codeAsset)->firstOrFail();
+        $ItemAsset = ItemAsset::getBycodeItemAssets($codeAsset)->first();
+
+        if(!$ItemAsset){
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => ['Code '.$codeAsset.' Tidak Ditemukan'],
+            ]);
+        }
 
         $data = [
             'title' => 'Report Maintenance',
@@ -247,53 +274,98 @@ class MaintenenceCtrl extends Controller
         ]);
     }
 
-  
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function refreshSchedule()
     {
-        //
-    }
+        DB::beginTransaction(); // Mulai transaksi database
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        try {
+            $items = ItemAsset::whereIn('status', ['Available', 'Maintenance'])->get();
+            
+            $countReported = 0; // Variabel untuk menghitung jumlah item yang dibuatkan laporan
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+            foreach ($items as $item) {
+                // Cek jika location_id kosong atau tidak ada
+                if (empty($item->location_id)) {
+                    // Batalkan transaksi dan kembalikan pesan error
+                    DB::rollBack();
+                    return back()->with('alert', [
+                        'type' => 'danger',
+                        'messages' => [
+                            "Data item asset dengan code: {$item->code_assets}, name: {$item->masterAsset->asset_name}, location belum di-setting."
+                        ],
+                    ]);
+                }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+                // Ambil master asset terkait
+                $masterAsset = $item->masterAsset;
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+                if ($masterAsset && $masterAsset->interval_maintence) {
+                    // Cari maintenance terakhir untuk item ini
+                    $latestMaintenance = Maintenance::where('item_asset_id', $item->id)
+                        ->latest('created_at')
+                        ->first();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+                    // Tentukan tanggal referensi
+                    $referenceDate = $latestMaintenance 
+                        ? $latestMaintenance->created_at 
+                        : $item->created_at;
+
+                    // Hitung tanggal maintenance berikutnya
+                    $nextMaintenanceDate = Carbon::parse($referenceDate)
+                        ->addMonths($masterAsset->interval_maintence);
+                    
+                    $documentCode = DocService::generateDocumentCodeMaintenance();
+
+                    // Jika sudah melewati interval, buat maintenance baru
+                    if (Carbon::now() >= $nextMaintenanceDate) {
+                        Maintenance::create([
+                            'code_maintenance' => $documentCode, 
+                            'item_asset_id' => $item->id,
+                            'master_asset_id' => $masterAsset->id,
+                            'location_id' => $item->location_id,
+                            'report_type' => 'Maintenance',
+                            'status_mainten' => 'Reported',
+                            'problem_detail' => 'Routine maintenance report',
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+
+                        // Update status item ke Maintenance
+                        $item->update(['status' => 'Maintenance']);
+
+                        $countReported++; // Tambahkan ke count jika berhasil dibuatkan laporan
+                    }
+                }
+            }
+
+            // Commit transaksi jika semua berhasil
+            DB::commit();
+
+            // Tampilkan pesan sesuai jumlah item yang dibuatkan laporan
+            if ($countReported > 0) {
+                $message = "Berhasil membuat $countReported laporan maintenance.";
+            } else {
+                $message = "Belum ada asset maintenance yang perlu dibuatkan laporan.";
+            }
+
+            return back()->with('alert', [
+                'type' => $countReported > 0 ? 'success' : 'alert', // Tipe alert (success jika ada laporan, info jika tidak ada)
+                'messages' => [$message], // Pesan yang ditampilkan
+            ]);
+
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi error
+            DB::rollBack();
+
+            // Log error untuk debugging
+            Log::error('Error in refreshSchedule: ' . $e->getMessage());
+
+            // Tampilkan pesan error umum
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => ['Terjadi kesalahan saat memproses data. Silakan coba lagi.'],
+            ]);
+        }
     }
 }

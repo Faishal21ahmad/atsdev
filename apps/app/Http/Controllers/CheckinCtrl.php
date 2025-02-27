@@ -8,12 +8,14 @@ use App\Models\MasterAsset;
 use Illuminate\Support\Str;
 use App\Services\DocService;
 use Illuminate\Http\Request;
+use App\Imports\CheckinImport;
 use Illuminate\Support\Facades\DB;
 use App\Models\CheckinMasterDetail;
 use Illuminate\Support\Facades\Auth;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class CheckinCtrl extends Controller
 {
@@ -39,7 +41,6 @@ class CheckinCtrl extends Controller
     }
 
     // Menampilkan halaman check-in
-  
     // Menambahkan asset ke keranjang
     public function actionAddCheckinCart(Request $request)
     {
@@ -61,7 +62,6 @@ class CheckinCtrl extends Controller
             'messages' => [],
         ]);
 
-
         // return redirect()->route('showCheckIn')->with('success', 'Asset berhasil ditambahkan ke keranjang!');
     }
 
@@ -81,110 +81,123 @@ class CheckinCtrl extends Controller
     }
 
     public function actionSaveCheckinCart(Request $request){
-    // Validasi data
-    // $request->validate([
-    //     'description' => 'required|string',
-    //     'total' => 'required|numeric',
-    // ]);
+        // Validasi data
+        // $request->validate([
+        //     'description' => 'required|string',
+        //     'total' => 'required|numeric',
+        // ]);
 
-    // Ambil data cart dari session
-    $cart = session()->get('cart', []);
+        // Ambil data cart dari session
+        $cart = session()->get('cart', []);
 
-    // Jika keranjang kosong, kembalikan ke halaman sebelumnya dengan pesan error
-    if (count($cart) == 0) {
-        return back()->with('alert', [
-            'type' => 'danger',
-            'messages' => ['Keranjang kosong, tidak ada asset yang dipilih.'],
-        ])->onlyInput();
-    }
-
-    // Mulai database transaction
-    DB::beginTransaction();
-
-    try {
-        // Generate kode checkin
-        $docCode = DocService::generateDocumentCodeCheckin();
-
-        // Data Checkin
-        $dataCheckin = [
-            'codecheckin' => $docCode,
-            'description' => $request->description,
-            'total' => $request->total,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ];
-
-        // Input data Checkin ke tabel checkin
-        $checkin = Checkin::create($dataCheckin);
-
-        // Loop data cart
-        foreach ($cart as $item) {
-            // Proses Master Asset
-            $dataMasterAsset = MasterAsset::updateOrCreate(
-                ['slug' => $item['slug']],
-                [
-                    'asset_name' => $item['nameAsset'],
-                    'slug' => $item['slug'] ?? Str::slug($item['nameAsset']),
-                    'updated_at' => now(),
-                ]
-            );
-
-            // Update current_stock secara manual
-            $dataMasterAsset->current_stock += $item['quantity'];
-            $dataMasterAsset->save();
-
-            // Data Checkin Master Detail
-            $dataCheckinMasterDetail = CheckinMasterDetail::create([
-                'check_in_id' => $checkin->id,
-                'master_asset_id' => $dataMasterAsset->id,
-                'quantity' => $item['quantity'],
-                'unit_price' => $item['unitPrice'],
-                'sub_total' => $item['quantity'] * $item['unitPrice'],
-                'created_at' => now(),
-            ]);
-
-            // Looping sebanyak nilai $item['quantity']
-            $itemAssets = [];
-            for ($i = 0; $i < $item['quantity']; $i++) {
-                $codeAsset = DocService::generateCodeAssets();
-
-                $qrPath = 'fileQR/' . $codeAsset . '.svg';
-                QrCode::size(300)->format('svg')->generate($codeAsset, storage_path('app/public/' . $qrPath));
-
-                $itemAssets[] = [
-                    'master_asset_id' => $dataMasterAsset->id,
-                    'checkin_master_detail_id' => $dataCheckinMasterDetail->id,
-                    'code_assets' => $codeAsset, // Generate kode unik untuk setiap item
-                    'status' => 'Available',
-                    'condition' => $item['condition'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-
-            // Bulk insert untuk item asset
-            ItemAsset::insert($itemAssets);
+        // Jika keranjang kosong, kembalikan ke halaman sebelumnya dengan pesan error
+        if (count($cart) == 0) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => ['Keranjang kosong, tidak ada asset yang dipilih.'],
+            ])->onlyInput();
         }
 
-        // Commit transaksi
-        DB::commit();
+        // Mulai database transaction
+        DB::beginTransaction();
 
-        // Hapus session cart
-        session()->forget('cart');
+        try {
+            // Generate kode checkin
+            $docCode = DocService::generateDocumentCodeCheckin();
 
-        return redirect()->route('asset')->with('alert', [
-            'type' => 'success',
-            'messages' => ['Check IN Berhasil'],
-        ]);
-    } catch (\Exception $e) {
-        // Rollback transaksi jika terjadi error
-        DB::rollBack();
-        return back()->with('alert', [
-            'type' => 'danger',
-            'messages' => ['Terjadi kesalahan: ' . $e->getMessage()],
-        ]);
+            // Data Checkin
+            $dataCheckin = [
+                'codecheckin' => $docCode,
+                'description' => $request->description,
+                'total' => $request->total,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            // Input data Checkin ke tabel checkin
+            $checkin = Checkin::create($dataCheckin);
+
+            // Loop data cart
+            foreach ($cart as $item) {
+                // Proses Master Asset
+                $dataMasterAsset = MasterAsset::updateOrCreate(
+                    ['slug' => $item['slug']],
+                    [
+                        'asset_name' => $item['nameAsset'],
+                        'slug' => $item['slug'] ?? Str::slug($item['nameAsset']),
+                        'updated_at' => now(),
+                    ]
+                );
+
+                // Update current_stock secara manual
+                $dataMasterAsset->current_stock += $item['quantity'];
+                $dataMasterAsset->save();
+
+                // Data Checkin Master Detail
+                $dataCheckinMasterDetail = CheckinMasterDetail::create([
+                    'check_in_id' => $checkin->id,
+                    'master_asset_id' => $dataMasterAsset->id,
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['unitPrice'],
+                    'sub_total' => $item['quantity'] * $item['unitPrice'],
+                    'created_at' => now(),
+                ]);
+
+                // Looping sebanyak nilai $item['quantity']
+                $itemAssets = [];
+                for ($i = 0; $i < $item['quantity']; $i++) {
+                    $codeAsset = DocService::generateCodeAssets();
+
+                    $qrPath = 'fileQR/' . $codeAsset . '.svg';
+                    QrCode::size(300)->format('svg')->generate($codeAsset, storage_path('app/public/' . $qrPath));
+
+                    $itemAssets[] = [
+                        'master_asset_id' => $dataMasterAsset->id,
+                        'checkin_master_detail_id' => $dataCheckinMasterDetail->id,
+                        'code_assets' => $codeAsset, // Generate kode unik untuk setiap item
+                        'status' => 'Available',
+                        'condition' => $item['condition'],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+                // Bulk insert untuk item asset
+                ItemAsset::insert($itemAssets);
+            }
+            // Commit transaksi
+            DB::commit();
+
+            // Hapus session cart
+            session()->forget('cart');
+
+            return redirect()->route('asset')->with('alert', [
+                'type' => 'success',
+                'messages' => ['Check IN Berhasil'],
+            ]);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi error
+            DB::rollBack();
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => ['Terjadi kesalahan: ' . $e->getMessage()],
+            ]);
+        }
     }
-}
+
+    // Import data excel ke cart
+    public function importCheckinExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            Excel::import(new CheckinImport, $request->file('file'));
+            return back()->with('success', 'Data berhasil diimport ke cart!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error: ' . $e->getMessage());
+        }
+    }
 
 
     // Menghitung total harga
@@ -197,53 +210,6 @@ class CheckinCtrl extends Controller
         return $total;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
 
 

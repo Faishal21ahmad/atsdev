@@ -1,4 +1,5 @@
 <x-layoutdsbd title="{{ $title }}" user="{{ $user['name'] }}" role="{{ $user['role'] }}">
+    <x-btnback href="javascript:history.back()" />
     <div class="container mx-auto w-full mt-2">
         <div class="flex w-full justify-between dark:text-white ">
             <div class="">
@@ -14,7 +15,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="container mx-auto w-full mt-2">
         <div id="content" class="grid gap-4 lg:grid-cols-2 grid-cols-1">
@@ -141,13 +141,5 @@
                 }
             }
         });
-
-
-
-
-
-
-
     </script>
-
 </x-layoutdsbd>

@@ -1,5 +1,4 @@
 <x-layoutaut title="{{ $title }}">
-
     <!-- Header -->
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 class="text-center text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100">ATC</h2>
@@ -118,6 +117,4 @@
             combineOTP();
         });
     </script>
-    
-
 </x-layoutaut>

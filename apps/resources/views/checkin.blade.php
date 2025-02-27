@@ -1,8 +1,5 @@
-{{-- <div class="container mx-auto w-full text-slate-300">
-    {{ $assetMaster }}
-</div> --}}
-
 <x-layoutdsbd title="{{ $title }}" user="{{ $user['name'] }}" role="{{ $user['role'] }}">
+    <x-btnback href="javascript:history.back()" />
     <div class="container mx-auto w-full mt-2">
         <div class="flex w-full justify-between dark:text-white ">
             <div class="">
@@ -15,8 +12,9 @@
                     @csrf
                     <input id="totalHarga" type="text" hidden name="total" value="{{ $total }}">
                     <input  type="text" hidden name="description" id="descriptionInput" value="" >
-                    <button type="submit" id="checkOUT" class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Check OUT</button>
+                    <button type="submit" id="checkOUT" class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Check IN</button>
                 </form>
+                <button type="button" id="addButton" data-modal-target="ModalImportCheckin" data-modal-toggle="ModalImportCheckin" class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white  ">Import</button>
                 <button type="button" id="addButton" data-modal-target="ModalAdd" data-modal-toggle="ModalAdd" class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white  lg:hidden">Add Asset</button>
             </div>
         </div>
@@ -82,7 +80,6 @@
                                     </div>
                                 </div>
                                 
-                                
                                 <div class="col-span-2">
                                     <label for="unitPrice" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit Price</label>
                                     <input type="number" name="unitPrice" id="unitPrice" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="Enter Unit Price">
@@ -106,29 +103,60 @@
         </div>
     </div>
 
-<!-- ModalAdd -->
-<div id="ModalAdd" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-md max-h-full">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-            <!-- Modal header -->
-            <div class="flex items-center justify-between p-3 md:p-4 border-b rounded-t dark:border-gray-600 border-gray-200">
-                <h3 id="labelModal" class="text-lg font-semibold text-gray-900 dark:text-white">Add Asset</h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="ModalAdd">
-                    <svg class="w-3 h-3" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div id="formModal" class="p-4 space-y-2">
-                <!-- Form akan diisi oleh JavaScript -->
+    <!-- ModalAdd -->
+    <div id="ModalAdd" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-3 md:p-4 border-b rounded-t dark:border-gray-600 border-gray-200">
+                    <h3 id="labelModal" class="text-lg font-semibold text-gray-900 dark:text-white">Add Asset</h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="ModalAdd">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div id="formModal" class="p-4 space-y-2">
+                    <!-- Form akan diisi oleh JavaScript -->
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <!-- ImportModal -->
+    <div id="ModalImportCheckin" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-3 md:p-4 border-b rounded-t dark:border-gray-600 border-gray-200">
+                    <h3 id="labelModal" class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Import Checkin
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="ModalImportCheckin">
+                        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <form id="importForm" action="{{ route('checkin.import.action') }}" class="p-3 md:p-4 space-y-4" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
+                        <input name="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+                    </div>
+                    <button type="submit" class="text-white  bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-600 dark:hover:bg-gray-800 dark:focus:ring-gray-800 w-full">
+                        Submit Checkin
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div> 
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -181,48 +209,46 @@
     });
 
     // Fungsi untuk validasi client-side
-function validateForm() {
-    const nameAsset = document.getElementById('nameAsset').value.trim();
-    const unitPrice = document.getElementById('unitPrice').value.trim();
-    const quantity = document.getElementById('quantity').value.trim();
-    const condition = document.getElementById('condition').value.trim();
-    const errors = [];
+    function validateForm() {
+        const nameAsset = document.getElementById('nameAsset').value.trim();
+        const unitPrice = document.getElementById('unitPrice').value.trim();
+        const quantity = document.getElementById('quantity').value.trim();
+        const condition = document.getElementById('condition').value.trim();
+        const errors = [];
 
-    if (nameAsset === '') {
-        errors.push('Name Asset tidak boleh kosong');
-    }
-
-    if (unitPrice === '') {
-        errors.push('Unit Price tidak boleh kosong');
-    } else if (isNaN(unitPrice) || unitPrice <= 0) {
-        errors.push('Unit Price harus berupa angka positif');
-    }
-
-    if (quantity === '') {
-        errors.push('Quantity tidak boleh kosong');
-    } else if (isNaN(quantity) || quantity <= 0) {
-        errors.push('Quantity harus berupa angka positif');
-    }
-
-    if (condition === '') {
-        errors.push('Condition tidak boleh kosong');
-    }
-
-    return errors;
-}
-
-document.addEventListener('submit', function (e) {
-    if (e.target && e.target.id === 'inputCheckin') {
-        e.preventDefault();
-        const errors = validateForm();
-        if (errors.length > 0) {
-            showAlert('danger', errors);
-        } else {
-            e.target.submit();
+        if (nameAsset === '') {
+            errors.push('Name Asset tidak boleh kosong');
         }
+
+        if (unitPrice === '') {
+            errors.push('Unit Price tidak boleh kosong');
+        } else if (isNaN(unitPrice) || unitPrice <= 0) {
+            errors.push('Unit Price harus berupa angka positif');
+        }
+
+        if (quantity === '') {
+            errors.push('Quantity tidak boleh kosong');
+        } else if (isNaN(quantity) || quantity <= 0) {
+            errors.push('Quantity harus berupa angka positif');
+        }
+
+        if (condition === '') {
+            errors.push('Condition tidak boleh kosong');
+        }
+
+        return errors;
     }
-});
 
-
+    document.addEventListener('submit', function (e) {
+        if (e.target && e.target.id === 'inputCheckin') {
+            e.preventDefault();
+            const errors = validateForm();
+            if (errors.length > 0) {
+                showAlert('danger', errors);
+            } else {
+                e.target.submit();
+            }
+        }
+    });
 </script>
 </x-layoutdsbd>

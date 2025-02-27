@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use App\Imports\VendorsImport;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 class VendorCtrl extends Controller
@@ -131,53 +135,22 @@ class VendorCtrl extends Controller
         ]);
     }
 
+    public function importVendorExcel(Request $request){
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx,csv'
+        ]);
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        try {
+            Excel::import(new VendorsImport, $request->file('file'));
+            return back()->with('alert', [
+                'type' => 'success',
+                'messages' => ['Data berhasil diimport!'],
+            ]);
+        } catch (Exception $e) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => ['Import Gagal',$e->getMessage()],
+            ]);
+        }
     }
 }

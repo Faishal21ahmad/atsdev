@@ -5,7 +5,7 @@
         <div class="w-3/4">
             <div class="flex gap-4">
                 <p id="codeasset" class="text-lg">{{ $ItemAsset->code_assets }}</p>
-                <p id="location" class="text-lg">{{ $ItemAsset->location->location_name  }}</p>
+                <p id="location" class="text-lg">{{ $ItemAsset->location->location_name ?? 'location Unknown'  }}</p>
             </div>
             <p id="nameasset" class="text-3xl font-semibold">{{ $ItemAsset->masterAsset->asset_name }}</p>
         </div>
@@ -118,8 +118,6 @@
                 });
             });
         });
-
-
 
         document.addEventListener("DOMContentLoaded", function () {
             const fileInput = document.getElementById("fileReport");

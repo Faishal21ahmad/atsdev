@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
+import { Html5QrcodeScanner } from "html5-qrcode";
 
 export default defineConfig({
     plugins: [

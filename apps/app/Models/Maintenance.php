@@ -78,4 +78,33 @@ class Maintenance extends Model
         return $query->whereNull('deleted_at');
     }
 
+    public static function getMaintenReported()
+    {
+        return self::where('status_mainten', 'Reported')
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+    public static function getMaintenProses()
+    {
+        return self::where('status_mainten', 'Proses')
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+    public static function getMaintenFinish()
+    {
+        return self::where('status_mainten', 'Finish')
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+    public static function getReportedAndProgresMaintenances(){
+        return self::where('status_mainten', 'Reported')
+            ->orWhere('status_mainten', 'Proses')
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
 }

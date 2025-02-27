@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('username', 50);
             $table->string('email', 100)->unique();
             $table->string('password', 255);
+            $table->string('bio', 100)->nullable();
             $table->boolean('is_active')->default(false);
+            $table->boolean('is_disable')->default(false);
             $table->timestamps();
             $table->softDeletes();
             

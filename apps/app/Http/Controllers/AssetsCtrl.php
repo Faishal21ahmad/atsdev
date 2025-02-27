@@ -134,7 +134,7 @@ class AssetsCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => ['Code '.$codeAsset.' Tidak Ditemukan'],
-            ])->onlyInput('email');
+            ]);
         }
 
         $dataMaintenenceItem = Maintenance::getByIditemAsset($dataItem->id);

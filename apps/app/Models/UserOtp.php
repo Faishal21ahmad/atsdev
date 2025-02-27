@@ -22,7 +22,6 @@ class UserOtp extends Model
     {
         // Cari OTP berdasarkan kode OTP dan user_id
         $otp = self::where('otp_code', $otpCode)
-            ->where('user_id', $userId)
             ->first();
 
         // Jika OTP tidak ditemukan
@@ -62,11 +61,12 @@ class UserOtp extends Model
         return [
             'success' => true,
             'message' => 'OTP valid.',
+            'purpose' => $otp->purpose,
         ];
     }
 
     // Fungsi untuk generate OTP dan menyimpannya ke database
-    public static function generateOtp($userId, $purpose = 'verify_email')
+    public static function generateOtp($userId, $purpose)
     {
         $otpCode = rand(100000, 999999); // Buat kode OTP 6 digit
         $otpExpires = now()->addMinutes(10); // Masa berlaku OTP

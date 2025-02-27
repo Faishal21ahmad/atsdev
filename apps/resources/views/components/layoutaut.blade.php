@@ -15,8 +15,6 @@
     <!-- JavaScript -->
     <div id="js-alert-container" class="fixed flex flex-col top-4 right-4 sm:top-6 sm:right-6 z-50 w-full max-w-xs sm:max-w-sm gap-4"></div>
 
-
-  
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         {{ $slot }}
     </div>
@@ -57,10 +55,6 @@
                 this.submit();
             }
         });
-
-
-
-
 
         // Fungsi untuk menampilkan alert
         function showAlert(type, messages) {
@@ -118,16 +112,6 @@
             };
             return titles[type] || 'Info';
         }
-        
-        // setTimeout(function () {
-        //     let alert = document.getElementById('alert');
-        //     alert.classList.add('opacity-0'); // Menghilangkan opacity (fade out)
-            
-        //     setTimeout(() => {
-        //         alert.classList.add('hidden'); // Sembunyikan setelah animasi selesai
-        //     }, 500);
-        // }, 5000);
-
     </script>  
 
 </body>

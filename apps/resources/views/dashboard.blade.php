@@ -26,33 +26,23 @@
         </div>
     </div>
 
-
     <!-- Maintenance Schedule -->
     <div class="container mx-auto w-full mt-5">
         <h1 class="text-xl py-2 font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap overflow-hidden">Maintenance Schedule</h1>
         {{-- {{ $getReportedMaintenances }} --}}
-        <div class="w-full h-64 overflow-x-auto
-            scrollbar-thin
-            scrollbar-thumb-rounded-full 
-            scrollbar-thumb-slate-300 
-            scrollbar-track-slate-100 
-            dark:scrollbar-thumb-slate-300 
-            dark:scrollbar-track-slate-500
-            scrollbar-thumb-rounded-full 
-            scrollbar-track-rounded-full
-        ">
+        <div class="w-full h-64 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300  scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full  scrollbar-track-rounded-full">
             <table class="table-auto w-full text-left ">
                 <thead class="">
-                    <tr class="sticky top-0 bg-white dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700 rounded-md ">
-                        <th class="py-3 px-2 whitespace-nowrap text-gray-900 dark:text-gray-100">No</th>
-                        <th class="py-3 px-2 whitespace-nowrap text-gray-900 dark:text-gray-100">Code Mainten</th>
-                        <th class="py-3 px-2 whitespace-nowrap text-gray-900 dark:text-gray-100">Code Asset</th>
-                        <th class="py-3 px-2 whitespace-nowrap text-gray-900 dark:text-gray-100">Asset Name</th>
-                        <th class="py-3 px-2 whitespace-nowrap text-gray-900 dark:text-gray-100">Location</th>
-                        <th class="py-3 px-2 whitespace-nowrap text-gray-900 dark:text-gray-100">Date Report</th>
-                        <th class="py-3 px-2 whitespace-nowrap text-gray-900 dark:text-gray-100">Type Report</th>
-                        <th class="py-3 px-2 whitespace-nowrap text-gray-900 dark:text-gray-100">Problem Detail</th>
-                        <th class="py-3 px-2 whitespace-nowrap text-gray-900 dark:text-gray-100">Action</th>
+                    <tr class="sticky top-0 bg-slate-100 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 shadow-md">
+                        <th class="py-3 px-2 whitespace-nowrap text-center">No</th>
+                        <th class="py-3 px-2 whitespace-nowrap">Code Mainten</th>
+                        <th class="py-3 px-2 whitespace-nowrap">Code Asset</th>
+                        <th class="py-3 px-2 whitespace-nowrap">Asset Name</th>
+                        <th class="py-3 px-2 whitespace-nowrap">Location</th>
+                        <th class="py-3 px-2 whitespace-nowrap">Date Report</th>
+                        <th class="py-3 px-2 whitespace-nowrap">Type Report</th>
+                        <th class="py-3 px-2 whitespace-nowrap">Problem Detail</th>
+                        <th class="py-3 px-2 whitespace-nowrap">Action</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -63,15 +53,15 @@
                             $twoDaysLater = \Carbon\Carbon::now()->addDays(2);
                             $isHighlighted = $createdAt->lessThanOrEqualTo($twoDaysAgo) || $createdAt->greaterThanOrEqualTo($twoDaysLater);
                         @endphp
-                    <tr class="border-b border-gray-200 dark:border-gray-700 rounded-md {{ $isHighlighted ? 'bg-red-300 dark:bg-red-700' : '' }}">
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-gray-800 dark:text-gray-200">{{ $loop->iteration }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-gray-800 dark:text-gray-200">{{ $maintenance->code_maintenance ?? 'Unknown' }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-gray-800 dark:text-gray-200">{{ $maintenance->itemasset->code_assets ?? 'Unknown' }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-gray-800 dark:text-gray-200">{{ $maintenance->masterasset->asset_name ?? 'Unknown' }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-gray-800 dark:text-gray-200">{{ $maintenance->location->location_name ?? 'Unknown' }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-gray-800 dark:text-gray-200">{{ \Carbon\Carbon::parse($maintenance->created_at)->format('d/m/Y') }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-gray-800 dark:text-gray-200">{{ $maintenance->report_type }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-gray-800 dark:text-gray-200">{{ $maintenance->problem_detail ?? '-' }}</td>
+                    <tr class="border-b text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700 rounded-md {{ $isHighlighted ? 'bg-red-300 dark:bg-red-700' : '' }}">
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-center">{{ $loop->iteration }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->code_maintenance ?? 'Unknown' }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->itemasset->code_assets ?? 'Unknown' }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->masterasset->asset_name ?? 'Unknown' }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->location->location_name ?? 'Unknown' }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ \Carbon\Carbon::parse($maintenance->created_at)->format('d/m/Y') }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->report_type }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->problem_detail ?? '-' }}</td>
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">
                             <a href="{{ route('mainten.resolve', $maintenance->code_maintenance ) }}" class="py-2 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">do the task</a>
                         </td>
@@ -87,9 +77,7 @@
             </table>
         </div>
     </div>
-    
-{{-- <x-table :columns="$columns" :data="$data" />
---}}
+
 
 <!-- Stok Low -->
 <div class="container mx-auto w-full mt-5">
@@ -104,26 +92,26 @@
                 scrollbar-track-rounded-full">
         <table class="table-auto w-full text-left">
             <thead>
-                <tr class="border-b border-gray-200 dark:border-gray-700 rounded-md">
-                    <th class="py-3 px-1 whitespace-nowrap text-gray-900 dark:text-gray-100">No</th>
-                    <th class="py-3 px-1 whitespace-nowrap text-gray-900 dark:text-gray-100">Name Asset</th>
-                    <th class="py-3 px-1 whitespace-nowrap text-gray-900 dark:text-gray-100">Stock</th>
-                    <th class="py-3 px-1 whitespace-nowrap text-gray-900 dark:text-gray-100">Action</th>
+                <tr class="sticky text-gray-900 dark:text-gray-100 top-0 bg-slate-100 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700 shadow-md">
+                    <th class="py-3 px-1 whitespace-nowrap text-center">No</th>
+                    <th class="py-3 px-1 whitespace-nowrap">Name Asset</th>
+                    <th class="py-3 px-1 whitespace-nowrap">Stock</th>
+                    <th class="py-3 px-1 whitespace-nowrap">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($getLowStockAssets as $index => $item)
-                    <tr class="border-b border-gray-200 dark:border-gray-700 rounded-md">
-                        <td class="py-3 px-1 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ $loop->iteration }}</td>
-                        <td class="py-3 px-1 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ $item->asset_name }}</td>
-                        <td class="py-3 px-1 whitespace-nowrap text-gray-800 dark:text-gray-200">{{ $item->current_stock }}</td>
+                    <tr class="text-gray-800 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 rounded-md">
+                        <td class="py-3 px-1 whitespace-nowrap text-center">{{ $loop->iteration }}</td>
+                        <td class="py-3 px-1 whitespace-nowrap">{{ $item->asset_name }}</td>
+                        <td class="py-3 px-1 whitespace-nowrap">{{ $item->current_stock }}</td>
                         <td class="py-3 px-1 whitespace-nowrap">
                             <a href="#" class="py-2 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">do the task</a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="text-center py-3 text-gray-500 dark:text-gray-400">
+                        <td colspan="4" class="text-center py-3 text-gray-500 dark:text-gray-400">
                             No Stok Low found.
                         </td>
                     </tr>
@@ -190,9 +178,5 @@
             };
             return titles[type] || 'Info';
         }
-
-
-
 </script>
-
 </x-layoutdsbd>

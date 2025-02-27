@@ -25,7 +25,9 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'bio',
         'is_active',
+        'is_disable'
     ];
 
     protected $dates = ['deleted_at'];
@@ -73,6 +75,25 @@ class User extends Authenticatable
 
     public static function getAllUsers()
     {
-        return self::select('id', 'role_id', 'department_id', 'username', 'email', 'is_active', 'created_at', 'updated_at')->whereNull('deleted_at')->get();
+        return self::select('id', 'role_id', 'department_id', 'username', 'email', 'is_active','is_disable', 'created_at', 'updated_at')->whereNull('deleted_at')->get();
+    }
+
+    public static function checkisActive($email)
+    {
+        $stats = self::select('is_active')->where('email', $email)->first();
+        if ($stats->is_active) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static function checkisDisable($email)
+    {
+        $stats = self::select('is_disable')->where('email', $email)->first();
+        if ($stats->is_disable) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

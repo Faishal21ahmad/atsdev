@@ -1,0 +1,120 @@
+vendor_name,contact,address,description
+Vendor A,0812-0000-0001,Jl. Merdeka No. 123 Jakarta,Supplier bahan baku elektronik
+Vendor B,0812-0000-0002,Jl. Sudirman No. 456 Bandung,Distributor alat tulis kantor
+Vendor C,0812-0000-0003,Jl. Gatot Subroto No. 789 Surabaya,Penyedia jasa logistik
+Vendor D,0812-0000-0004,Jl. Thamrin No. 101 Medan,Supplier bahan bangunan
+Vendor E,0812-0000-0005,Jl. Diponegoro No. 202 Yogyakarta,Distributor peralatan kantor
+Vendor F,0812-0000-0006,Jl. Pahlawan No. 303 Semarang,Penyedia jasa transportasi
+Vendor G,0812-0000-0007,Jl. Ahmad Yani No. 404 Malang,Supplier bahan kimia
+Vendor H,0812-0000-0008,Jl. Hayam Wuruk No. 505 Denpasar,Distributor peralatan medis
+Vendor I,0812-0000-0009,Jl. Gajah Mada No. 606 Makassar,Penyedia jasa IT
+Vendor J,0812-0000-0010,Jl. Sudirman No. 707 Palembang,Supplier bahan makanan
+Vendor K,0812-0000-0011,Jl. Merdeka No. 808 Balikpapan,Distributor peralatan olahraga
+Vendor L,0812-0000-0012,Jl. Thamrin No. 909 Manado,Penyedia jasa keamanan
+Vendor M,0812-0000-0013,Jl. Diponegoro No. 1010 Pekanbaru,Supplier bahan tekstil
+Vendor N,0812-0000-0014,Jl. Pahlawan No. 1111 Batam,Distributor peralatan elektronik
+Vendor O,0812-0000-0015,Jl. Ahmad Yani No. 1212 Samarinda,Penyedia jasa kebersihan
+Vendor P,0812-0000-0016,Jl. Hayam Wuruk No. 1313 Banjarmasin,Supplier bahan plastik
+Vendor Q,0812-0000-0017,Jl. Gajah Mada No. 1414 Pontianak,Distributor peralatan masak
+Vendor R,0812-0000-0018,Jl. Sudirman No. 1515 Jayapura,Penyedia jasa konstruksi
+Vendor S,0812-0000-0019,Jl. Merdeka No. 1616 Mataram,Supplier bahan kertas
+Vendor T,0812-0000-0020,Jl. Thamrin No. 1717 Kupang,Distributor peralatan listrik
+Vendor U,0812-0000-0021,Jl. Diponegoro No. 1818 Ambon,Penyedia jasa desain
+Vendor V,0812-0000-0022,Jl. Pahlawan No. 1919 Ternate,Supplier bahan logam
+Vendor W,0812-0000-0023,Jl. Ahmad Yani No. 2020 Kendari,Distributor peralatan pertanian
+Vendor X,0812-0000-0024,Jl. Hayam Wuruk No. 2121 Palu,Penyedia jasa pemasaran
+Vendor Y,0812-0000-0025,Jl. Gajah Mada No. 2222 Gorontalo,Supplier bahan kayu
+Vendor Z,0812-0000-0026,Jl. Sudirman No. 2323 Mamuju,Distributor peralatan kesehatan
+Vendor AA,0812-0000-0027,Jl. Merdeka No. 2424 Tidore,Penyedia jasa konsultasi
+Vendor AB,0812-0000-0028,Jl. Thamrin No. 2525 Sorong,Supplier bahan keramik
+Vendor AC,0812-0000-0029,Jl. Diponegoro No. 2626 Manokwari,Distributor peralatan laboratorium
+Vendor AD,0812-0000-0030,Jl. Pahlawan No. 2727 Fakfak,Penyedia jasa pelatihan
+Vendor AE,0812-0000-0031,Jl. Ahmad Yani No. 2828 Merauke,Supplier bahan karet
+Vendor AF,0812-0000-0032,Jl. Hayam Wuruk No. 2929 Biak,Distributor peralatan fotografi
+Vendor AG,0812-0000-0033,Jl. Gajah Mada No. 3030 Nabire,Penyedia jasa periklanan
+Vendor AH,0812-0000-0034,Jl. Sudirman No. 3131 Wamena,Supplier bahan kulit
+Vendor AI,0812-0000-0035,Jl. Merdeka No. 3232 Timika,Distributor peralatan musik
+Vendor AJ,0812-0000-0036,Jl. Thamrin No. 3333 Jayawijaya,Penyedia jasa pengiriman
+Vendor AK,0812-0000-0037,Jl. Diponegoro No. 3434 Boven Digoel,Supplier bahan kaca
+Vendor AL,0812-0000-0038,Jl. Pahlawan No. 3535 Asmat,Distributor peralatan pendingin
+Vendor AM,0812-0000-0039,Jl. Ahmad Yani No. 3636 Mappi,Penyedia jasa perawatan
+Vendor AN,0812-0000-0040,Jl. Hayam Wuruk No. 3737 Yahukimo,Supplier bahan kertas daur ulang
+Vendor AO,0812-0000-0041,Jl. Gajah Mada No. 3838 Pegunungan Bintang,Distributor peralatan kantor modern
+Vendor AP,0812-0000-0042,Jl. Sudirman No. 3939 Tolikara,Penyedia jasa desain grafis
+Vendor AQ,0812-0000-0043,Jl. Merdeka No. 4040 Sarmi,Supplier bahan baku tekstil
+Vendor AR,0812-0000-0044,Jl. Thamrin No. 4141 Keerom,Distributor peralatan elektronik canggih
+Vendor AS,0812-0000-0045,Jl. Diponegoro No. 4242 Waropen,Penyedia jasa konsultasi bisnis
+Vendor AT,0812-0000-0046,Jl. Pahlawan No. 4343 Supiori,Supplier bahan baku plastik
+Vendor AU,0812-0000-0047,Jl. Ahmad Yani No. 4444 Intan Jaya,Distributor peralatan medis modern
+Vendor AV,0812-0000-0048,Jl. Hayam Wuruk No. 4545 Deiyai,Penyedia jasa transportasi darat
+Vendor AW,0812-0000-0049,Jl. Gajah Mada No. 4646 Dogiyai,Supplier bahan baku logam
+Vendor AX,0812-0000-0050,Jl. Sudirman No. 4747 Puncak Jaya,Distributor peralatan pertanian modern
+Vendor AY,0812-0000-0051,Jl. Merdeka No. 4848 Mimika,Penyedia jasa pemasaran digital
+Vendor AZ,0812-0000-0052,Jl. Thamrin No. 4949 Paniai,Supplier bahan baku kayu
+Vendor BA,0812-0000-0053,Jl. Diponegoro No. 5050 Nduga,Distributor peralatan kesehatan modern
+Vendor BB,0812-0000-0054,Jl. Pahlawan No. 5151 Lanny Jaya,Penyedia jasa konsultasi keuangan
+Vendor BC,0812-0000-0055,Jl. Ahmad Yani No. 5252 Mamberamo Tengah,Supplier bahan baku karet
+Vendor BD,0812-0000-0056,Jl. Hayam Wuruk No. 5353 Yalimo,Distributor peralatan fotografi profesional
+Vendor BE,0812-0000-0057,Jl. Gajah Mada No. 5454 Mamberamo Raya,Penyedia jasa periklanan kreatif
+Vendor BF,0812-0000-0058,Jl. Sudirman No. 5555 Pegunungan Arfak,Supplier bahan baku kulit
+Vendor BG,0812-0000-0059,Jl. Merdeka No. 5656 Tambrauw,Distributor peralatan musik modern
+Vendor BH,0812-0000-0060,Jl. Thamrin No. 5757 Maybrat,Penyedia jasa pengiriman cepat
+Vendor BI,0812-0000-0061,Jl. Diponegoro No. 5858 Raja Ampat,Supplier bahan baku kaca
+Vendor BJ,0812-0000-0062,Jl. Pahlawan No. 5959 Sorong Selatan,Distributor peralatan pendingin modern
+Vendor BK,0812-0000-0063,Jl. Ahmad Yani No. 6060 Fakfak,Penyedia jasa perawatan gedung
+Vendor BL,0812-0000-0064,Jl. Hayam Wuruk No. 6161 Kaimana,Supplier bahan baku kertas daur ulang
+Vendor BM,0812-0000-0065,Jl. Gajah Mada No. 6262 Teluk Bintuni,Distributor peralatan kantor modern
+Vendor BN,0812-0000-0066,Jl. Sudirman No. 6363 Teluk Wondama,Penyedia jasa desain grafis kreatif
+Vendor BO,0812-0000-0067,Jl. Merdeka No. 6464 Manokwari Selatan,Supplier bahan baku tekstil berkualitas
+Vendor BP,0812-0000-0068,Jl. Thamrin No. 6565 Pegunungan Arfak,Distributor peralatan elektronik canggih
+Vendor BQ,0812-0000-0069,Jl. Diponegoro No. 6666 Tambrauw,Penyedia jasa konsultasi bisnis strategis
+Vendor BR,0812-0000-0070,Jl. Pahlawan No. 6767 Maybrat,Supplier bahan baku plastik berkualitas
+Vendor BS,0812-0000-0071,Jl. Ahmad Yani No. 6868 Raja Ampat,Distributor peralatan medis modern
+Vendor BT,0812-0000-0072,Jl. Hayam Wuruk No. 6969 Sorong Selatan,Penyedia jasa transportasi darat
+Vendor BU,0812-0000-0073,Jl. Gajah Mada No. 7070 Fakfak,Supplier bahan baku logam berkualitas
+Vendor BV,0812-0000-0074,Jl. Sudirman No. 7171 Kaimana,Distributor peralatan pertanian modern
+Vendor BW,0812-0000-0075,Jl. Merdeka No. 7272 Teluk Bintuni,Penyedia jasa pemasaran digital kreatif
+Vendor BX,0812-0000-0076,Jl. Thamrin No. 7373 Teluk Wondama,Supplier bahan baku kayu berkualitas
+Vendor BY,0812-0000-0077,Jl. Diponegoro No. 7474 Manokwari Selatan,Distributor peralatan kesehatan modern
+Vendor BZ,0812-0000-0078,Jl. Pahlawan No. 7575 Pegunungan Arfak,Penyedia jasa konsultasi keuangan
+Vendor CA,0812-0000-0079,Jl. Ahmad Yani No. 7676 Tambrauw,Supplier bahan baku karet berkualitas
+Vendor CB,0812-0000-0080,Jl. Hayam Wuruk No. 7777 Maybrat,Distributor peralatan fotografi profesional
+Vendor CC,0812-0000-0081,Jl. Gajah Mada No. 7878 Raja Ampat,Penyedia jasa periklanan kreatif
+Vendor CD,0812-0000-0082,Jl. Sudirman No. 7979 Sorong Selatan,Supplier bahan baku kulit berkualitas
+Vendor CE,0812-0000-0083,Jl. Merdeka No. 8080 Fakfak,Distributor peralatan musik modern
+Vendor CF,0812-0000-0084,Jl. Thamrin No. 8181 Kaimana,Penyedia jasa pengiriman cepat
+Vendor CG,0812-0000-0085,Jl. Diponegoro No. 8282 Teluk Bintuni,Supplier bahan baku kaca berkualitas
+Vendor CH,0812-0000-0086,Jl. Pahlawan No. 8383 Teluk Wondama,Distributor peralatan pendingin modern
+Vendor CI,0812-0000-0087,Jl. Ahmad Yani No. 8484 Manokwari Selatan,Penyedia jasa perawatan gedung
+Vendor CJ,0812-0000-0088,Jl. Hayam Wuruk No. 8585 Pegunungan Arfak,Supplier bahan baku kertas daur ulang
+Vendor CK,0812-0000-0089,Jl. Gajah Mada No. 8686 Tambrauw,Distributor peralatan kantor modern
+Vendor CL,0812-0000-0090,Jl. Sudirman No. 8787 Maybrat,Penyedia jasa desain grafis kreatif
+Vendor CM,0812-0000-0091,Jl. Merdeka No. 8888 Raja Ampat,Supplier bahan baku tekstil berkualitas
+Vendor CN,0812-0000-0092,Jl. Thamrin No. 8989 Sorong Selatan,Distributor peralatan elektronik canggih
+Vendor CO,0812-0000-0093,Jl. Diponegoro No. 9090 Fakfak,Penyedia jasa konsultasi bisnis strategis
+Vendor CP,0812-0000-0094,Jl. Pahlawan No. 9191 Kaimana,Supplier bahan baku plastik berkualitas
+Vendor CQ,0812-0000-0095,Jl. Ahmad Yani No. 9292 Teluk Bintuni,Distributor peralatan medis modern
+Vendor CR,0812-0000-0096,Jl. Hayam Wuruk No. 9393 Teluk Wondama,Penyedia jasa transportasi darat
+Vendor CS,0812-0000-0097,Jl. Gajah Mada No. 9494 Manokwari Selatan,Supplier bahan baku logam berkualitas
+Vendor CT,0812-0000-0098,Jl. Sudirman No. 9595 Pegunungan Arfak,Distributor peralatan pertanian modern
+Vendor CU,0812-0000-0099,Jl. Merdeka No. 9696 Tambrauw,Penyedia jasa pemasaran digital kreatif
+Vendor CV,0812-0000-0100,Jl. Thamrin No. 9797 Maybrat,Supplier bahan baku kayu berkualitas
+Vendor CW,0812-0000-0101,Jl. Diponegoro No. 9898 Raja Ampat,Distributor peralatan kesehatan modern
+Vendor CX,0812-0000-0102,Jl. Pahlawan No. 9999 Sorong Selatan,Penyedia jasa konsultasi keuangan
+Vendor CY,0812-0000-0103,Jl. Ahmad Yani No. 100100 Fakfak,Supplier bahan baku karet berkualitas
+Vendor CZ,0812-0000-0104,Jl. Hayam Wuruk No. 101101 Kaimana,Distributor peralatan fotografi profesional
+Vendor DA,0812-0000-0105,Jl. Gajah Mada No. 102102 Teluk Bintuni,Penyedia jasa periklanan kreatif
+Vendor DB,0812-0000-0106,Jl. Sudirman No. 103103 Teluk Wondama,Supplier bahan baku kulit berkualitas
+Vendor DC,0812-0000-0107,Jl. Merdeka No. 104104 Manokwari Selatan,Distributor peralatan musik modern
+Vendor DD,0812-0000-0108,Jl. Thamrin No. 105105 Pegunungan Arfak,Penyedia jasa pengiriman cepat
+Vendor DE,0812-0000-0109,Jl. Diponegoro No. 106106 Tambrauw,Supplier bahan baku kaca berkualitas
+Vendor DF,0812-0000-0110,Jl. Pahlawan No. 107107 Maybrat,Distributor peralatan pendingin modern
+Vendor DG,0812-0000-0111,Jl. Ahmad Yani No. 108108 Raja Ampat,Penyedia jasa perawatan gedung
+Vendor DH,0812-0000-0112,Jl. Hayam Wuruk No. 109109 Sorong Selatan,Supplier bahan baku kertas daur ulang
+Vendor DI,0812-0000-0113,Jl. Gajah Mada No. 110110 Fakfak,Distributor peralatan kantor modern
+Vendor DJ,0812-0000-0114,Jl. Sudirman No. 111111 Kaimana,Penyedia jasa desain grafis kreatif
+Vendor DK,0812-0000-0115,Jl. Merdeka No. 112112 Teluk Bintuni,Supplier bahan baku tekstil berkualitas
+Vendor DL,0812-0000-0116,Jl. Thamrin No. 113113 Teluk Wondama,Distributor peralatan elektronik canggih
+Vendor DM,0812-0000-0117,Jl. Diponegoro No. 114114 Manokwari Selatan,Penyedia jasa konsultasi bisnis strategis
+Vendor DN,0812-0000-0118,Jl. Pahlawan No. 115115 Pegunungan Arfak,Supplier bahan baku plastik berkualitas
+Vendor DO,0812-0000-0119,Jl. Ahmad Yani No. 116116 Tambrauw,Distributor peralatan medis modern

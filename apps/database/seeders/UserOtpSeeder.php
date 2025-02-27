@@ -34,16 +34,5 @@ class UserOtpSeeder extends Seeder
         }, $UserOtps);
 
         UserOtp::insert($UserOtps);
-        
-        // foreach ($UserOtps as $UserOtp) {
-        //     UserOtp::create([
-        //         'user_id' => $UserOtp['user_id'],
-        //         'otp_code' => $UserOtp['otp_code'],
-        //         'otp_expires' => $UserOtp['otp_expires'],
-        //         'purpose' => $UserOtp['purpose'],
-        //         'is_used' => $UserOtp['is_used'],
-        //     ]);
-        // }
-
     }
 }

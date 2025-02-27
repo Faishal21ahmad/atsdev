@@ -36,7 +36,6 @@
     </div>
 </div>
 
-
 <script>  
     setTimeout(function () {
         let alert = document.getElementById('alert');
