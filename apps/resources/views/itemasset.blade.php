@@ -28,10 +28,6 @@
                 </span>
                 </p>
             </div>
-
-         
-                
-   
         
             <!-- Right Section -->
             <div class="w-1/2 lg:w-1/4">
@@ -41,7 +37,6 @@
                     <a href="{{ route('printbycode', $dataItem->code_assets ) }}"  target="blank"  class="w-full">
                         <button class="p-2 w-full  text-center border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">Print QR</button>
                     </a>
-                   
                     @if ($dataItem->status == 'Available')
                         <a href="{{ route('mainten.report', $dataItem->code_assets ) }}" 
                             class="p-2 w-full text-center border-2 bg-slate-100 hover:bg-slate-200 
@@ -203,51 +198,38 @@
 
 
 <script>
+    disableSubmitIfNoChanges('editItemAsset');
+
     const qrmain = document.getElementById('qrmain').innerHTML;
     document.getElementById('qr').innerHTML = qrmain;
 
 
     // Fungsi untuk validasi client-side
     function validateForm() {
-            const condition = document.getElementById('condition').value;
-            const codeAsset = document.getElementById('codeAsset').value;
-            const location = document.getElementById('location').value;
-            const departement = document.getElementById('departement').value;
-            const description = document.getElementById('description').value;
-            const errors = [];
+        const codeAsset = document.getElementById('codeAsset').value;
+        const errors = [];
 
-            if (codeAsset === '') {
-                errors.push('Kode Asset tidak boleh kosong');
-            }
-            if (condition === '') {
-                errors.push('Condition tidak boleh kosong');
-            }
-            if (location === '') {
-                errors.push('Lokasi tidak boleh kosong');
-            }
-            if (departement === '') {
-                errors.push('Departement Maintenance tidak boleh kosong');
-            }
-            if (description === '') {
-                errors.push('Description tidak boleh kosong');
-            }
-
-            return errors;
+        if (codeAsset === '') {
+            errors.push('Kode Asset tidak boleh kosong');
         }
-        
-        // Event listener untuk form submission
-        document.getElementById('editItemAsset').addEventListener('submit', function (e) {
-            e.preventDefault(); // Mencegah form di-submit secara default
-            // Validasi client-side
-            const errors = validateForm();
+        return errors;
+    }
+    
+    // Event listener untuk form submission
+    document.getElementById('editItemAsset').addEventListener('submit', function (e) {
+        e.preventDefault(); // Mencegah form di-submit secara default
+        // Validasi client-side
+        const errors = validateForm();
 
-            if (errors.length > 0) {
-                showAlert('danger', errors);
-            }  else {
-                // Jika tidak ada error, submit form secara manual
-                this.submit();
-            }
-        });
+        if (errors.length > 0) {
+            showAlert('danger', errors);
+        }  else {
+            // Jika tidak ada error, submit form secara manual
+            this.submit();
+        }
+    });
+
+    
 </script>
 
 </x-layoutdsbd>

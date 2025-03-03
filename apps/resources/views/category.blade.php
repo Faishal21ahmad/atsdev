@@ -16,9 +16,6 @@
                 <button id="addButton"
                     data-modal-target="ModalCategory" 
                     data-modal-toggle="ModalCategory" 
-                    data-label="Add Category"
-                    data-action="{{ route('category.add.action') }}"
-                    data-method="POST"
                     class="px-5 sm:px-10 py-2 rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700  dark:text-white">Add
                 </button>
                 <button id="importButton"
@@ -49,13 +46,10 @@
                         <td class="py-2 px-1 whitespace-nowrap max-w-[20ch] truncate">
                             <button
                                 data-modal-target="ModalCategory" 
-                                data-modal-toggle="ModalCategory" 
-                                data-label="Edit Category"
+                                data-modal-toggle="ModalCategory"
                                 data-id="{{ $category->id }}"
                                 data-name="{{ $category->category_name }}"
                                 data-description="{{ $category->description }}"
-                                data-action="{{ route('category.edit.action') }}"
-                                data-method="POST"
                                 class="py-1 px-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md edit-button">Edit</button>
                             <button
                                 type="button"
@@ -181,19 +175,17 @@
 
 <script>
     // Event listener untuk tombol delete
-    document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             const deleteButtons = document.querySelectorAll('.deleteButton');
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Ambil data dari atribut tombol
-                    const id = button.getAttribute('data-id');
-                    const name = button.getAttribute('data-name');
-                    const action = button.getAttribute('data-action');
+                    const { id, name } = this.dataset;
+                    
                     // Isi input hidden di form delete
                     document.getElementById('deleteCategoryId').value = id;
                     // Update action form sesuai dengan ID
                     const form = document.getElementById('deleteForm');
-                    form.action = `${action}`; 
+                    form.action = `{{ route('category.delete.action', ['id' => ':id']) }}`.replace(':id', id); 
                 });
             });
         });
@@ -205,21 +197,16 @@
             editButtons.forEach(button => {
                 button.addEventListener('click', function () {
                     // Ambil data dari atribut tombol
-                    const label = button.getAttribute('data-label');
-                    const id = button.getAttribute('data-id');
-                    const name = button.getAttribute('data-name');
-                    const description = button.getAttribute('data-description');
-                    const action = button.getAttribute('data-action');
-                    const method = button.getAttribute('data-method');
+                    const { id, name, description } = this.dataset;
                     // Isi data ke dalam form modal
-                    document.getElementById('labelModal').textContent = label;
+                    document.getElementById('labelModal').textContent = `Edit Category`;
                     document.getElementById('modalId').value = id;
                     document.getElementById('nameCategory').value = name;
                     document.getElementById('description').value = description;
                     // Update action form (jika diperlukan)
                     const form = document.getElementById('formCategory');
-                    form.action = `${action}`; // Sesuaikan dengan route Anda
-                    form.method = method ; // Sesuaikan dengan method yang Anda inginkan
+                    form.action = `{{ route('category.edit.action') }}`; // Sesuaikan dengan route Anda
+                    form.method = `POST` ; // Sesuaikan dengan method yang Anda inginkan
                 });
             });
         });
@@ -231,14 +218,11 @@
             if (addButton) {
                 addButton.addEventListener('click', function () {
                     // Ambil data dari atribut tombol
-                    const label = addButton.getAttribute('data-label');
-                    const action = addButton.getAttribute('data-action');
-                    const method = addButton.getAttribute('data-method');
-                    document.getElementById('labelModal').textContent = label;
+                    document.getElementById('labelModal').textContent = 'Add Category';
                     // Update action form (jika diperlukan)
                     const form = document.getElementById('formCategory');
-                    form.action = `${action}`; // Sesuaikan dengan route Anda
-                    form.method = method; // Sesuaikan dengan method yang Anda inginkan
+                    form.action = `{{ route('category.add.action') }}`; // Sesuaikan dengan route Anda
+                    form.method = `POST`; // Sesuaikan dengan method yang Anda inginkan
                     // Kosongkan inputan modal (karena ini untuk Add)
                     document.getElementById('modalId').value = ''; 
                     document.getElementById('nameCategory').value = '';
@@ -249,17 +233,14 @@
 
     // Fungsi untuk validasi client-side
     function validateForm() {
+        const modalId = document.getElementById('modalId').value;
         const nameCategory = document.getElementById('nameCategory').value;
-        const description = document.getElementById('description').value;
         const errors = [];
 
         if (nameCategory === '') {
             errors.push('Name Category tidak boleh kosong');
         }
 
-        if (description === '') {
-            errors.push('Description tidak boleh kosong');
-        }
         return errors;
     }
 

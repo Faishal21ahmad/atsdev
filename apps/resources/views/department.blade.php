@@ -16,10 +16,7 @@
             <div class="flex items-center space-x-2">
                 <button id="addButton"
                     data-modal-target="ModalDepartment" 
-                    data-modal-toggle="ModalDepartment" 
-                    data-label="Add Department"
-                    data-action="{{ route('department.add.action') }}"
-                    data-method="POST"
+                    data-modal-toggle="ModalDepartment"
                     class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Add
                 </button>
                 <button id="importButton"
@@ -50,21 +47,18 @@
                         <td class="py-2 px-1 whitespace-nowrap max-w-[20ch] truncate">
                             <button
                                 data-modal-target="ModalDepartment" 
-                                data-modal-toggle="ModalDepartment" 
-                                data-label="Edit Department"
+                                data-modal-toggle="ModalDepartment"
                                 data-id="{{ $department->id }}"
                                 data-name="{{ $department->department_name }}"
                                 data-description="{{ $department->description }}"
-                                data-action="{{ route('department.edit.action') }}"
-                                data-method="POST"
+                                type="button"
                                 class="py-1 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md edit-button">Edit</button>
                             <button
-                                type="button"
                                 data-id="{{ $department->id }}"
                                 data-modal-target="modalDelete" 
                                 data-modal-toggle="modalDelete"
                                 data-name="{{ $department->department_name }}"
-                                data-action="{{ route('department.delete.action', $department->id ) }}"
+                                type="button"
                                 class="py-1 px-4 border-2 bg-red-100 hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 dark:border-0 dark:text-white rounded-md deleteButton">Delete</button>
                         </td>
                     </tr>
@@ -187,82 +181,57 @@
             const deleteButtons = document.querySelectorAll('.deleteButton');
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Ambil data dari atribut tombol
-                    const id = button.getAttribute('data-id');
-                    const name = button.getAttribute('data-name');
-                    const action = button.getAttribute('data-action');
-                    // Isi input hidden di form delete
+                    const { id, name } = this.dataset;
                     document.getElementById('deleteId').value = id;
-                    // Update action form sesuai dengan ID
                     const form = document.getElementById('deleteForm');
-                    form.action = `${action}`; 
+                    form.action = `{{ route('department.delete.action', ['id' => ':id']) }}`.replace(':id', id); 
                 });
             });
         });
 
         // Event listener untuk tombol edit
         document.addEventListener('DOMContentLoaded', function () {
-            // Ambil semua tombol dengan class 'edit-button'
             const editButtons = document.querySelectorAll('.edit-button');
             editButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Ambil data dari atribut tombol
-                    const label = button.getAttribute('data-label');
-                    const id = button.getAttribute('data-id');
-                    const name = button.getAttribute('data-name');
-                    const description = button.getAttribute('data-description');
-                    const action = button.getAttribute('data-action');
-                    const method = button.getAttribute('data-method');
-                    // Isi data ke dalam form modal
-                    document.getElementById('labelModal').textContent = label;
+                    const { id, name, description } = this.dataset;
+                    document.getElementById('labelModal').textContent = `Edit Department`;
                     document.getElementById('modalId').value = id;
                     document.getElementById('nameDepartment').value = name;
                     document.getElementById('description').value = description;
-                    // Update action form (jika diperlukan)
                     const form = document.getElementById('formDepartment');
-                    form.action = `${action}`; // Sesuaikan dengan route Anda
-                    form.method = method ; // Sesuaikan dengan method yang Anda inginkan
+                    form.action = `{{ route('department.edit.action') }}`;
+                    form.method = `POST` ;
                 });
             });
         });
 
         // Event listener untuk tombol add
         document.addEventListener('DOMContentLoaded', function () {
-            // Ambil semua tombol dengan class ''
             const addButton = document.getElementById('addButton');
             if (addButton) {
                 addButton.addEventListener('click', function () {
-                    // Ambil data dari atribut tombol
-                    const label = addButton.getAttribute('data-label');
-                    const action = addButton.getAttribute('data-action');
-                    const method = addButton.getAttribute('data-method');
-                    document.getElementById('labelModal').textContent = label;
-                    // Update action form (jika diperlukan)
+                    document.getElementById('labelModal').textContent = "Add Department";
                     const form = document.getElementById('formDepartment');
-                    form.action = action; // Sesuaikan dengan route Anda
-                    form.method = method; // Sesuaikan dengan method yang Anda inginkan
-                    // Kosongkan inputan modal (karena ini untuk Add)
+                    form.action = `{{ route('department.add.action') }}`;
+                    form.method = `POST`; 
                     document.getElementById('modalId').value = ''; 
                     document.getElementById('nameDepartment').value = '';
                     document.getElementById('description').value = '';
                 });
-            }
+            };
         });
 
         // Fungsi untuk validasi client-side
         function validateForm() {
             const nameDepartment = document.getElementById('nameDepartment').value;
-            const description = document.getElementById('description').value;
             const errors = [];
 
             if (nameDepartment === '') {
                 errors.push('Name Department tidak boleh kosong');
             }
-            if (description === '') {
-                errors.push('Description tidak boleh kosong');
-            }
             return errors;
-        }
+        };
 
         // Event listener untuk form submission
         document.getElementById('formDepartment').addEventListener('submit', function (e) {

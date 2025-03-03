@@ -17,9 +17,6 @@
                 <button id="addButton"
                     data-modal-target="ModalLocation" 
                     data-modal-toggle="ModalLocation" 
-                    data-label="Add Location"
-                    data-action="{{ route('location.add.action') }}"
-                    data-method="POST"
                     class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Add</button>
                 <button id="importButton"
                     data-modal-target="ModalImportLocation" 
@@ -48,12 +45,10 @@
                             <button
                                 data-modal-target="ModalLocation" 
                                 data-modal-toggle="ModalLocation" 
-                                data-label="Edit Location"
                                 data-id="{{ $location->id }}"
                                 data-name="{{ $location->location_name }}"
                                 data-description="{{ $location->description }}"
-                                data-action="{{ route('location.edit.action') }}"
-                                data-method="POST"
+                                type="button"
                                 class="py-1 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md edit-button">Edit</button>
                             <button
                                 type="button"
@@ -61,7 +56,6 @@
                                 data-modal-target="modalDelete" 
                                 data-modal-toggle="modalDelete"
                                 data-name="{{ $location->location_name }}"
-                                data-action="{{ route('location.delete.action', $location->id ) }}"
                                 class="py-1 px-4 border-2 bg-red-100 hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 dark:border-0 dark:text-white rounded-md deleteButton">Delete</button>
                         </td>
                     </tr>
@@ -183,41 +177,27 @@
             const deleteButtons = document.querySelectorAll('.deleteButton');
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Ambil data dari atribut tombol
-                    const id = button.getAttribute('data-id');
-                    const name = button.getAttribute('data-name');
-                    const action = button.getAttribute('data-action');
-                    // Isi input hidden di form delete
+                    const { id, name } = this.dataset;
                     document.getElementById('deleteId').value = id;
-                    // Update action form sesuai dengan ID
                     const form = document.getElementById('deleteForm');
-                    form.action = `${action}`; 
+                    form.action = `{{ route('location.delete.action', ['id' => ':id']) }}`.replace(':id', id); 
                 });
             });
         });
 
         // Event listener untuk tombol edit
         document.addEventListener('DOMContentLoaded', function () {
-            // Ambil semua tombol dengan class 'edit-button'
             const editButtons = document.querySelectorAll('.edit-button');
             editButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Ambil data dari atribut tombol
-                    const label = button.getAttribute('data-label');
-                    const id = button.getAttribute('data-id');
-                    const name = button.getAttribute('data-name');
-                    const description = button.getAttribute('data-description');
-                    const action = button.getAttribute('data-action');
-                    const method = button.getAttribute('data-method');
-                    // Isi data ke dalam form modal
-                    document.getElementById('labelModal').textContent = label;
+                    const { id, name, description } = this.dataset;
+                    document.getElementById('labelModal').textContent = "Edit Location";
                     document.getElementById('modalId').value = id;
                     document.getElementById('nameLocation').value = name;
                     document.getElementById('description').value = description;
-                    // Update action form (jika diperlukan)
                     const form = document.getElementById('formLocation');
-                    form.action = `${action}`; // Sesuaikan dengan route Anda
-                    form.method = method ; // Sesuaikan dengan method yang Anda inginkan
+                    form.action = `{{ route('location.edit.action') }}`; 
+                    form.method = `POST` ; 
                 });
             });
         });
@@ -228,38 +208,28 @@
             const addButton = document.getElementById('addButton');
             if (addButton) {
                 addButton.addEventListener('click', function () {
-                    // Ambil data dari atribut tombol
-                    const label = addButton.getAttribute('data-label');
-                    const action = addButton.getAttribute('data-action');
-                    const method = addButton.getAttribute('data-method');
-                    document.getElementById('labelModal').textContent = label;
-                    // Update action form (jika diperlukan)
+                    document.getElementById('labelModal').textContent = "Add Location";
                     const form = document.getElementById('formLocation');
-                    form.action = action; // Sesuaikan dengan route Anda
-                    form.method = method; // Sesuaikan dengan method yang Anda inginkan
-                    // Kosongkan inputan modal (karena ini untuk Add)
+                    form.action = `{{ route('location.add.action') }}`;
+                    form.method = `POST`; 
                     document.getElementById('modalId').value = ''; 
                     document.getElementById('nameLocation').value = '';
                     document.getElementById('description').value = '';
                 });
-            }
+            };
         });
 
         // Fungsi untuk validasi client-side
         function validateForm() {
             const nameLocation = document.getElementById('nameLocation').value;
-            const description = document.getElementById('description').value;
             const errors = [];
 
             if (nameLocation === '') {
                 errors.push('Name Location tidak boleh kosong');
             }
 
-            if (description === '') {
-                errors.push('Description tidak boleh kosong');
-            }
             return errors;
-        }
+        };
 
         // Event listener untuk form submission
         document.getElementById('formLocation').addEventListener('submit', function (e) {

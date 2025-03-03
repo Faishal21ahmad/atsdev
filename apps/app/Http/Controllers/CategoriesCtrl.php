@@ -39,10 +39,9 @@ class CategoriesCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nameCategory' => 'required',
-            'description' => 'required',
+            'description' => 'nullable'
         ], [
-            'nameCategory.required' => 'Name Category is required',
-            'description.required' => 'Description is required',
+            'nameCategory.required' => 'Name Category is required'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -74,11 +73,10 @@ class CategoriesCtrl extends Controller
         $validator = Validator::make($request->all(), [
             'modalId' => 'required',
             'nameCategory' => 'required',
-            'description' => 'required',
+            'description' => 'nullable'
         ], [
             'modalId.required' => 'Modal Id is required',
-            'nameCategory.required' => 'Name Category is required',
-            'description.required' => 'Description is required',
+            'nameCategory.required' => 'Name Category is required'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error

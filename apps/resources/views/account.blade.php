@@ -116,7 +116,7 @@
                         </div>
                         <div id="colEml" class="col-span-1">
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                            <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="xxxx@gmail.com">
+                            <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="xxxx@gmail.com" disabled>
                         </div>
                         <div id="colPass" class="col-span-1">
                             <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
@@ -124,7 +124,8 @@
                         </div>
                         <div id="colRol" class="col-span-1">
                             <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selete Role</label>
-                            <select name="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="Name Account Items">
+                            <select name="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500
+                            overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300 scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full " placeholder="Name Account Items">
                                 <option id="role" selected="" value="">select role</option>
                                 @foreach ($dataRole as $item)
                                     <option value="{{ $item->id }}">{{ $item->role_name }}</option>
@@ -133,7 +134,9 @@
                         </div>
                         <div id="colDpart" class="col-span-1">
                             <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selete department</label>
-                            <select name="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="Name Account Items">
+                            <select name="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500
+                            overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300 scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full 
+                            " placeholder="Name Account Items">
                                 <option id="department" selected="" value="">select department</option>
                                 @foreach ($dataDepartment as $item)
                                     <option value="{{ $item->id }}">{{ $item->department_name }}</option>
@@ -265,22 +268,17 @@
     </div> 
 
 <script>
-
     // Event listener untuk tombol add
     document.addEventListener('DOMContentLoaded', function () {
-        // Ambil semua tombol dengan class ''
         const addButton = document.getElementById('addButton');
         if (addButton) {
             addButton.addEventListener('click', function () {
-                // Ambil data dari atribut tombol
-                const label = addButton.getAttribute('data-label');
                 document.getElementById('btn-rst').classList.add('hidden');
                 document.getElementById('colPass').classList.remove('hidden');
                 // Update action form (jika diperlukan)
                 const form = document.getElementById('formAccount');
-                form.action = `{{ route('account.add.action') }}`; // Sesuaikan dengan route Anda
-                form.method = 'POST'; // Sesuaikan dengan method yang Anda inginkan
-                // Kosongkan inputan modal (karena ini untuk Add)
+                form.action = `{{ route('account.add.action') }}`;
+                form.method = 'POST'; 
                 document.getElementById('labelModal').textContent = 'Add Account';
                 document.getElementById('modalId').value = '';
                 document.getElementById('username').value = '';
@@ -297,28 +295,20 @@
         const editButtons = document.querySelectorAll('.edit-button');
         editButtons.forEach(button => {
             button.addEventListener('click', function () {
-                // Ambil data dari atribut tombol
-                const label = button.getAttribute('data-label');
-                const id = button.getAttribute('data-id');
-                const name = button.getAttribute('data-name');
-                const email = button.getAttribute('data-email');
-                const role = button.getAttribute('data-role');
-                const roleId = button.getAttribute('data-role-id');
-                const department = button.getAttribute('data-department');
-                const departmentId = button.getAttribute('data-department-id');
-                const isdisable = button.getAttribute('data-disable');
-                // Isi data ke dalam form modal
-                document.getElementById('colPass').classList.add('hidden');
-                document.getElementById('btn-rst').classList.remove('hidden');
-                document.getElementById('labelModal').textContent = label;
+                const { id, name, email, role, roleId, department, departmentId, isdisable } = this.dataset;
+                document.getElementById('labelModal').textContent = `Edit Account`;
                 document.getElementById('modalId').value = id;
                 document.getElementById('username').value = name;
                 document.getElementById('email').value = email;
+                document.getElementById('email').disabled = true;
+
                 document.getElementById('role').value = roleId;
                 document.getElementById('role').textContent = role;
                 document.getElementById('department').value = departmentId;
                 document.getElementById('department').textContent = department;
-                document.getElementById('email').isdisable = true;
+                
+                document.getElementById('colPass').classList.add('hidden');
+                document.getElementById('btn-rst').classList.remove('hidden');
                 if(isdisable == true){
                     document.getElementById('btn-enable').classList.remove('hidden');
                     document.getElementById('btn-disable').classList.add('hidden');
@@ -326,11 +316,9 @@
                     document.getElementById('btn-enable').classList.add('hidden');
                     document.getElementById('btn-disable').classList.remove('hidden');
                 }
-
-                // Update action form (jika diperlukan)
                 const form = document.getElementById('formAccount');
-                form.action = `{{ route('account.edit.action') }}`; // Sesuaikan dengan route Anda
-                form.method = 'POST' ; // Sesuaikan dengan method yang Anda inginkan
+                form.action = `{{ route('account.edit.action') }}`; 
+                form.method = 'POST' ; 
             });
         });
     });
@@ -388,7 +376,6 @@
                 button.addEventListener('click', function () {
                     // Ambil data dari atribut tombol
                     const id = button.getAttribute('data-id');
-                    
                     const name = button.getAttribute('data-name');
                     const action = button.getAttribute('data-action');
                     // Isi input hidden di form delete

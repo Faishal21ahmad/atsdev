@@ -33,7 +33,7 @@ class UsersCtrl extends Controller
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'bio' => 'nullable|string|max:1000',
+            'bio' => 'nullable|string|max:1000'
         ], [
             'username.required' => 'Username tidak boleh kosong',
             'username.string' => 'Username harus berupa string',
@@ -41,9 +41,8 @@ class UsersCtrl extends Controller
             'email.email' => 'Email harus berupa email',
             'email.max' => 'Email tidak boleh lebih dari 255 karakter',
             'email.required' => 'Email tidak boleh kosong',
-            'bio.required' => 'bio tidak boleh kosong',
             'bio.string' => 'bio harus berupa string',
-            'bio.max' => 'bio tidak boleh lebih dari 1000 karakter',
+            'bio.max' => 'bio tidak boleh lebih dari 1000 karakter'
         ]);
 
          // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error

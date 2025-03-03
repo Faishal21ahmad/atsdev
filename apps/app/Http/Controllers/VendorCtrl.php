@@ -40,12 +40,11 @@ class VendorCtrl extends Controller
             'vendorName' => 'required',
             'contact' => 'required',
             'address' => 'required',
-            'description' => 'required',
+            'description' => 'nullable'
         ], [
             'vendorName.required' => 'Vendor Name is required',
             'contact.required' => 'Contact is required',
-            'address.required' => 'Address is required',
-            'description.required' => 'Description is required',
+            'address.required' => 'Address is required'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -78,16 +77,12 @@ class VendorCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'modalId' => 'required',
-            'vendorName' => 'required',
-            'contact' => 'required',
-            'address' => 'required',
-            'description' => 'required',
+            'vendorName' => 'nullable',
+            'contact' => 'nullable',
+            'address' => 'nullable',
+            'description' => 'nullable',
         ], [
-            'modalId.required' => 'Modal ID is required',
-            'vendorName.required' => 'Vendor Name is required',
-            'contact.required' => 'Contact is required',
-            'address.required' => 'Address is required',
-            'description.required' => 'Description is required',
+            'modalId.required' => 'Modal ID is required'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error

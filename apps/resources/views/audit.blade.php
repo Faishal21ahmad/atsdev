@@ -37,27 +37,25 @@
                         <th class="py-3 px-1 whitespace-nowrap">Master Asset</th>
                         <th class="py-3 px-1 whitespace-nowrap">Item Asset</th>
                         <th class="py-3 px-1 whitespace-nowrap">Total Price</th>
-                        <th class="py-3 px-1 whitespace-nowrap">Status</th>
                         <th class="py-3 px-1 whitespace-nowrap">Action</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody" class="border-b border-gray-200 dark:border-gray-700 rounded-md text-gray-900 dark:text-gray-100">
-                    @if (empty($dataCheckin))
+                    @if (empty($dataCheckinDetail))
                         <tr>
                             <td colspan="6" class="py-3 px-1 text-center">Empty Data .</td>
                         </tr>
                     @else
-                        @foreach ($dataCheckin as $index => $item)
+                        @foreach ($dataCheckinDetail as $index => $item)
                             <tr class="border-b border-gray-200 dark:border-gray-700">
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $loop->iteration }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item['codecheckin'] }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->created_at)->format('d / m / Y') }} </td>
-                                <td class="py-3 px-1 whitespace-nowrap">50</td>
-                                <td class="py-3 px-1 whitespace-nowrap">50</td>
+                                <td class="py-3 px-1 whitespace-nowrap">{{ $item->total_master_asset }}</td>
+                                <td class="py-3 px-1 whitespace-nowrap">{{ $item->total_item_asset }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">Rp {{ number_format($item['total'], 0, ',', '.') }}</td>
-                                <td class="py-3 px-1 whitespace-nowrap">Success</td>
                                 <td class="py-2 px-1 whitespace-nowrap">
-                                    <form action="{{ route('checkin.remove.action', $item['id']) }}" method="POST">
+                                    <form action="" method="POST">
                                         @csrf
                                         <button type="submit" class="px-4 sm:px-5 py-1 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Delete</button>
                                     </form>
@@ -92,26 +90,24 @@
                         <th class="py-3 px-1 whitespace-nowrap">Item Asset</th>
                         <th class="py-3 px-1 whitespace-nowrap">Date out</th>
                         <th class="py-3 px-1 whitespace-nowrap">Vendor</th>
-                        <th class="py-3 px-1 whitespace-nowrap">Status</th>
                         <th class="py-3 px-1 whitespace-nowrap">Action</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody" class="border-b border-gray-200 dark:border-gray-700 rounded-md text-gray-900 dark:text-gray-100">
-                    @if (empty($dataCheckout))
+                    @if (empty($dataCheckoutDetail))
                     <tr>
                         <td colspan="6" class="py-3 px-1 text-center">Empty Data .</td>
                     </tr>
                 @else
-                    @foreach ($dataCheckout as $index => $item)
+                    @foreach ($dataCheckoutDetail as $index => $item)
                         <tr class="border-b border-gray-200 dark:border-gray-700">
                             <td class="py-3 px-1 whitespace-nowrap">{{ $loop->iteration }}</td>
                             <td class="py-3 px-1 whitespace-nowrap">{{ $item['codecheckout'] }}</td>
-                            <td class="py-3 px-1 whitespace-nowrap">50</td>
+                            <td class="py-3 px-1 whitespace-nowrap">{{ $item->total_item_asset }}</td>
                             <td class="py-3 px-1 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->created_at)->format('d / m / Y') }} </td>
-                            <td class="py-3 px-1 whitespace-nowrap">50</td>
-                            <td class="py-3 px-1 whitespace-nowrap">Success</td>
+                            <td class="py-3 px-1 whitespace-nowrap">{{ $item->vendor->vendor_name ?? '-' }}</td>
                             <td class="py-2 px-1 whitespace-nowrap">
-                                <form action="{{ route('checkin.remove.action', $item['id']) }}" method="POST">
+                                <form action="" method="POST">
                                     @csrf
                                     <button type="submit" class="px-4 sm:px-5 py-1 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Delete</button>
                                 </form>
@@ -167,7 +163,7 @@
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item->itemAsset->code_assets }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item->status_mainten }}</td>
                                 <td class="py-2 px-1 whitespace-nowrap">
-                                    <form action="{{ route('checkin.remove.action', $item['id']) }}" method="POST">
+                                    <form action="" method="POST">
                                         @csrf
                                         <button type="submit" class="px-4 sm:px-5 py-1 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Delete</button>
                                     </form>

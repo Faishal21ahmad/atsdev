@@ -1,50 +1,58 @@
 version: '3.9'
 services:
   app:
-    container_name: ats_dev
-    build: .
-    volumes:
-      - ./apps:/app
-    ports:
-      - "7772:80"
-      - "774:443"
-      - "774:443/udp"
-    tty: true
-    networks:
-      laravel:
-        ipv4_address: 172.20.0.2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: atsapp
     restart: always
-        
-  # mariadb_ats:
-  #   image: mariadb:latest
-  #   container_name: mariadb_ats
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: C354XqQW
-  #     MYSQL_DATABASE: ATS_db_V1
-  #   volumes:
-  #     - ./mysql:/var/lib/mysql
-  #   networks:
-  #     laravel:
-  #       ipv4_address: 172.20.0.3
+    ports:
+      - "7774:80"
+      - "884:443"
+      - "884:443/udp"
+    volumes:
+      - ./apps:/var/www/html
+      - ./ssl:/etc/ssl/certs
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=ats_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+    depends_on:
+      - db
+    networks:
+      - atsLaravel
 
-  # phpmyadmin_ats:
-  #   image: phpmyadmin/phpmyadmin:latest
-  #   container_name: phpmyadmin_ats
-  #   restart: always
-  #   environment:
-  #     PMA_HOST: 172.20.0.3
-  #     PMA_USER: root
-  #     PMA_PASSWORD: C354XqQW
-  #   ports:
-  #     - "7773:80"
-  #   networks:
-  #     laravel:
-  #       ipv4_address: 172.20.0.4
+  db:
+    image: mariadb:latest
+    container_name: atsdb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: atsdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - atsLaravel
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: atsphpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: secret
+    depends_on:
+      - db
+    networks:
+      - atsLaravel
 
 networks:
-  laravel:
+  atsLaravel:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/24

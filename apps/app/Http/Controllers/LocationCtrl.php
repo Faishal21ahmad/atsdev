@@ -39,10 +39,9 @@ class LocationCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nameLocation' => 'required',
-            'description' => 'required',
+            'description' => 'nullable',
         ], [
             'nameLocation.required' => 'Name Location is required',
-            'description.required' => 'Description is required',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -73,12 +72,10 @@ class LocationCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'modalId' => 'required',
-            'nameLocation' => 'required',
-            'description' => 'required',
+            'nameLocation' => 'nullable',
+            'description' => 'nullable',
         ], [
             'modalId.required' => 'Modal Id is required',
-            'nameLocation.required' => 'Name Location is required',
-            'description.required' => 'Description is required',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error

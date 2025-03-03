@@ -60,20 +60,16 @@ class AssetsCtrl extends Controller
         $validator = Validator::make($request->all(), [
             'slug' => 'required',
             'nameAsset' => 'required',
-            'category' => 'required',
-            'maintenInterval' => 'required',
-            'stockMinimum' => 'required',
+            'category' => 'nullable',
+            'maintenInterval' => 'nullable',
+            'stockMinimum' => 'nullable',
             'fileImg' => 'nullable|mimes:pdf,png,jpg,jpeg|max:2048',
-            'description' => 'required',
+            'description' => 'nullable',
         ], [
             'slug.required' => 'Slug wajib diisi !!.',
             'nameAsset.required' => 'Name Asset wajib diisi !!.',
-            'category.required' => 'Category wajib diisi !!.',
-            'maintenInterval.required' => 'Mainten Interval wajib diisi !!.',
-            'stockMinimum.required' => 'Stock Minimum wajib diisi !!.',
             'fileImg.mimes' => 'Image Upload harus berupa pdf, png, jpg, jpeg !!.',
             'fileImg.max' => 'Image Upload maksimal 2MB !!.',
-            'description.required' => 'Description wajib diisi !!.',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -158,16 +154,12 @@ class AssetsCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'codeAsset' => 'required',
-            'condition' => 'required',
-            'location' => 'required',
-            'departement' => 'required',
-            'description' => 'required',
+            'condition' => 'nullable',
+            'location' => 'nullable',
+            'departement' => 'nullable',
+            'description' => 'nullable'
         ], [
-            'codeAsset.required' => 'Code Asset wajib diisi !!.',
-            'condition.required' => 'Condition wajib diisi !!.',
-            'location.required' => 'Location wajib diisi !!.',
-            'departement.required' => 'Departement wajib diisi !!.',
-            'description.required' => 'Description wajib diisi !!.',
+            'codeAsset.required' => 'Code Asset wajib diisi !!.'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error

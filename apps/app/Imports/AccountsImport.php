@@ -25,14 +25,10 @@ class AccountsImport implements ToCollection, WithHeadingRow, WithValidation
     {
         // Ambil semua username yang sudah ada di database sekali saja
         $this->existingAccounts = User::pluck('username')->toArray();
-
         // Ambil semua role dan simpan dalam bentuk array [nama => id]
         $this->roles = Role::pluck('id', 'role_name')->toArray();
-
         // Ambil semua department dan simpan dalam bentuk array [nama => id]
         $this->departments = Department::pluck('id', 'department_name')->toArray();
-
-        
     }
 
     /**

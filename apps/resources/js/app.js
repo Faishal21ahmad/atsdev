@@ -1,4 +1,4 @@
 import './bootstrap';
 import 'flowbite';
-import './alert';
+import './validate';
 import './scanner';

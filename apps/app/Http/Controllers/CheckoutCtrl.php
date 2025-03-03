@@ -62,14 +62,14 @@ class CheckoutCtrl extends Controller
 
     public function actionSavecheckoutCart(Request $request)
     {
-            // Ambil data cart dari session
+        // Ambil data cart dari session
         $itemCheckout = session()->get('itemCheckout', []);
 
         // Jika keranjang kosong, kembalikan ke halaman sebelumnya dengan pesan error
         if (count($itemCheckout) == 0) {
             return back()->with('alert', [
                 'type' => 'danger',
-                'messages' => ['Keranjang kosong, tidak ada asset yang dipilih.'],
+                'messages' => ['Data item checkout kosong', 'Silahkan tambahkan item terlebih dahulu'],
             ])->onlyInput();
         }
 

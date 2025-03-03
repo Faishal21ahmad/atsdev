@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 use App\Models\CheckinMasterDetail;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -82,14 +81,24 @@ class CheckinCtrl extends Controller
 
     public function actionSaveCheckinCart(Request $request){
         // Validasi data
-        // $request->validate([
-        //     'description' => 'required|string',
-        //     'total' => 'required|numeric',
-        // ]);
+        $validator = Validator::make($request->all(),[
+            'description' => 'nullable',
+            'total' => 'required|numeric',
+        ], [
+            'total.required' => 'Name total is required',
+            'total.numeric' => 'Name total is number',
+        ]);
 
-        // Ambil data cart dari session
+         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ])->onlyInput();
+        }
+
         $cart = session()->get('cart', []);
-
+        // dd($cart);
         // Jika keranjang kosong, kembalikan ke halaman sebelumnya dengan pesan error
         if (count($cart) == 0) {
             return back()->with('alert', [

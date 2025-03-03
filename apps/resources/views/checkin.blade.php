@@ -8,13 +8,13 @@
             </div>
             
             <div class="inline-flex flex-col gap-2 text-black">
-                <form id="submitCheckin" action="{{ route('checkin.save.action') }}" method="POST">
+                <form id="submitCheckin" action="{{ route('checkin.save.action') }}" method="POST" class="">
                     @csrf
                     <input id="totalHarga" type="text" hidden name="total" value="{{ $total }}">
                     <input  type="text" hidden name="description" id="descriptionInput" value="" >
-                    <button type="submit" id="checkOUT" class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Check IN</button>
+                    <button type="submit" id="checkOUT" class="px-8 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Check IN</button>
                 </form>
-                <button type="button" id="addButton" data-modal-target="ModalImportCheckin" data-modal-toggle="ModalImportCheckin" class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white  ">Import</button>
+                <button type="button" id="addButton" data-modal-target="ModalImportCheckin" data-modal-toggle="ModalImportCheckin" class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Import</button>
                 <button type="button" id="addButton" data-modal-target="ModalAdd" data-modal-toggle="ModalAdd" class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white  lg:hidden">Add Asset</button>
             </div>
         </div>
@@ -159,23 +159,25 @@
     </div> 
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+     document.addEventListener('DOMContentLoaded', () => {
         const textarea = document.getElementById('description');
         const input = document.getElementById('descriptionInput');
 
         textarea.addEventListener('input', () => {
-            console.log('Nilai textarea:', textarea.value); // Cek nilai di console
             input.value = textarea.value;
         });
+
+        // Clone form dan ubah ID-nya untuk modal
+        const originalFormHTML = document.getElementById('containerFormAdd').innerHTML;
+        const modalFormHTML = originalFormHTML.replace(/id="(.*?)"/g, 'id="$1-modal"');
+        document.getElementById('formModal').innerHTML = modalFormHTML;
     });
 
+    const assetMaster = @json($assetMaster);
 
-    const assetMaster = @json($assetMaster); // Data dari controller
-    const formAddAsset = document.getElementById('containerFormAdd').innerHTML;
-    document.getElementById('formModal').innerHTML = formAddAsset;
-
+    // Autocomplete untuk kedua form (asli dan modal)
     document.addEventListener('input', (e) => {
-        if (e.target.id === 'nameAsset') {
+        if (e.target.matches('input[name="nameAsset"], input[name="nameAsset-modal"]')) {
             const inputValue = e.target.value.toLowerCase();
             const autocompleteContainer = e.target.nextElementSibling;
             autocompleteContainer.innerHTML = '';
@@ -190,7 +192,11 @@
                 option.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-600', 'text-gray-900', 'dark:text-white');
                 option.addEventListener('click', () => {
                     e.target.value = asset.asset_name;
-                    document.getElementById('slug').value = asset.slug; // Mengisi slug secara otomatis
+                    const form = e.target.closest('form');
+                    const slugInput = form.querySelector('input[name="slug"]');
+                    if (slugInput) {
+                        slugInput.value = asset.slug;
+                    }
                     autocompleteContainer.classList.add('hidden');
                 });
                 autocompleteContainer.appendChild(option);
@@ -198,53 +204,40 @@
 
             autocompleteContainer.classList.toggle('hidden', filteredAssets.length === 0);
 
-            // Cek apakah input nameAsset sesuai dengan data yang ada di assetMaster
+            const form = e.target.closest('form');
+            const slugInput = form.querySelector('input[name="slug"]');
             const matchedAsset = assetMaster.find(asset => asset.asset_name.toLowerCase() === inputValue);
-            if (matchedAsset) {
-                document.getElementById('slug').value = matchedAsset.slug; // Isi slug jika input valid
-            } else {
-                document.getElementById('slug').value = ""; // Kosongkan slug jika input tidak valid
+            if (slugInput) {
+                slugInput.value = matchedAsset ? matchedAsset.slug : "";
             }
         }
     });
 
-    // Fungsi untuk validasi client-side
-    function validateForm() {
-        const nameAsset = document.getElementById('nameAsset').value.trim();
-        const unitPrice = document.getElementById('unitPrice').value.trim();
-        const quantity = document.getElementById('quantity').value.trim();
-        const condition = document.getElementById('condition').value.trim();
+    // Validasi form
+    function validateForm(form) {
+        const nameAsset = form.querySelector('input[name="nameAsset"]').value.trim();
+        const unitPrice = form.querySelector('input[name="unitPrice"]').value.trim();
+        const quantity = form.querySelector('input[name="quantity"]').value.trim();
+        const condition = form.querySelector('input[name="condition"]').value.trim();
         const errors = [];
 
-        if (nameAsset === '') {
-            errors.push('Name Asset tidak boleh kosong');
-        }
-
-        if (unitPrice === '') {
-            errors.push('Unit Price tidak boleh kosong');
-        } else if (isNaN(unitPrice) || unitPrice <= 0) {
-            errors.push('Unit Price harus berupa angka positif');
-        }
-
-        if (quantity === '') {
-            errors.push('Quantity tidak boleh kosong');
-        } else if (isNaN(quantity) || quantity <= 0) {
-            errors.push('Quantity harus berupa angka positif');
-        }
-
-        if (condition === '') {
-            errors.push('Condition tidak boleh kosong');
-        }
+        if (!nameAsset) errors.push('Nama Asset wajib diisi');
+        if (!unitPrice) errors.push('Unit Price wajib diisi');
+        else if (isNaN(unitPrice) || unitPrice <= 0) errors.push('Unit Price harus angka');
+        if (!quantity) errors.push('Quantity wajib diisi');
+        else if (isNaN(quantity) || quantity <= 0) errors.push('Quantity harus angka');
+        if (!condition) errors.push('Condition wajib diisi');
 
         return errors;
     }
 
+    // Submit handler untuk kedua form
     document.addEventListener('submit', function (e) {
-        if (e.target && e.target.id === 'inputCheckin') {
+        if (e.target && (e.target.id === 'inputCheckin' || e.target.id === 'inputCheckin-modal')) {
             e.preventDefault();
-            const errors = validateForm();
+            const errors = validateForm(e.target);
             if (errors.length > 0) {
-                showAlert('danger', errors);
+                alert(errors.join('\n'));
             } else {
                 e.target.submit();
             }

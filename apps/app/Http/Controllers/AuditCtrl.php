@@ -16,16 +16,18 @@ class AuditCtrl extends Controller
     public function showAudit()
     {
         $user = Auth::user();
-        $dataCheckin = Checkin::active()->get();
-        $dataCheckout = Checkout::active()->get();
+        // $dataCheckin = Checkin::active()->get();
+        // $dataCheckout = Checkout::active()->get();
+
+        $dataCheckinDetail = Checkin::getAllWithAssetTotals()->get();
+        $dataCheckoutDetail = Checkout::getAllWithItemAssetCount()->get();
         $dataMaintenance = Maintenance::active()->get();
-
-
+        
         $data = [
             'title' => 'Audit',
-            'dataCheckin' => $dataCheckin,
-            'dataCheckout' => $dataCheckout,
+            'dataCheckoutDetail' => $dataCheckoutDetail,
             'dataMaintenance' => $dataMaintenance,
+            'dataCheckinDetail' => $dataCheckinDetail,
             'user' => [
                 'name' => $user->username,
                 'role' => $user->department->department_name,

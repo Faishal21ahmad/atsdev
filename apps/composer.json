@@ -9,11 +9,10 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^11.31",
-        "laravel/octane": "^2.7",
+        "laravel/octane": "^2.8",
         "laravel/tinker": "^2.9",
         "maatwebsite/excel": "^3.1",
-        "simplesoftwareio/simple-qrcode": "^4.2",
-        "spatie/browsershot": "^5.0"
+        "simplesoftwareio/simple-qrcode": "^4.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

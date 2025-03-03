@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class Checkout extends Model
 {
@@ -30,5 +31,21 @@ class Checkout extends Model
     public function scopeActive($query)
     {
         return $query->whereNull('deleted_at');
+    }
+
+    public static function getAllWithItemAssetCount(): Builder
+    {
+        return self::query()
+            ->select([
+                'checkouts.id',
+                'checkouts.vendor_id',
+                'checkouts.codecheckout',
+                'checkouts.created_at'
+            ])
+            ->selectRaw('(
+                SELECT COUNT(*) 
+                FROM item_assets 
+                WHERE check_out_id = checkouts.id
+            ) as total_item_asset');
     }
 }

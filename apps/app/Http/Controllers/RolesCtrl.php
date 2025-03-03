@@ -36,10 +36,9 @@ class RolesCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nameRole' => 'required',
-            'description' => 'required',
+            'description' => 'nullable',
         ], [
-            'nameRole.required' => 'Name Role is required',
-            'description.required' => 'Description is required',
+            'nameRole.required' => 'Name Role is required'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -70,12 +69,10 @@ class RolesCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'modalId' => 'required',
-            'nameRole' => 'required',
-            'description' => 'required',
+            'nameRole' => 'nullable',
+            'description' => 'nullable'
         ], [
-            'modalId.required' => 'Modal Id is required',
-            'nameRole.required' => 'Name Role is required',
-            'description.required' => 'Description is required',
+            'modalId.required' => 'Modal Id is required'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error

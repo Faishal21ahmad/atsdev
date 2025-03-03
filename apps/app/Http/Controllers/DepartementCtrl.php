@@ -39,10 +39,9 @@ class DepartementCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nameDepartment' => 'required',
-            'description' => 'required',
+            'description' => 'nullable',
         ], [
             'nameDepartment.required' => 'Name Department is required',
-            'description.required' => 'Description is required',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -73,12 +72,10 @@ class DepartementCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'modalId' => 'required',
-            'nameDepartment' => 'required',
-            'description' => 'required',
+            'nameDepartment' => 'nullable',
+            'description' => 'nullable',
         ], [
             'modalId.required' => 'Modal Id is required',
-            'nameDepartment.required' => 'Name Department is required',
-            'description.required' => 'Description is required',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error

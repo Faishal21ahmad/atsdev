@@ -13,7 +13,7 @@
         <x-alert :type="session('alert.type')" :messages="session('alert.messages')" />
     @endif
     <!-- JavaScript -->
-    <div id="js-alert-container" class="fixed flex flex-col top-4 right-4 sm:top-6 sm:right-6 z-50 w-full max-w-xs sm:max-w-sm gap-4"></div>
+    <div id="js-alert-container" class="fixed flex flex-col top-4 right-4 sm:top-6 sm:right-6 z-[80] w-full max-w-xs sm:max-w-sm gap-4"></div>
 
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         {{ $slot }}

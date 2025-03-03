@@ -16,9 +16,6 @@
                 <button id="addVendorButton"
                     data-modal-target="ModalVendor" 
                     data-modal-toggle="ModalVendor" 
-                    data-label="Add Vendor"
-                    data-action="{{ route('vendor.add.action') }}"
-                    data-method="POST"
                     class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Add
                 </button>
                 <button id="importButton"
@@ -51,16 +48,14 @@
                             <td class="py-3 px-1 whitespace-nowrap">{{ $vendor->description }}</td>
                             <td class="py-2 px-1 whitespace-nowrap">
                                 <button
+                                    type="button"
                                     data-modal-target="ModalVendor" 
-                                    data-modal-toggle="ModalVendor" 
-                                    data-label="Edit Vendor"
+                                    data-modal-toggle="ModalVendor"
                                     data-id="{{ $vendor->id }}"
                                     data-name="{{ $vendor->vendor_name }}"
                                     data-contact="{{ $vendor->contact }}"
                                     data-address="{{ $vendor->address }}"
                                     data-description="{{ $vendor->description }}"
-                                    data-action="{{ route('vendor.edit.action') }}"
-                                    data-method="POST"
                                     class="py-1 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md edit-vendor-button">Edit</button>
                                 <button
                                     type="button"
@@ -68,7 +63,6 @@
                                     data-modal-target="modalDeleteVendor" 
                                     data-modal-toggle="modalDeleteVendor"
                                     data-name="{{ $vendor->vendor_name }}"
-                                    data-action="{{ route('vendor.delete.action', $vendor->id ) }}"
                                     class="py-1 px-4 border-2 bg-red-100 hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 dark:border-0 dark:text-white rounded-md deleteVendorButton">Delete</button>
                             </td>
                         </tr>
@@ -110,7 +104,7 @@
                         </div>
                         <div class="col-span-2">
                             <label for="contact" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact</label>
-                            <input type="text" name="contact" id="contact" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="Contact">
+                            <input type="number" name="contact" id="contact" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="Contact">
                         </div>
 
                         <div class="col-span-2">
@@ -197,12 +191,10 @@
             const deleteVendorButtons = document.querySelectorAll('.deleteVendorButton');
             deleteVendorButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    const id = button.getAttribute('data-id');
-                    const name = button.getAttribute('data-name');
-                    const action = button.getAttribute('data-action');
+                    const { id, name } = this.dataset;
                     document.getElementById('deleteVendorId').value = id;
                     const form = document.getElementById('deleteVendorForm');
-                    form.action = `${action}`; 
+                    form.action = `{{ route('vendor.delete.action', ['id' => ':id']) }}`.replace(':id', id); 
                 });
             });
         });
@@ -212,23 +204,16 @@
             const editVendorButtons = document.querySelectorAll('.edit-vendor-button');
             editVendorButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    const label = button.getAttribute('data-label');
-                    const id = button.getAttribute('data-id');
-                    const name = button.getAttribute('data-name');
-                    const contact = button.getAttribute('data-contact');
-                    const address = button.getAttribute('data-address');
-                    const description = button.getAttribute('data-description');
-                    const action = button.getAttribute('data-action');
-                    const method = button.getAttribute('data-method');
-                    document.getElementById('labelModalVendor').textContent = label;
+                    const { id, name, contact, address, description } = this.dataset;
+                    document.getElementById('labelModalVendor').textContent = `Edit Vendor`;
                     document.getElementById('modalVendorId').value = id;
                     document.getElementById('vendorName').value = name;
                     document.getElementById('contact').value = contact;
                     document.getElementById('address').value = address;
                     document.getElementById('description').value = description;
                     const form = document.getElementById('formVendor');
-                    form.action = `${action}`;
-                    form.method = method;
+                    form.action = `{{ route('vendor.edit.action') }}`;
+                    form.method = `POST`;
                 });
             });
         });
@@ -238,13 +223,10 @@
             const addVendorButton = document.getElementById('addVendorButton');
             if (addVendorButton) {
                 addVendorButton.addEventListener('click', function () {
-                    const label = addVendorButton.getAttribute('data-label');
-                    const action = addVendorButton.getAttribute('data-action');
-                    const method = addVendorButton.getAttribute('data-method');
-                    document.getElementById('labelModalVendor').textContent = label;
+                    document.getElementById('labelModalVendor').textContent = `Add Vendor`;
                     const form = document.getElementById('formVendor');
-                    form.action = action;
-                    form.method = method;
+                    form.action = `{{ route('vendor.add.action') }}`;
+                    form.method = `POST`;
                     document.getElementById('modalVendorId').value = ''; 
                     document.getElementById('vendorName').value = '';
                     document.getElementById('contact').value = '';
@@ -273,9 +255,7 @@
             if (address === '') {
                 errors.push('Address tidak boleh kosong');
             }
-            if (description === '') {
-                errors.push('Description tidak boleh kosong');
-            }
+        
             return errors;
         }
 

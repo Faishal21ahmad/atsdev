@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Str;
 
 class CheckinImport implements ToCollection, WithHeadingRow
 {
@@ -16,7 +17,7 @@ class CheckinImport implements ToCollection, WithHeadingRow
         foreach ($rows as $row) {
             $asset = [
                 'id' => uniqid(), // ID unik untuk setiap item
-                'slug' => strtolower(str_replace(' ', '-', $row['assets_name'])), // Generate slug dari nama asset
+                'slug' => Str::slug($row['assets_name']), // Generate slug dari nama asset
                 'nameAsset' => $row['assets_name'],
                 'unitPrice' => $row['price_per_unit'],
                 'quantity' => $row['quantity'],
