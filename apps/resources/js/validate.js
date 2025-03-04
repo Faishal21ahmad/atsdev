@@ -1,54 +1,54 @@
-function disableSubmitIfNoChanges(formId) {
+export async function disableSubmitIfNoChanges(formId) {
+    await new Promise(resolve => setTimeout(resolve, 0)); // Tunggu DOM siap
+
     const form = document.getElementById(formId);
     if (!form) return;
 
-    // Temukan semua input, textarea, dan select dalam form
     const inputs = form.querySelectorAll('input, textarea, select');
     const submitButton = form.querySelector('button[type="submit"]');
-    
-    // Simpan nilai awal
-    const initialValues = {};
-    
+
+    if (!submitButton) return;
+
+    // Simpan nilai awal dalam Map
+    const initialValues = new Map();
     inputs.forEach(input => {
-        // Handle checkbox dan radio button
         if (input.type === 'checkbox' || input.type === 'radio') {
-            initialValues[input.name] = input.checked;
-        } 
-        // Handle select dropdown
-        else if (input.tagName === 'SELECT') {
-            initialValues[input.name] = input.value;
-        }
-        // Handle input biasa
-        else {
-            initialValues[input.name] = input.value;
+            initialValues.set(input, input.checked);
+        } else {
+            initialValues.set(input, input.value.trim());
         }
     });
 
-    // Fungsi untuk memeriksa perubahan
     function checkChanges() {
         let hasChanges = false;
 
-        inputs.forEach(input => {
-            // Bandingkan nilai saat ini dengan nilai awal
+        for (const input of inputs) {
             if (input.type === 'checkbox' || input.type === 'radio') {
-                if (input.checked !== initialValues[input.name]) {
+                if (input.checked !== initialValues.get(input)) {
                     hasChanges = true;
                 }
-            } else if (input.value !== initialValues[input.name]) {
+            } else if (input.value.trim() !== initialValues.get(input)) {
                 hasChanges = true;
             }
-        });
+        }
 
-        // Update status tombol submit
         submitButton.disabled = !hasChanges;
     }
 
-    // Tambahkan event listener untuk semua input
+    // Tambahkan event listener untuk input
     inputs.forEach(input => {
         input.addEventListener('input', checkChanges);
         input.addEventListener('change', checkChanges);
     });
 
-    // Panggil sekali saat inisialisasi
+    // Cegah submit jika tidak ada perubahan dan tampilkan showAlert
+    form.addEventListener('submit', function (e) {
+        if (submitButton.disabled) {
+            e.preventDefault();
+            showAlert('danger', ['Tidak ada perubahan yang dibuat pada form.']);
+        }
+    });
+
+    // Panggil sekali untuk inisialisasi
     checkChanges();
 }

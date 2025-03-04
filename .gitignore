@@ -1,0 +1,10 @@
+!ssl/
+!mysql/
+!.gitignore
+!apps/*
+!excel template/*
+
+
+/ssl/cert.pem
+/ssl/key.pem
+/mysql/*

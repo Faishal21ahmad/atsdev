@@ -10,7 +10,7 @@
                     <div class="text-gray-900 dark:text-gray-100 ">
                         <div class="flex gap-4">
                             <p id="codeasset" class="text-lg">{{ $dataMainten->itemAsset->code_assets }}</p>
-                            <p id="location" class="text-lg">{{ $dataMainten->location->location_name }}</p>
+                            <p id="location" class="text-lg">{{ $dataMainten->location->location_name ?? 'location Unknown' }}</p>
                         </div>
                         <p id="nameasset" class="text-3xl font-semibold">{{ $dataMainten->masterAsset->asset_name }}</p>
                     </div>
@@ -309,88 +309,66 @@
             });
         });
 
-    // Fungsi untuk validasi client-side
-    function validateForm() {
-        const codeMaintence = document.getElementById('codeMaintence').value.trim();
-        const itemAsset = document.getElementById('itemAsset').value.trim();
-        const repairDetail = document.getElementById('repairDetail').value.trim();
-        const vendor = document.getElementById('vendor').value.trim();
-        const cost = document.getElementById('cost').value.trim();
-        const statusResolve = document.querySelectorAll('input[name="statusResolve"]');
-        const fileReport = document.getElementById('fileReport').files;
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('formResolveMainten').addEventListener('submit', function (e) {
+                e.preventDefault(); // Mencegah pengiriman form secara default
+                const errors = validateForm();
 
-        const errors = [];
-
-        // Validasi file jika ada
-        if (fileReport.length > 0) {
-            const allowedExtensions = ['pdf','png', 'jpg', 'jpeg'];
-            
-            for (let i = 0; i < fileReport.length; i++) {
-                const file = fileReport[i]; // Ambil file ke-i
-                const fileSize = file.size;
-                const fileExt = file.name.split('.').pop().toLowerCase();
-
-                if (!allowedExtensions.includes(fileExt)) {
-                    errors.push(`Format file "${file.name}" harus berupa PNG, JPG, atau JPEG`);
+                if (errors.length > 0) {
+                    showAlert('danger', errors);
+                } else {
+                    this.submit(); // Submit form jika tidak ada error
                 }
-
-                if (fileSize > 2 * 1024 * 1024) { // 2MB dalam bytes
-                    errors.push(`Ukuran file "${file.name}" terlalu besar (maks. 2 MB)`);
-                }
-            }
-        }
-
-        // Cek apakah ada radio button yang dipilih
-        let isstatusResolveChecked = false;
-        statusResolve.forEach(radio => {
-            if (radio.checked) {
-                isstatusResolveChecked = true;
-            }
+            });
         });
 
-        if (!isstatusResolveChecked) {
-            errors.push('Repair Result tidak boleh kosong');
-        }
+        function validateForm() {
+            const errors = [];
 
-        if (codeMaintence === '') {
-            errors.push('codeMaintence tidak boleh kosong');
-        }
+            // Ambil nilai input dan trim whitespace
+            const codeMaintence = document.getElementById('codeMaintence').value.trim();
+            const itemAsset = document.getElementById('itemAsset').value.trim();
+            const repairDetail = document.getElementById('repairDetail').value.trim();
+            const vendor = document.getElementById('vendor').value.trim();
+            const cost = document.getElementById('cost').value.trim();
+            const statusResolveRadios = document.querySelectorAll('input[name="statusResolve"]');
+            const fileReport = document.getElementById('fileReport').files;
 
-        if (itemAsset === '') {
-            errors.push('Item Asset tidak boleh kosong');
-        }
-
-        if (repairDetail === '') {
-            errors.push('Detail Repair tidak boleh kosong');
-        }
-
-        if (vendor === '') {
-            errors.push('Vendor tidak boleh kosong');
-        }
-
-        if (cost === '') {
-            errors.push('Cost tidak boleh kosong');
-        } else if (!/^\d+$/.test(cost)) {
-            errors.push('Cost hanya boleh berisi angka');
-        }
-
-        return errors;
-    }
-
-        // Event listener untuk form submission
-        document.getElementById('formResolveMainten').addEventListener('submit', function (e) {
-            e.preventDefault(); // Mencegah form di-submit secara default
-            // Validasi client-side
-            const errors = validateForm();
-
-            if (errors.length > 0) {
-                // showErrors(errors);
-                showAlert('danger', errors);
-            }  else {
-                // Jika tidak ada error, submit form secara manual
-                this.submit();
+            // Validasi input wajib
+            if (!codeMaintence) errors.push('Kode Maintenance tidak boleh kosong');
+            if (!itemAsset) errors.push('Item Asset tidak boleh kosong');
+            if (!repairDetail) errors.push('Detail Repair tidak boleh kosong');
+            if (!vendor) errors.push('Vendor tidak boleh kosong');
+            if (!cost) {
+                errors.push('Cost tidak boleh kosong');
+            } else if (!/^\d+$/.test(cost)) {
+                errors.push('Cost hanya boleh berisi angka');
             }
-        });
+
+            // Validasi radio button (status resolve)
+            const isStatusResolveChecked = [...statusResolveRadios].some(radio => radio.checked);
+            if (!isStatusResolveChecked) errors.push('Repair Result tidak boleh kosong');
+
+            // Validasi file jika diunggah
+            if (fileReport.length > 0) {
+                const allowedExtensions = ['pdf', 'png', 'jpg', 'jpeg'];
+
+                for (let file of fileReport) {
+                    const fileExt = file.name.split('.').pop().toLowerCase();
+                    const fileSize = file.size;
+
+                    if (!allowedExtensions.includes(fileExt)) {
+                        errors.push(`Format file "${file.name}" harus berupa PDF, PNG, JPG, atau JPEG`);
+                    }
+                    if (fileSize > 2 * 1024 * 1024) { // 2MB dalam bytes
+                        errors.push(`Ukuran file "${file.name}" terlalu besar (maks. 2 MB)`);
+                    }
+                }
+            }
+
+            return errors;
+        }
+
 
 
         document.addEventListener("DOMContentLoaded", function () {

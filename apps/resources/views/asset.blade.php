@@ -81,11 +81,13 @@
                 for (let row of rows) {
                     if (row === noResultsMessage) continue;
                     
-                    const name = row.cells[1]?.textContent.toLowerCase() || '';
-                    const category = row.cells[2]?.textContent.toLowerCase() || '';
-                    const description = row.cells[3]?.textContent.toLowerCase() || '';
+                    const asset = row.cells[1]?.textContent.toLowerCase().trim() || '';
+                    const category = row.cells[2]?.textContent.toLowerCase().trim() || '';
+                    const description = row.cells[3]?.textContent.toLowerCase().trim() || '';
+                    const stock = row.cells[4]?.textContent.toLowerCase().trim() || '';
+                    const maintDuration = row.cells[5]?.textContent.toLowerCase().trim() || '';
                     
-                    if (name.includes(searchText) || description.includes(searchText) || category.includes(searchText)) {
+                    if (asset.includes(searchText) || category.includes(searchText) || description.includes(searchText) || stock.includes(searchText) || maintDuration.includes(searchText) ) {
                         row.style.display = '';
                         found = true;
                     } else {

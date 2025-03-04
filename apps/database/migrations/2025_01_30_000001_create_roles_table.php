@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('role_name', 50);
-            $table->text('description')->nullable();
+            $table->string('role_name', 60);
+            $table->text('description', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -213,6 +213,12 @@
         }
     });
 
+    // document.addEventListener("DOMContentLoaded", async function() {
+    //     await disableSubmitIfNoChanges('inputCheckin');
+    //     await disableSubmitIfNoChanges('inputCheckin-modal');
+
+    // });
+
     // Validasi form
     function validateForm(form) {
         const nameAsset = form.querySelector('input[name="nameAsset"]').value.trim();
@@ -223,25 +229,26 @@
 
         if (!nameAsset) errors.push('Nama Asset wajib diisi');
         if (!unitPrice) errors.push('Unit Price wajib diisi');
-        else if (isNaN(unitPrice) || unitPrice <= 0) errors.push('Unit Price harus angka');
+        else if (!/^\d+$/.test(unitPrice) || unitPrice <= 0) errors.push('Unit Price harus angka');
         if (!quantity) errors.push('Quantity wajib diisi');
-        else if (isNaN(quantity) || quantity <= 0) errors.push('Quantity harus angka');
+        else if (!/^\d+$/.test(quantity) || quantity <= 0) errors.push('Quantity harus angka');
         if (!condition) errors.push('Condition wajib diisi');
 
         return errors;
     }
 
-    // Submit handler untuk kedua form
-    document.addEventListener('submit', function (e) {
-        if (e.target && (e.target.id === 'inputCheckin' || e.target.id === 'inputCheckin-modal')) {
-            e.preventDefault();
-            const errors = validateForm(e.target);
-            if (errors.length > 0) {
-                alert(errors.join('\n'));
-            } else {
-                e.target.submit();
+    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('submit', function (e) {
+            if (e.target && (e.target.id === 'inputCheckin' || e.target.id === 'inputCheckin-modal')) {
+                e.preventDefault();
+                const errors = validateForm(e.target);
+                if (errors.length > 0) {
+                    showAlert('danger', errors);
+                } else {
+                    e.target.submit();
+                }
             }
-        }
+        });
     });
 </script>
 </x-layoutdsbd>

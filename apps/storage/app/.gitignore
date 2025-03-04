@@ -2,3 +2,5 @@
 !private/
 !public/
 !.gitignore
+!public/audio/beep1.wav
+!public/asset/print.css

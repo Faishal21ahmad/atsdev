@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string('location_name', 70);
-            $table->text('description')->nullable();
+            $table->string('location_name', 60);
+            $table->text('description', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
 

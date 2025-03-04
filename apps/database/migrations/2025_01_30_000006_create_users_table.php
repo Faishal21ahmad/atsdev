@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('department_id');
-            $table->string('username', 50);
+            $table->string('username', 60);
             $table->string('email', 100)->unique();
             $table->string('password', 255);
-            $table->string('bio', 100)->nullable();
+            $table->string('bio', 255)->nullable();
             $table->boolean('is_active')->default(false);
             $table->boolean('is_disable')->default(false);
             $table->timestamps();

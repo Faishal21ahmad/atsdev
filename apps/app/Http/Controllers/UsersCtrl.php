@@ -32,17 +32,13 @@ class UsersCtrl extends Controller
 
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'bio' => 'nullable|string|max:1000'
+            'bio' => 'nullable|string|max:500'
         ], [
             'username.required' => 'Username tidak boleh kosong',
             'username.string' => 'Username harus berupa string',
             'username.max' => 'Username tidak boleh lebih dari 255 karakter',
-            'email.email' => 'Email harus berupa email',
-            'email.max' => 'Email tidak boleh lebih dari 255 karakter',
-            'email.required' => 'Email tidak boleh kosong',
             'bio.string' => 'bio harus berupa string',
-            'bio.max' => 'bio tidak boleh lebih dari 1000 karakter'
+            'bio.max' => 'bio tidak boleh lebih dari 500 karakter'
         ]);
 
          // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -57,9 +53,8 @@ class UsersCtrl extends Controller
         // Update data profile
         $users->update([
             'username' => $request->username,
-            'email' => $request->email,
             'bio' => $request->bio,
-            'updated_at' => now(),
+            'updated_at' => now()
         ]);
 
         return redirect()->route('profile')->with('alert', [
@@ -71,20 +66,18 @@ class UsersCtrl extends Controller
 
     public function actionForgotProfile(Request $request){
         $validator = Validator::make($request->all(), [
-            'passwordOLD' => 'required|string|min:6',
-            'newPassword' => 'required|string|min:6',
-            'confirmPassword' => 'required|string|min:6',
-
+            'passwordOLD' => 'required|string',
+            'newPassword' => 'required|string|min:8',
+            'confirmPassword' => 'required|string|min:8'
         ], [
             'passwordOLD.required' => 'Password lama tidak boleh kosong',
             'passwordOLD.string' => 'Password lama harus berupa string',
-            'passwordOLD.min' => 'Password lama tidak boleh kurang dari 6 karakter',
             'newPassword.required' => 'Password baru tidak boleh kosong',
             'newPassword.string' => 'Password baru harus berupa string',
-            'newPassword.min' => 'Password baru tidak boleh kurang dari 6 karakter',
+            'newPassword.min' => 'Password baru tidak boleh kurang dari 8 karakter',
             'confirmPassword.required' => 'Konfirmasi password tidak boleh kosong',
             'confirmPassword.string' => 'Konfirmasi password harus berupa string',
-            'confirmPassword.min' => 'Konfirmasi password tidak boleh kurang dari 6 karakter',
+            'confirmPassword.min' => 'Konfirmasi password tidak boleh kurang dari 8 karakter'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -96,25 +89,23 @@ class UsersCtrl extends Controller
         }
         $user = Auth::user();
 
-        // dd(!Hash::check($request->passwordOLD, $user->password));
-
         // Cek apakah password lama sesuai
         if (!Hash::check($request->passwordOLD, $user->password)) {
             return redirect()->route('profile')->with('alert', [
-                'type' => 'denger',
-                'message' => 'Old password is incorrect!',
+                'type' => 'danger',
+                'messages' => ['Old password is incorrect!'],
             ]);
         }
 
         // Update password baru
         $user->update([
             'password' => Hash::make($request->newPassword),
-            'updated_at' => now(),
+            'updated_at' => now()
         ]);
 
         return redirect()->route('profile')->with('alert', [
             'type' => 'success',
-            'message' => 'Password berhasil diubah',
+            'messages' => ['Password berhasil diubah'],
         ]);
     }
 }

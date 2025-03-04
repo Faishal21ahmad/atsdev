@@ -85,7 +85,7 @@
                         </div>
                         <div class="col-span-2">
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                            <input type="text" name="email" id="email" value="{{ $profile->email }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="email">
+                            <input type="text" disabled name="email" id="email" value="{{ $profile->email }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="email">
                         </div>
 
                         <div class="col-span-2">
@@ -148,4 +148,99 @@
             </div>
         </div>
     </div> 
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            await disableSubmitIfNoChanges('formProfile');
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('formProfile').addEventListener('submit', function (e) {
+                e.preventDefault(); // Mencegah pengiriman form secara default
+                const errors = validateProfileForm();
+
+                if (errors.length > 0) {
+                    showAlert('danger', errors);
+                } else {
+                    this.submit(); // Submit form jika tidak ada error
+                }
+            });
+        });
+
+        function validateProfileForm() {
+            const errors = [];
+
+            // Ambil nilai input dan trim whitespace
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const bio = document.getElementById('bio').value.trim();
+
+            // Validasi username
+            if (!username) errors.push('Username tidak boleh kosong');
+
+            // Validasi email
+            if (!email) {
+                errors.push('Email tidak boleh kosong');
+            } else if (!validateEmail(email)) {
+                errors.push('Format email tidak valid');
+            }
+
+            // Validasi bio (maksimal 250 karakter)
+            if (bio.length > 250) errors.push('Deskripsi / Bio tidak boleh lebih dari 250 karakter');
+
+            return errors;
+        }
+
+        // Fungsi untuk validasi format email
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('formForgotPassword').addEventListener('submit', function (e) {
+                e.preventDefault(); // Mencegah pengiriman form secara default
+                const errors = validateForgotPasswordForm();
+
+                if (errors.length > 0) {
+                    showAlert('danger', errors);
+                } else {
+                    this.submit(); // Submit form jika tidak ada error
+                }
+            });
+        });
+
+        function validateForgotPasswordForm() {
+            const errors = [];
+
+            // Ambil nilai input dan trim whitespace
+            const passwordOLD = document.getElementById('passwordOLD').value.trim();
+            const newPassword = document.getElementById('newPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            // Validasi password lama
+            if (!passwordOLD) errors.push('Password lama tidak boleh kosong');
+
+            // Validasi password baru
+            if (!newPassword) {
+                errors.push('Password baru tidak boleh kosong');
+            } else if (newPassword.length < 8) {
+                errors.push('Password baru harus minimal 8 karakter');
+            }
+
+            // Validasi konfirmasi password
+            if (!confirmPassword) {
+                errors.push('Konfirmasi password tidak boleh kosong');
+            } else if (confirmPassword !== newPassword) {
+                errors.push('Konfirmasi password harus sama dengan password baru');
+            }
+
+            return errors;
+        }
+
+
+    </script>
+
+
+
 </x-layoutdsbd>

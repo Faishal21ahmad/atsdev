@@ -71,20 +71,26 @@
     <!-- Asset List -->
     <div class="container mx-auto w-full">
         <div class="w-full flex justify-between mb-2">
-            <h1 class="text-xl py-2 font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap overflow-hidden">Asset</h1>
-            <button class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Add Asset</button>
+            <div class="">
+                <label for="inputSearch" class="sr-only">Search</label>
+                <div class="w-20 relative">
+                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-400 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="inputSearch" class="block p-2 ps-10 text-sm border rounded-lg w-40 lg:w-80 border-gray-300 text-gray-900 bg-gray-50 focus:ring-gray-300 focus:border-gray-300 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="Search Asset">
+                </div>
+            </div>
+            
+            {{-- <h1 class="text-xl py-2 font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap overflow-hidden">Asset</h1> --}}
+            <a href="{{ route('showCheckIn') }}">
+                <button class="px-5 sm:px-10 py-2 rounded-md border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white">Add Asset</button>
+            </a>
+           
         </div>
     
-        <div class="w-full overflow-x-auto
-            scrollbar-thin
-            scrollbar-thumb-rounded-full 
-            scrollbar-thumb-slate-300 
-            scrollbar-track-slate-100 
-            dark:scrollbar-thumb-slate-300 
-            dark:scrollbar-track-slate-500
-            scrollbar-thumb-rounded-full 
-            scrollbar-track-rounded-full
-        ">
+        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300  scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300  dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full  scrollbar-track-rounded-full h-screen">
             <table class="table-auto w-full text-left">
                 <thead>
                     <tr class="border-b border-gray-200 dark:border-gray-700 rounded-md">
@@ -97,7 +103,7 @@
                         <th class="p-2 whitespace-nowrap text-gray-900 dark:text-gray-100">Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tableBody">
                     @foreach ($dataItemByAms as $item)
                         <tr class="border-b border-gray-200 dark:border-gray-700">
                             <td class="p-2 text-gray-800 dark:text-gray-200">{{ $loop->iteration }}</td>
@@ -239,13 +245,11 @@
 <script>
     // Fungsi untuk validasi client-side
     function validateForm() {
-        const slug = document.getElementById('slug').value;
-        
-        const nameAsset = document.getElementById('nameAsset').value;
-        const category = document.getElementById('category').value;
-        const maintenInterval = document.getElementById('maintenInterval').value;
-        const stockMinimum = document.getElementById('stockMinimum').value;
-        const description = document.getElementById('description').value;
+        const slug = document.getElementById('slug').value.trim();
+        const nameAsset = document.getElementById('nameAsset').value.trim();
+        const category = document.getElementById('category').value.trim();
+        const maintenInterval = document.getElementById('maintenInterval').value.trim();
+        const stockMinimum = document.getElementById('stockMinimum').value.trim();
         const fileImg = document.getElementById('fileImg').files;
         
 
@@ -273,10 +277,6 @@
             errors.push('Stock Minimum tidak boleh kosong');
         } else if (!/^\d+$/.test(stockMinimum)) {
             errors.push('Stock Minimum hanya boleh berisi angka');
-        }
-
-        if (description === '') {
-            errors.push('Description tidak boleh kosong');
         }
 
         // Validasi file jika ada
@@ -310,6 +310,44 @@
             // Jika tidak ada error, submit form secara manual
             this.submit();
         }
+    });
+
+
+    // Event listener untuk Search
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('inputSearch');
+        const tableBody = document.getElementById('tableBody');
+        const rows = tableBody.getElementsByTagName('tr');
+        const noResultsMessage = document.createElement('tr');
+        noResultsMessage.innerHTML = '<td colspan="7" class="text-center py-3 text-gray-500 dark:text-gray-400">No Category found.</td>';
+
+        noResultsMessage.style.display = 'none';
+        tableBody.appendChild(noResultsMessage);
+
+        searchInput.addEventListener('keyup', function () {
+            const searchText = searchInput.value.toLowerCase();
+            let found = false;
+            
+            for (let row of rows) {
+                if (row === noResultsMessage) continue;
+                
+                const codeAsset = row.cells[1]?.textContent.toLowerCase().trim() || '';
+                const location = row.cells[2]?.textContent.toLowerCase().trim() || '';
+                const condition = row.cells[3]?.textContent.toLowerCase().trim() || '';
+                const description = row.cells[4]?.textContent.toLowerCase().trim() || '';
+                const status = row.cells[5]?.textContent.toLowerCase().trim() || '';
+                
+                
+                if (codeAsset.includes(searchText) || location.includes(searchText) || condition.includes(searchText) || description.includes(searchText) || status.includes(searchText) ) {
+                    row.style.display = '';
+                    found = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+            
+            noResultsMessage.style.display = found ? 'none' : '';
+        });
     });
 </script>
 </x-layoutdsbd>

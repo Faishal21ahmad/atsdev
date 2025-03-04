@@ -208,34 +208,36 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+document.addEventListener("DOMContentLoaded", async function() {
+    await disableSubmitIfNoChanges('formRole');
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('formRole').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const errors = validateForm();
+
+        if (errors.length > 0) {
+            showAlert('danger', errors);
+            
+        } else {
+            this.submit();
+        }
+    });
+});
+
+
 // Fungsi untuk validasi client-side
 function validateForm() {
+    const errors = [];
     const nameRole = document.getElementById('nameRole').value;
     const description = document.getElementById('description').value;
-    const errors = [];
 
-    if (nameRole === '') {
-        errors.push('Name Location tidak boleh kosong');
-    }
+    if (!nameRole) errors.push('Name Role tidak boleh kosong');
+    if (!description) errors.push('Description tidak boleh kosong');
 
-    if (description === '') {
-        errors.push('Description tidak boleh kosong');
-    }
     return errors;
 }
-
-// Event listener untuk form submission
-document.getElementById('formRole').addEventListener('submit', function (e) {
-    e.preventDefault(); 
-    const errors = validateForm();
-
-    if (errors.length > 0) {
-        showAlert('danger', errors);
-    }  else {
-        // Jika tidak ada error, submit form secara manual
-        this.submit();
-    }
-});
 
 // Event listener untuk Search
 document.addEventListener('DOMContentLoaded', function () {
@@ -255,8 +257,8 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let row of rows) {
             if (row === noResultsMessage) continue;
             
-            const name = row.cells[1]?.textContent.toLowerCase() || '';
-            const description = row.cells[2]?.textContent.toLowerCase() || '';
+            const name = row.cells[1]?.textContent.toLowerCase().trim() || '';
+            const description = row.cells[2]?.textContent.toLowerCase().trim() || '';
             
             if (name.includes(searchText) || description.includes(searchText)) {
                 row.style.display = '';

@@ -159,69 +159,45 @@
         });
 
 
-        // Fungsi untuk validasi client-side
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('reportMainten').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const errors = validateForm();
+
+                if (errors.length > 0) {
+                    showAlert('danger', errors);
+                } else {
+                    this.submit();
+                }
+            });
+        });
+
         function validateForm() {
+            const errors = [];
+
+            // Ambil nilai input
             const itemAsset = document.getElementById('itemAsset').value;
             const codeAsset = document.getElementById('codeAsset').value;
             const masterAsset = document.getElementById('masterAsset').value;
             const location = document.getElementById('location').value;
             const statusMainten = document.getElementById('statusMainten').value;
             const problemDetail = document.getElementById('problemDetail').value;
-            const reportTypeRadios = document.querySelectorAll('input[name="reportType"]'); // Ambil semua radio button dengan name "reportType"
-            const errors = [];
+            const reportTypeRadios = document.querySelectorAll('input[name="reportType"]');
 
-            if (itemAsset === '') {
-                errors.push('Item Asset tidak boleh kosong');
-            }
+            // Validasi
+            if (!itemAsset) errors.push('Item Asset tidak boleh kosong');
+            if (!codeAsset) errors.push('Code Asset tidak boleh kosong');
+            if (!masterAsset) errors.push('Master Asset tidak boleh kosong');
+            if (!location) errors.push('Location Asset belum di atur');
+            if (!statusMainten) errors.push('Status Maintenance tidak boleh kosong');
+            if (!problemDetail) errors.push('Problem Detail tidak boleh kosong');
 
-            if (codeAsset === '') {
-                errors.push('Code Asset tidak boleh kosong');
-            }
-
-            if (masterAsset === '') {
-                errors.push('Master Asset tidak boleh kosong');
-            }
-
-            if (location === '') {
-                errors.push('Lokasi tidak boleh kosong');
-            }
-
-            if (statusMainten === '') {
-                errors.push('Status Maintenance tidak boleh kosong');
-            }
-
-            if (problemDetail === '') {
-                errors.push('Problem Detail tidak boleh kosong');
-            }
-
-            // Cek apakah ada radio button yang dipilih
-            let isReportTypeChecked = false;
-            reportTypeRadios.forEach(radio => {
-                if (radio.checked) {
-                    isReportTypeChecked = true;
-                }
-            });
-
-            if (!isReportTypeChecked) {
-                errors.push('Tipe Report tidak boleh kosong');
-            }
+            // Validasi radio button
+            const isReportTypeChecked = [...reportTypeRadios].some(radio => radio.checked);
+            if (!isReportTypeChecked) errors.push('Tipe Report tidak boleh kosong');
 
             return errors;
         }
-        
-        // Event listener untuk form submission
-        document.getElementById('reportMainten').addEventListener('submit', function (e) {
-            e.preventDefault(); // Mencegah form di-submit secara default
-            // Validasi client-side
-            const errors = validateForm();
-
-            if (errors.length > 0) {
-                showAlert('danger', errors);
-            }  else {
-                // Jika tidak ada error, submit form secara manual
-                this.submit();
-            }
-        });
     </script>
 
 </x-layoutdsbd>

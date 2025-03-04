@@ -141,13 +141,8 @@
                 let codeAsset = codeAssetInput.value.trim();
                 let errors = [];
 
-                if (codeAsset === '') {
-                    errors.push('Masukkan Code Asset terlebih dahulu!');
-                }
-
-                if (codeAsset.length !== 8) {
-                    errors.push('Code Asset tidak valid! Harus 8 karakter!');
-                }
+                if (!codeAsset) errors.push('Masukkan Code Asset terlebih dahulu!');
+                if (codeAsset.length !== 8) errors.push('Code Asset tidak valid, harus 8 karakter');
 
                 if (errors.length > 0) {
                     showAlert('danger', errors); // Menampilkan semua error sekaligus

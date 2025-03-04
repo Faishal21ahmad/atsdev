@@ -17,7 +17,7 @@ services:
       - DB_CONNECTION=mysql
       - DB_HOST=db
       - DB_PORT=3306
-      - DB_DATABASE=ats_db
+      - DB_DATABASE=atsdb
       - DB_USERNAME=root
       - DB_PASSWORD=secret
     depends_on:

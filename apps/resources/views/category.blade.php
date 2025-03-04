@@ -231,31 +231,32 @@
             }
         });
 
+    document.addEventListener("DOMContentLoaded", async function() {
+        await disableSubmitIfNoChanges('formCategory');
+    });        
+
     // Fungsi untuk validasi client-side
     function validateForm() {
         const modalId = document.getElementById('modalId').value;
         const nameCategory = document.getElementById('nameCategory').value;
         const errors = [];
-
-        if (nameCategory === '') {
-            errors.push('Name Category tidak boleh kosong');
-        }
-
+        if (!nameCategory) errors.push('Name Category tidak boleh kosong');
         return errors;
     }
 
-    // Event listener untuk form submission
-    document.getElementById('formCategory').addEventListener('submit', function (e) {
-        e.preventDefault(); 
-        const errors = validateForm();
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('formCategory').addEventListener('submit', function (e) {
+            e.preventDefault(); 
+            const errors = validateForm();
 
-        if (errors.length > 0) {
-            // showErrors(errors);
-            showAlert('danger', errors);
-        }  else {
-            // Jika tidak ada error, submit form secara manual
-            this.submit();
-        }
+            if (errors.length > 0) {
+                // showErrors(errors);
+                showAlert('danger', errors);
+            }  else {
+                // Jika tidak ada error, submit form secara manual
+                this.submit();
+            }
+        });
     });
 
 
@@ -277,8 +278,8 @@
             for (let row of rows) {
                 if (row === noResultsMessage) continue;
                 
-                const categoryName = row.cells[1]?.textContent.toLowerCase() || '';
-                const description = row.cells[2]?.textContent.toLowerCase() || '';
+                const categoryName = row.cells[1]?.textContent.toLowerCase().trim() || '';
+                const description = row.cells[2]?.textContent.toLowerCase().trim() || '';
                 
                 if (categoryName.includes(searchText) || description.includes(searchText)) {
                     row.style.display = '';

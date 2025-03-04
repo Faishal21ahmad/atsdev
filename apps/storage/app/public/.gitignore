@@ -1,10 +1,14 @@
 *
 !.gitignore
 !fileMainten/
-!fileMaster/
+!fileMainten/Default.jpg
+!fileMasterAsset/
+!fileMasterAsset/Default.jpg
 !fileQR/
 !Default.jpg
 !audio/
+!audio/beep1.wav
 !asset/
+!asset/print.css
 
 

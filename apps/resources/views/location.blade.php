@@ -219,29 +219,30 @@
             };
         });
 
+        document.addEventListener("DOMContentLoaded", async function() {
+            await disableSubmitIfNoChanges('formLocation');
+        });
+
         // Fungsi untuk validasi client-side
         function validateForm() {
-            const nameLocation = document.getElementById('nameLocation').value;
+            const nameLocation = document.getElementById('nameLocation').value.trim();
             const errors = [];
-
-            if (nameLocation === '') {
-                errors.push('Name Location tidak boleh kosong');
-            }
-
+            if (!nameLocation) errors.push('Name Location tidak boleh kosong');
             return errors;
         };
 
-        // Event listener untuk form submission
-        document.getElementById('formLocation').addEventListener('submit', function (e) {
-            e.preventDefault(); 
-            const errors = validateForm();
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('formLocation').addEventListener('submit', function (e) {
+                e.preventDefault(); 
+                const errors = validateForm();
 
-            if (errors.length > 0) {
-                showAlert('danger', errors);
-            }  else {
-                // Jika tidak ada error, submit form secara manual
-                this.submit();
-            }
+                if (errors.length > 0) {
+                    showAlert('danger', errors);
+                }  else {
+                    // Jika tidak ada error, submit form secara manual
+                    this.submit();
+                }
+            });
         });
 
     // Event listener untuk Search
@@ -262,8 +263,8 @@
             for (let row of rows) {
                 if (row === noResultsMessage) continue;
                 
-                const name = row.cells[1]?.textContent.toLowerCase() || '';
-                const description = row.cells[2]?.textContent.toLowerCase() || '';
+                const name = row.cells[1]?.textContent.toLowerCase().trim() || '';
+                const description = row.cells[2]?.textContent.toLowerCase().trim() || '';
                 
                 if (name.includes(searchText) || description.includes(searchText)) {
                     row.style.display = '';

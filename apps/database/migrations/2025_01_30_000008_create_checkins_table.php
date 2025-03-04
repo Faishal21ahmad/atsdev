@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('checkins', function (Blueprint $table) {
             $table->id();
             $table->string('codecheckin', 15)->unique();
-            $table->text('description')->nullable();
+            $table->text('description', 255)->nullable();
             $table->integer('total');
             $table->timestamps();
             $table->softDeletes();

@@ -1,4 +1,7 @@
 import './bootstrap';
 import 'flowbite';
-import './validate';
+
 import './scanner';
+
+import { disableSubmitIfNoChanges } from './validate';
+window.disableSubmitIfNoChanges = disableSubmitIfNoChanges;

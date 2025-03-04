@@ -198,35 +198,38 @@
 
 
 <script>
-    disableSubmitIfNoChanges('editItemAsset');
+ 
 
     const qrmain = document.getElementById('qrmain').innerHTML;
     document.getElementById('qr').innerHTML = qrmain;
 
-
     // Fungsi untuk validasi client-side
     function validateForm() {
-        const codeAsset = document.getElementById('codeAsset').value;
+        const codeAsset = document.getElementById('codeAsset').value.trim();
+        const condition = document.getElementById('condition').value.trim();
+        const location = document.getElementById('location').value.trim();
+        
         const errors = [];
 
-        if (codeAsset === '') {
-            errors.push('Kode Asset tidak boleh kosong');
-        }
+        if (!codeAsset) errors.push('Code Asset tidak boleh kosong');
+        if (!condition) errors.push('Condition tidak boleh kosong');
+        if (!location) errors.push('Location tidak boleh kosong');
         return errors;
     }
     
-    // Event listener untuk form submission
-    document.getElementById('editItemAsset').addEventListener('submit', function (e) {
-        e.preventDefault(); // Mencegah form di-submit secara default
-        // Validasi client-side
-        const errors = validateForm();
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('editItemAsset').addEventListener('submit', function (e) {
+            e.preventDefault(); // Mencegah form di-submit secara default
+            // Validasi client-side
+            const errors = validateForm();
 
-        if (errors.length > 0) {
-            showAlert('danger', errors);
-        }  else {
-            // Jika tidak ada error, submit form secara manual
-            this.submit();
-        }
+            if (errors.length > 0) {
+                showAlert('danger', errors);
+            }  else {
+                // Jika tidak ada error, submit form secara manual
+                this.submit();
+            }
+        });
     });
 
     

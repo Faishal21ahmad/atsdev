@@ -79,6 +79,8 @@
             return titles[type] || 'Info';
         }
 
+        
+
     </script>
 </body>
 </html>

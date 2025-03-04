@@ -236,39 +236,39 @@
             }
         });
 
-        // Fungsi untuk validasi client-side
-        function validateVendorForm() {
-            const vendorName = document.getElementById('vendorName').value;
-            const contact = document.getElementById('contact').value;
-            const address = document.getElementById('address').value;
-            const description = document.getElementById('description').value;
+        document.addEventListener("DOMContentLoaded", async function() {
+            await disableSubmitIfNoChanges('formVendor');
+        });
+
+        function validateForm() {
             const errors = [];
+            
+            // Ambil nilai input
+            const vendorName = document.getElementById('vendorName').value.trim();
+            const contact = document.getElementById('contact').value.trim();
+            const address = document.getElementById('address').value.trim();
+            // const description = document.getElementById('description').value.trim();
 
-            if (vendorName === '') {
-                errors.push('Vendor Name tidak boleh kosong');
-            }
+            // Validasi
+            if (!vendorName) errors.push('Vendor Name tidak boleh kosong');
+            if (!contact) errors.push('Contact tidak boleh kosong');
+            if (!address) errors.push('Address tidak boleh kosong');
+            // if (!description) errors.push('Description tidak boleh kosong');
 
-            if (contact === '') {
-                errors.push('Contact tidak boleh kosong');
-            }
-
-            if (address === '') {
-                errors.push('Address tidak boleh kosong');
-            }
-        
             return errors;
         }
 
-        // Event listener untuk form submission
-        document.getElementById('formVendor').addEventListener('submit', function (e) {
-            e.preventDefault(); 
-            const errors = validateVendorForm();
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('formVendor').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const errors = validateForm();
 
-            if (errors.length > 0) {
-                showAlert('danger', errors);
-            }  else {
-                this.submit();
-            }
+                if (errors.length > 0) {
+                    showAlert('danger', errors);
+                } else {
+                    this.submit();
+                }
+            });
         });
 
            // Event listener untuk Search
@@ -289,10 +289,10 @@
             for (let row of rows) {
                 if (row === noResultsMessage) continue;
                 
-                const name = row.cells[1]?.textContent.toLowerCase() || '';
-                const contact = row.cells[2]?.textContent.toLowerCase() || '';
-                const address = row.cells[3]?.textContent.toLowerCase() || '';
-                const description = row.cells[4]?.textContent.toLowerCase() || '';
+                const name = row.cells[1]?.textContent.toLowerCase().trim() || '';
+                const contact = row.cells[2]?.textContent.toLowerCase().trim() || '';
+                const address = row.cells[3]?.textContent.toLowerCase().trim() || '';
+                const description = row.cells[4]?.textContent.toLowerCase().trim() || '';
                 
                 if (name.includes(searchText) || description.includes(searchText) || contact.includes(searchText) || address.includes(searchText)) {
                     row.style.display = '';

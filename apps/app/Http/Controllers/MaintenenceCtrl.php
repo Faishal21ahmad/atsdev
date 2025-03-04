@@ -100,7 +100,7 @@ class MaintenenceCtrl extends Controller
             'codeAsset.required' => 'Code Asset wajib diisi !!.',
             'itemAsset.required' => 'Item Asset wajib diisi !!.',
             'masterAsset.required' => 'Master Asset wajib diisi !!.',
-            'location.required' => 'Location wajib diisi !!.',
+            'location.required' => 'Location wajib diisi!!.',
             'statusMainten.required' => 'Status Maintenance wajib diisi !!.',
             'problemDetail.required' => 'Problem Detail wajib diisi !!.',
             'reportType.required' => 'Report Type wajib diisi !!.',
@@ -113,7 +113,7 @@ class MaintenenceCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput('problemDetail','reportType','fileReport.*');
+            ])->onlyInput();
         }
         $codeAsset = $request->codeAsset;
         $documentCode = DocService::generateDocumentCodeMaintenance();

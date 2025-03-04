@@ -123,7 +123,7 @@
                             <input type="password" name="password" id="password" value="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="Password">
                         </div>
                         <div id="colRol" class="col-span-1">
-                            <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selete Role</label>
+                            <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
                             <select name="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500
                             overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300 scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full " placeholder="Name Account Items">
                                 <option id="role" selected="" value="">select role</option>
@@ -133,7 +133,7 @@
                             </select>
                         </div>
                         <div id="colDpart" class="col-span-1">
-                            <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selete department</label>
+                            <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
                             <select name="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500
                             overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300 scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full 
                             " placeholder="Name Account Items">
@@ -146,7 +146,7 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="flex gap-2">
-                        <button type="submit" class="text-white  bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-600 dark:hover:bg-gray-800 dark:focus:ring-gray-800 w-full">
+                        <button type="submit" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-600 dark:hover:bg-gray-800 dark:focus:ring-gray-800 w-full">
                             Submit
                         </button>
                         <button type="button" 
@@ -371,22 +371,55 @@
 
     // Event listener untuk tombol delete
     document.addEventListener('DOMContentLoaded', function () {
-            const deleteButtons = document.querySelectorAll('.deleteButton');
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    // Ambil data dari atribut tombol
-                    const id = button.getAttribute('data-id');
-                    const name = button.getAttribute('data-name');
-                    const action = button.getAttribute('data-action');
-                    // Isi input hidden di form delete
-                    document.getElementById('deleteID').value = id;
-                    // Update action form sesuai dengan ID
-                    const form = document.getElementById('deleteForm');
-                    form.action = action;
+        const deleteButtons = document.querySelectorAll('.deleteButton');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Ambil data dari atribut tombol
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const action = button.getAttribute('data-action');
+                // Isi input hidden di form delete
+                document.getElementById('deleteID').value = id;
+                // Update action form sesuai dengan ID
+                const form = document.getElementById('deleteForm');
+                form.action = action;
 
-                });
             });
         });
+    });
+
+    document.addEventListener("DOMContentLoaded", async function() {
+        await disableSubmitIfNoChanges('formAccount');
+    });
+
+     // Fungsi untuk validasi client-side
+    function validateForm() {
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const role = document.getElementById('role').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const department = document.getElementById('department').value.trim();
+        const errors = [];
+        if (!username) errors.push('Name Username tidak boleh kosong');
+        if (!email) errors.push('Email tidak boleh kosong');
+        if (!role) errors.push('Role tidak boleh kosong');
+        if (!department) errors.push('Department tidak boleh kosong');
+        if (!password) errors.push('Password tidak boleh kosong');
+        return errors;
+    };
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('formAccount').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const errors = validateForm();
+            if (errors.length > 0) {
+                showAlert('danger', errors);
+            } else {
+                this.submit();
+            }
+        });
+    });
 
 
     // Event listener untuk Search
@@ -412,8 +445,10 @@
                 const role = row.cells[3]?.textContent.toLowerCase() || '';
                 const department = row.cells[4]?.textContent.toLowerCase() || '';
                 const status = row.cells[5]?.textContent.toLowerCase() || '';
+                const isDisable = row.cells[6]?.textContent.toLowerCase() || '';
+
                 
-                if (name.includes(searchText) || email.includes(searchText) || role.includes(searchText) || department.includes(searchText) || status.includes(searchText)) {
+                if (name.includes(searchText) || email.includes(searchText) || role.includes(searchText) || department.includes(searchText) || status.includes(searchText) || isDisable.includes(searchText)) {
                     row.style.display = '';
                     found = true;
                 } else {
