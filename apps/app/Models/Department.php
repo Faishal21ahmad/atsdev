@@ -19,16 +19,17 @@ class Department extends Model
     protected $dates = ['deleted_at'];
 
     // Relasi ke User
-    public function users()
+    public function user()
     {
         return $this->hasMany(User::class);
     }
-
     // Relasi ke ItemAsset
     public function itemAssets()
     {
         return $this->hasMany(ItemAsset::class);
     }
+    
+    // Scope untuk mendapatkan departemen yang aktif
     public function scopeActive($query)
     {
         return $query->whereNull('deleted_at');

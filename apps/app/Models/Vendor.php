@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Checkin;
 use App\Models\Checkout;
 use App\Models\ItemAsset;
 use App\Models\Maintenance;
@@ -22,9 +23,9 @@ class Vendor extends Model
     protected $dates = ['deleted_at'];
 
     // Relasi ke ItemAsset
-    public function itemAssets()
+    public function checkins()
     {
-        return $this->hasMany(ItemAsset::class);
+        return $this->hasMany(Checkin::class);
     }
 
     // Relasi ke Maintenance

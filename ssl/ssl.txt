@@ -1,0 +1,26 @@
+buatkan code multiuser role dengan ketentuan di bawah dan sempurnakan 
+
+3 tabel dan model : 
+roles
+permissions
+permission_role
+
+middelware untuk cek akses 
+
+tambahkan opsi untuk caching atau tidak pada boot:
+public function boot(): void {
+    $permissions = Cache::remember('permissions', 3600, function () {
+        return Permission::with('roles')->get();
+    });
+}
+
+public function boot(): void {
+    $permissions = Permission::all();
+    foreach ($permissions as $permission) {
+        Gate::define($permission->slug, function(User $user) use ($permission) {
+            return $user->role->permissions->contains('slug', $permission->slug);
+        });
+    }
+}
+
+berikan juga contoh pada route dan pada blade

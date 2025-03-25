@@ -1,54 +1,45 @@
-export async function disableSubmitIfNoChanges(formId) {
-    await new Promise(resolve => setTimeout(resolve, 0)); // Tunggu DOM siap
+// Fungsi validasi file
+function validateFileInput(event) {
+    // Cegah form dari pengiriman default
+    event.preventDefault();
+    // Ambil input file dari form yang sedang di-submit
+    const fileInput = event.target.querySelector('input[type="file"]');
+    // Daftar format file yang diizinkan
+    const allowedFormats = ['xls', 'xlsx', 'csv'];
+    // Ukuran maksimal file (500KB)
+    const maxSize = 500 * 1024; // 500KB dalam bytes
+    // Ambil file yang diunggah
+    const file = fileInput.files[0];
+    // Array untuk menyimpan pesan error
+    const errors = [];
 
-    const form = document.getElementById(formId);
-    if (!form) return;
-
-    const inputs = form.querySelectorAll('input, textarea, select');
-    const submitButton = form.querySelector('button[type="submit"]');
-
-    if (!submitButton) return;
-
-    // Simpan nilai awal dalam Map
-    const initialValues = new Map();
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            initialValues.set(input, input.checked);
-        } else {
-            initialValues.set(input, input.value.trim());
-        }
-    });
-
-    function checkChanges() {
-        let hasChanges = false;
-
-        for (const input of inputs) {
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                if (input.checked !== initialValues.get(input)) {
-                    hasChanges = true;
-                }
-            } else if (input.value.trim() !== initialValues.get(input)) {
-                hasChanges = true;
-            }
-        }
-
-        submitButton.disabled = !hasChanges;
+    if (!file) {
+        errors.push('Silakan pilih file yang akan diunggah.');
+    } else {
+        // Validasi format file
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedFormats.includes(fileExtension)) errors.push(`Format file tidak diizinkan.`,` Hanya format ${allowedFormats.join(', ')} yang diizinkan.`);
+        // Validasi ukuran file
+        if (file.size > maxSize) errors.push(`Ukuran file melebihi batas maksimal 500KB.`);
     }
 
-    // Tambahkan event listener untuk input
-    inputs.forEach(input => {
-        input.addEventListener('input', checkChanges);
-        input.addEventListener('change', checkChanges);
-    });
+    // Jika ada error, tampilkan menggunakan showAlert
+    if (errors.length > 0) {
+        showAlert('danger', errors);
+        return false; // Hentikan proses submit
+    }
 
-    // Cegah submit jika tidak ada perubahan dan tampilkan showAlert
-    form.addEventListener('submit', function (e) {
-        if (submitButton.disabled) {
-            e.preventDefault();
-            showAlert('danger', ['Tidak ada perubahan yang dibuat pada form.']);
-        }
-    });
-
-    // Panggil sekali untuk inisialisasi
-    checkChanges();
+    // Jika semua validasi berhasil, submit form secara manual
+    event.target.submit();
 }
+
+// Tambahkan event listener ke semua form dengan ID "importForms"
+document.addEventListener('DOMContentLoaded', function () {
+    // Ambil semua form dengan ID "importForms"
+    const forms = document.querySelectorAll('#importForm');
+
+    // Loop melalui setiap form dan tambahkan event listener
+    forms.forEach(form => {
+        form.addEventListener('submit', validateFileInput);
+    });
+});

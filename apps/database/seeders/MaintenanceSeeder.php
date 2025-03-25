@@ -15,7 +15,6 @@ class MaintenanceSeeder extends Seeder
         $documentCounter = 1;
         $documentSeries = 'A';
         $today = date('dmY'); // Format tanggal untuk kode maintenance
-
         // Ambil semua item assets yang tersedia
         $itemAssets = ItemAsset::all();
 
@@ -24,7 +23,7 @@ class MaintenanceSeeder extends Seeder
             return;
         }
 
-        for ($i = 1; $i <= 300; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $statusMainten = ['Reported', 'Proses', 'Finish'][rand(0, 2)];
             $dateMainten = ($statusMainten === 'reported') ? null : now()->addDays(rand(2, 4));
 
@@ -44,8 +43,8 @@ class MaintenanceSeeder extends Seeder
                 'code_maintenance' => "MTN{$today}{$documentSeries}{$docNumber}",
                 'item_asset_id' => $itemAsset->id,
                 'vendor_id' => rand(1, 10),
-                'master_asset_id' => $itemAsset->master_asset_id, // Sesuai dengan ItemAssetsSeeder
-                'location_id' => $itemAsset->location_id, // Sesuai dengan ItemAssetsSeeder
+                'user_id_report' => 4,
+                'user_id_resolve' => 2,
                 'date_mainten' => $dateMainten,
                 'report_type' => ['Repair', 'Maintenance'][rand(0, 1)],
                 'problem_detail' => "Problem detail for maintenance",
@@ -56,7 +55,6 @@ class MaintenanceSeeder extends Seeder
                 'updated_at' => now(),
             ];
         }
-
         Maintenance::insert($maintenances);
     }
 }

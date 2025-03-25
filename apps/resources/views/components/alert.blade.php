@@ -3,10 +3,10 @@
 @php
     // Tentukan warna dan ikon berdasarkan tipe pesan
     $colors = [
-        'danger' => ['bg' => 'bg-red-50', 'text' => 'text-red-800', 'icon' => 'text-red-800', 'dark' => 'dark:bg-gray-800 dark:text-red-400'],
-        'alert' => ['bg' => 'bg-yellow-50', 'text' => 'text-yellow-800', 'icon' => 'text-yellow-800', 'dark' => 'dark:bg-gray-800 dark:text-yellow-400'],
-        'success' => ['bg' => 'bg-green-50', 'text' => 'text-green-800', 'icon' => 'text-green-800', 'dark' => 'dark:bg-gray-800 dark:text-green-400'],
-        'info' => ['bg' => 'bg-blue-50', 'text' => 'text-blue-800', 'icon' => 'text-blue-800', 'dark' => 'dark:bg-gray-800 dark:text-blue-400'],
+        'danger' => ['bg' => 'bg-red-50', 'text' => 'text-red-800', 'icon' => 'text-red-800', 'dark' => 'dark:bg-slate-800 dark:text-red-400'],
+        'alert' => ['bg' => 'bg-yellow-50', 'text' => 'text-yellow-800', 'icon' => 'text-yellow-800', 'dark' => 'dark:bg-slate-800 dark:text-yellow-400'],
+        'success' => ['bg' => 'bg-green-50', 'text' => 'text-green-800', 'icon' => 'text-green-800', 'dark' => 'dark:bg-slate-800 dark:text-green-400'],
+        'info' => ['bg' => 'bg-blue-50', 'text' => 'text-blue-800', 'icon' => 'text-blue-800', 'dark' => 'dark:bg-slate-800 dark:text-blue-400'],
     ];
     $color = $colors[$type] ?? $colors['info'];
 @endphp
@@ -20,11 +20,13 @@
         <div>
             <span class="font-medium">
                 @if ($type === 'danger')
-                    Please fix the following errors:
+                    Danger Alert:
                 @elseif ($type === 'alert')
                     Attention needed:
                 @elseif ($type === 'success')
-                    Success!
+                    Success:
+                @elseif ($type === 'info')
+                    Info:
                 @endif
             </span>
             <ul class="mt-1.5 list-disc list-inside">

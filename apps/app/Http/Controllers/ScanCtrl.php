@@ -11,7 +11,6 @@ class ScanCtrl extends Controller
     // Show Scan Asset
     public function showScanAsset(){
         $user = Auth::user();
-
         $assetItem = ItemAsset::getItemAssetsWithMasterAsset();
         $data = [
             'title' => 'Scan Asset',
@@ -23,13 +22,10 @@ class ScanCtrl extends Controller
                 ]
         ];
         return view('scan', $data);
-
-        // return view('scanQRAsset', $data);
     }
 
     public function showScanReportMainten(){
         $user = Auth::user();
-
         $assetItem = ItemAsset::getItemAssetsWithMasterAsset();
         $data = [
             'title' => 'Scan Report Mainten',
@@ -41,8 +37,6 @@ class ScanCtrl extends Controller
                 ]
         ];
         return view('scan', $data);
-
-        // return view('scanQRReportMaintence', $data);
     }
 
 

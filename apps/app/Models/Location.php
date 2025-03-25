@@ -24,16 +24,8 @@ class Location extends Model
     {
         return $this->hasMany(ItemAsset::class);
     }
-    
-    // Relasi ke Maintenance
-    public function maintenances()
-    {
-        return $this->hasMany(Maintenance::class);
-    }
-
     public function scopeActive($query)
     {
         return $query->whereNull('deleted_at');
     }
-
 }

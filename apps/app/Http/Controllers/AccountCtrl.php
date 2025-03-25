@@ -42,17 +42,21 @@ class AccountCtrl extends Controller
     // Create New Account
     public function actionAddAccount(Request $request){
         $validator = Validator::make($request->all(), [
-            'username' => 'required',
-            'email' => 'required', 
+            'username' => 'required|max:100',
+            'email' => 'required|email', 
             'password' => 'required',
-            'role' => 'required',
-            'department' => 'required',
+            'role' => 'required|numeric',
+            'department' => 'required|numeric',
         ], [
             'username.required' => 'Username tidak boleh kosong',
+            'username.max' => 'Username maksimal 100 karakter',
+            'email.email' => 'Email tidak valid',
             'email.required' => 'Email tidak boleh kosong',
             'password.required' => 'Password tidak boleh kosong',
             'role.required' => 'Role tidak boleh kosong',
+            'role.numeric' => 'Role tidak valid',
             'department.required' => 'Department tidak boleh kosong',
+            'department.numeric' => 'Department tidak valid',
         ]);
         
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -60,7 +64,7 @@ class AccountCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataNewAccount = [
@@ -85,15 +89,19 @@ class AccountCtrl extends Controller
 
     public function actionUpdateAccount(Request $request){
         $validator = Validator::make($request->all(), [
-            'modalId' => 'required',
-            'username' => 'required',
-            'role' => 'required',
-            'department' => 'required',
+            'modalId' => 'required|numeric',
+            'username' => 'required|max:100',
+            'role' => 'required|numeric',
+            'department' => 'required|numeric',
         ], [
             'modalId.required' => 'ID tidak boleh kosong',
+            'modalId.numeric' => 'ID tidak valid',
+            'username.max' => 'Username maksimal 100 karakter',
             'username.required' => 'Username tidak boleh kosong',
             'role.required' => 'Role tidak boleh kosong',
+            'role.numeric' => 'Role tidak valid',
             'department.required' => 'Department tidak boleh kosong',
+            'department.numeric' => 'Department tidak valid',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -101,7 +109,7 @@ class AccountCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataUpdateAccount = [
@@ -121,9 +129,10 @@ class AccountCtrl extends Controller
 
     public function actionResetAccount(Request $request){
         $validator = Validator::make($request->all(), [
-            'idexedata' => 'required',
+            'idexedata' => 'required|numeric',
         ], [
             'idexedata.required' => 'ID tidak boleh kosong',
+            'idexedata.numeric' => 'ID tidak valid',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -131,7 +140,7 @@ class AccountCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataUpdateAccount = [
@@ -147,11 +156,13 @@ class AccountCtrl extends Controller
             'messages' => ['Reset Account berhasil dilakukan'],
         ]);
     }
+
     public function actionDisableAccount(Request $request){
         $validator = Validator::make($request->all(), [
-            'idexedata' => 'required',
+            'idexedata' => 'required|numeric',
         ], [
             'idexedata.required' => 'ID tidak boleh kosong',
+            'idexedata.numeric' => 'ID tidak valid',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -159,7 +170,7 @@ class AccountCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataUpdateAccount = [
@@ -178,9 +189,10 @@ class AccountCtrl extends Controller
 
     public function actionEnableAccount(Request $request){
         $validator = Validator::make($request->all(), [
-            'idexedata' => 'required',
+            'idexedata' => 'required|numeric',
         ], [
             'idexedata.required' => 'ID tidak boleh kosong',
+            'idexedata.numeric' => 'ID tidak valid',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -188,7 +200,7 @@ class AccountCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataUpdateAccount = [
@@ -204,19 +216,19 @@ class AccountCtrl extends Controller
         ]);
     }
 
-
     public function actionDeleteAccount(Request $request){
         $validator = Validator::make($request->all(), [
-            'deleteID' =>'required',
+            'deleteID' =>'required|numeric',
         ], [
             'deleteID.required' => 'ID tidak boleh kosong',
+            'deleteID.numeric' => 'ID tidak valid',
         ]);
          // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
         if ($validator->fails()) {
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         User::where('id', $request->deleteID)->delete();
@@ -229,10 +241,21 @@ class AccountCtrl extends Controller
 
     public function importAccountExcel(Request $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls,csv|max:500',
+        ],[
+            'file.required' => 'File tidak boleh kosong',
+            'file.mimes' => 'File harus berupa excel',
+            'file.max' => 'File maksimal 500KB',
         ]);
-
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ]);
+        }
+        
         try {
             Excel::import(new AccountsImport, $request->file('file'));
             return back()->with('alert', [

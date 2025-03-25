@@ -18,6 +18,12 @@ class UserOtp extends Model
         'is_used',
     ];
 
+     // Relasi ke User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public static function validateAndUpdateOtp($otpCode, $userId)
     {
         // Cari OTP berdasarkan kode OTP dan user_id
@@ -81,9 +87,4 @@ class UserOtp extends Model
         return $otp->otp_code; // Mengembalikan data OTP yang baru dibuat
     }
 
-    // Relasi ke User
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

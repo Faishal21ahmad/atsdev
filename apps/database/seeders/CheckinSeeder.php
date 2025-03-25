@@ -14,8 +14,8 @@ class CheckinSeeder extends Seeder
     public function run(): void
     {
         $checkins = [
-            ['codecheckin' => 'CHI25052024A001', 'description' => 'Initial checkin for new assets','total' => 4000000],
-            ['codecheckin' => 'CHI25052024A002', 'description' => 'Checkin for additional assets','total' => 4000000],
+            ['codecheckin' => 'CHI25052024A001', 'user_id' => 1,'vendor_id' => 1, 'description' => 'Initial checkin for new assets','total' => 4000000],
+            ['codecheckin' => 'CHI25052024A002', 'user_id' => 1,'vendor_id' => 3, 'description' => 'Checkin for additional assets','total' => 4000000],
         ];
 
         // Menambahkan created_at dan updated_at ke setiap elemen
@@ -26,12 +26,5 @@ class CheckinSeeder extends Seeder
         }, $checkins);
 
         Checkin::insert($checkins);
-        // foreach ($checkins as $checkin) {
-        //     Checkin::create([
-        //         'codecheckin' => $checkin['codecheckin'],
-        //         'checkin_date' => $checkin['checkin_date'],
-        //         'description' => $checkin['description']
-        //     ]);
-        // }
     }
 }

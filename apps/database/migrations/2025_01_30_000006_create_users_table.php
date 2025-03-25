@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('username', 60);
             $table->string('email', 100)->unique();
             $table->string('password', 255);
-            $table->string('bio', 255)->nullable();
+            $table->text('bio', 400)->nullable();
             $table->boolean('is_active')->default(false);
             $table->boolean('is_disable')->default(false);
             $table->timestamps();
@@ -31,12 +31,6 @@ return new class extends Migration
             // Indexes
             $table->index('role_id');
             $table->index('department_id');
-        });
-
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
         });
 
         Schema::create('user_otps', function (Blueprint $table) {
@@ -80,7 +74,6 @@ return new class extends Migration
             Schema::dropIfExists('users'); // Hapus tabel jika tidak ada deleted_at
         }
         Schema::dropIfExists('user_otps');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
 
     }
@@ -95,3 +88,4 @@ return new class extends Migration
  * 
  * 
  */
+

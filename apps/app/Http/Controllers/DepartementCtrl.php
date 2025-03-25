@@ -38,10 +38,12 @@ class DepartementCtrl extends Controller
     public function actionAddDepartment(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nameDepartment' => 'required',
-            'description' => 'nullable',
+            'nameDepartment' => 'required|max:60',
+            'description' => 'nullable|max:300',
         ], [
             'nameDepartment.required' => 'Name Department is required',
+            'nameDepartment.max' => 'Name Department maximal 60 characters',
+            'description.max' => 'Description maximal 300 characters'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -49,7 +51,7 @@ class DepartementCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataDepartment = [
@@ -71,11 +73,14 @@ class DepartementCtrl extends Controller
     public function actionUpdateDepartment(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'modalId' => 'required',
-            'nameDepartment' => 'nullable',
-            'description' => 'nullable',
+            'modalId' => 'required|numeric',
+            'nameDepartment' => 'nullable|max:60',
+            'description' => 'nullable|max:300',
         ], [
-            'modalId.required' => 'Modal Id is required',
+            'modalId.required' => 'Department is not valid !!.',
+            'modalId.numeric' => 'Department is not valid !!.',
+            'nameDepartment.max' => 'Name Department maximal 60 characters',
+            'description.max' => 'Description maximal 300 characters'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -83,7 +88,7 @@ class DepartementCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataDepartment = [
@@ -120,11 +125,22 @@ class DepartementCtrl extends Controller
         ]);
     }
 
-
     public function importDeparmentExcel(Request $request){
-        $request->validate([
-            'file' => 'required|mimes:xls,xlsx,csv'
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls,csv|max:500',
+        ],[
+            'file.required' => 'File tidak boleh kosong',
+            'file.mimes' => 'File harus berupa excel',
+            'file.max' => 'File maksimal 500KB',
         ]);
+
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ]);
+        }
 
         try {
             Excel::import(new DepartmentsImport, $request->file('file'));

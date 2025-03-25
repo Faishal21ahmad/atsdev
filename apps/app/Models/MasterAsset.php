@@ -25,7 +25,6 @@ class MasterAsset extends Model
 
     protected $dates = ['deleted_at'];
 
-
     protected static function boot()
     {
         parent::boot();
@@ -53,12 +52,6 @@ class MasterAsset extends Model
     public function checkinMasterDetails()
     {
         return $this->hasMany(CheckinMasterDetail::class);
-    }
-    
-    // Relasi ke Maintenance
-    public function maintenances()
-    {
-        return $this->hasMany(Maintenance::class);
     }
 
     /**

@@ -72,6 +72,34 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserOtp::class);
     }
+    
+    public function checkins()
+    {
+        return $this->hasMany(Checkin::class);
+    }
+
+    public function checkouts()
+    {
+        return $this->hasMany(Checkout::class);
+    }
+    // Relasi ke Maintenance yang dilaporkan oleh user ini
+    public function reportedMaintenances()
+    {
+        return $this->hasMany(Maintenance::class, 'user_id_report');
+    }
+
+    // Relasi ke Maintenance yang diselesaikan oleh user ini
+    public function resolvedMaintenances()
+    {
+        return $this->hasMany(Maintenance::class, 'user_id_resolve');
+    }
+
+
+
+    public function hasPermission($permissionSlug) {
+        return $this->role->permissions->contains('slug', $permissionSlug);
+    }
+
 
     public static function getAllUsers()
     {

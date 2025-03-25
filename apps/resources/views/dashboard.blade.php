@@ -5,35 +5,43 @@
             <!-- Kotak 1 -->
             <div class="col-span-1 flex items-center">
                 <div class="">
-                    <h1 class="text-5xl font-semibold text-gray-900 dark:text-gray-100">{{ $totalasset }}</h1>
-                    <span class="text-gray-600 dark:text-gray-400">Total Asset</span>
+                    <h1 class="text-5xl font-semibold text-slate-900 dark:text-slate-100">{{ $totalasset }}</h1>
+                    <span class="text-slate-600 dark:text-slate-400">Total Asset</span>
                 </div>
             </div>
             <!-- Kotak 2 -->
             <div class="col-span-1 flex items-center">
                 <div class="">
-                    <h1 class="text-5xl font-semibold text-gray-900 dark:text-gray-100">{{ $countlowStock }}</h1>
-                    <span class="text-gray-600 dark:text-gray-400">Stok low</span>
+                    <h1 class="text-5xl font-semibold text-slate-900 dark:text-slate-100">{{ $countlowStock }}</h1>
+                    <span class="text-slate-600 dark:text-slate-400">Stok low</span>
                 </div>
             </div>
             <!-- Kotak 3 -->
             <div class="row-span-2 lg:row-span-1 grid gap-1 text-xl">
-                <a href="{{ route('scanAsset') }}" class="p-2 w-full text-center border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">Scan</a>
-                <a href="{{ route('showCheckIn') }}" class="p-2 w-full text-center border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">Check in</a>
-                <a href="{{ route('showCheckOut') }}" class="p-2 w-full text-center border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">Check out</a>
-                <a href="{{ route('scanReportMaintence') }}" class="p-2 w-full text-center border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">Maintenance</a>
+                @can('scan-item-asset')
+                    <a href="{{ route('scanAsset') }}" class="p-2 w-full text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">Scan</a>
+                @endcan
+                @can('checkin')
+                    <a href="{{ route('showCheckIn') }}" class="p-2 w-full text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">Check in</a>
+                @endcan
+                @can('checkout')
+                    <a href="{{ route('showCheckOut') }}" class="p-2 w-full text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">Check out</a>
+                @endcan
+                @can('scan-maintenance-report')
+                    <a href="{{ route('scanReportMaintence') }}" class="p-2 w-full text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">Maintenance</a>
+                @endcan
             </div>
         </div>
     </div>
-
+    @can('maintenance-schedule')
     <!-- Maintenance Schedule -->
     <div class="container mx-auto w-full mt-5">
-        <h1 class="text-xl py-2 font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap overflow-hidden">Maintenance Schedule</h1>
+        <h1 class="text-xl py-2 font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap overflow-hidden">Maintenance Schedule</h1>
         {{-- {{ $getReportedMaintenances }} --}}
-        <div class="w-full h-64 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300  scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full  scrollbar-track-rounded-full">
+        <div class="w-full max-h-72 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300  scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full  scrollbar-track-rounded-full">
             <table class="table-auto w-full text-left ">
                 <thead class="">
-                    <tr class="sticky top-0 bg-slate-100 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 shadow-md">
+                    <tr class="sticky top-0 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 shadow-md">
                         <th class="py-3 px-2 whitespace-nowrap text-center">No</th>
                         <th class="py-3 px-2 whitespace-nowrap">Code Mainten</th>
                         <th class="py-3 px-2 whitespace-nowrap">Code Asset</th>
@@ -42,7 +50,11 @@
                         <th class="py-3 px-2 whitespace-nowrap">Date Report</th>
                         <th class="py-3 px-2 whitespace-nowrap">Type Report</th>
                         <th class="py-3 px-2 whitespace-nowrap">Problem Detail</th>
-                        <th class="py-3 px-2 whitespace-nowrap">Action</th>
+                        <th class="py-3 px-2 whitespace-nowrap">Status Mainten</th>
+
+                        @can('resolve-maintenance')
+                        <th class="py-3 px-2 whitespace-nowrap text-center">Action</th>
+                        @endcan
                     </tr>
                 </thead>
                 <tbody class="">
@@ -53,23 +65,27 @@
                             $twoDaysLater = \Carbon\Carbon::now()->addDays(2);
                             $isHighlighted = $createdAt->lessThanOrEqualTo($twoDaysAgo) || $createdAt->greaterThanOrEqualTo($twoDaysLater);
                         @endphp
-                    <tr class="border-b text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700 rounded-md {{ $isHighlighted ? 'bg-red-300 dark:bg-red-700' : '' }}">
+                    <tr class="border-b text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 rounded-md {{ $isHighlighted ? 'bg-red-300 dark:bg-red-700' : '' }}">
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-center">{{ $loop->iteration }}</td>
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->code_maintenance ?? 'Unknown' }}</td>
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->itemasset->code_assets ?? 'Unknown' }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->masterasset->asset_name ?? 'Unknown' }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->location->location_name ?? 'Unknown' }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ \Carbon\Carbon::parse($maintenance->created_at)->format('d/m/Y') }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->itemasset->masterasset->asset_name ?? 'Unknown' }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->itemasset->location->location_name ?? 'Unknown' }}</td>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ \Carbon\Carbon::parse($maintenance->created_at)->format('d / M / Y') }}</td>
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->report_type }}</td>
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->problem_detail ?? '-' }}</td>
-                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">
-                            <a href="{{ route('mainten.resolve', $maintenance->code_maintenance ) }}" class="py-2 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">do the task</a>
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->status_mainten ?? '-' }}</td>
+                        
+                        @can('resolve-maintenance')
+                        <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-center">
+                            <a href="{{ route('mainten.resolve', $maintenance->code_maintenance ) }}" class="py-2 px-4  text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">handle</a>
                         </td>
+                        @endcan
                     </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center py-3 text-gray-500 dark:text-gray-400">
-                                No maintenance schedule found.
+                            <td colspan="10" class="text-center py-3 text-slate-500 dark:text-slate-400">
+                                No maintenance schedule was found.
                             </td>
                         </tr>
                     @endforelse
@@ -77,42 +93,39 @@
             </table>
         </div>
     </div>
-
+    @endcan
 
 <!-- Stok Low -->
 <div class="container mx-auto w-full mt-5">
-    <h1 class="text-xl py-2 font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap overflow-hidden">Stok Low</h1>
-    <div class="w-full overflow-x-auto scrollbar-thin
-                scrollbar-thumb-rounded-full 
-                scrollbar-thumb-slate-300 
-                scrollbar-track-slate-100 
-                dark:scrollbar-thumb-slate-300 
-                dark:scrollbar-track-slate-500
-                scrollbar-thumb-rounded-full 
-                scrollbar-track-rounded-full">
+    <h1 class="text-xl py-2 font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap overflow-hidden">Low Stock</h1>
+    <div class="w-full max-h-72 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300 scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
         <table class="table-auto w-full text-left">
             <thead>
-                <tr class="sticky text-gray-900 dark:text-gray-100 top-0 bg-slate-100 dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-700 shadow-md">
+                <tr class="sticky text-slate-900 dark:text-slate-100 top-0 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-700 shadow-md">
                     <th class="py-3 px-1 whitespace-nowrap text-center">No</th>
                     <th class="py-3 px-1 whitespace-nowrap">Name Asset</th>
-                    <th class="py-3 px-1 whitespace-nowrap">Stock</th>
+                    <th class="py-3 px-1 whitespace-nowrap">Stock current</th>
+                    @can('checkin')
                     <th class="py-3 px-1 whitespace-nowrap">Action</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody>
                 @forelse ($getLowStockAssets as $index => $item)
-                    <tr class="text-gray-800 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 rounded-md">
+                    <tr class="text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 rounded-md">
                         <td class="py-3 px-1 whitespace-nowrap text-center">{{ $loop->iteration }}</td>
                         <td class="py-3 px-1 whitespace-nowrap">{{ $item->asset_name }}</td>
                         <td class="py-3 px-1 whitespace-nowrap">{{ $item->current_stock }}</td>
+                        @can('checkin')
                         <td class="py-3 px-1 whitespace-nowrap">
-                            <a href="#" class="py-2 px-4 border-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">do the task</a>
+                            <a href="{{ route('showCheckIn', $item->slug) }}" class="py-2 px-4 text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">add</a>
                         </td>
+                        @endcan
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center py-3 text-gray-500 dark:text-gray-400">
-                            No Stok Low found.
+                        <td colspan="4" class="text-center py-3 text-slate-500 dark:text-slate-400">
+                            not found Low Stock
                         </td>
                     </tr>
                 @endforelse
@@ -121,62 +134,4 @@
     </div>
 </div>
 
-<script>
-    // Fungsi untuk menampilkan alert
-    function showAlert(type, messages) {
-            const container = document.getElementById('js-alert-container');
-
-            // Buat elemen alert
-            const alertDiv = document.createElement('div');
-            alertDiv.className = 'alert-message'; // Tambahkan class untuk styling
-            alertDiv.innerHTML = `
-                <div class="flex p-4 text-sm rounded-lg shadow-lg ${getAlertColor(type)}" role="alert">
-                    <svg class="shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                    </svg>
-                    <span class="sr-only">${type}</span>
-                    <div>
-                        <span class="font-medium">${getAlertTitle(type)}</span>
-                        <ul class="mt-1.5 list-disc list-inside">
-                            ${messages.map(msg => `<li>${msg}</li>`).join('')}
-                        </ul>
-                    </div>
-                </div>
-            `;
-
-            // Tambahkan ke container
-            container.appendChild(alertDiv);
-
-            // Tampilkan alert
-            alertDiv.classList.remove('hidden');
-
-            // Sembunyikan alert setelah 5 detik
-            setTimeout(() => {
-                alertDiv.classList.add('hidden');
-                setTimeout(() => alertDiv.remove(), 300); // Hapus elemen setelah animasi selesai
-            }, 5000);
-        }
-
-        // Fungsi untuk menentukan warna alert berdasarkan type
-        function getAlertColor(type) {
-            const colors = {
-                danger: 'bg-red-50 text-red-800 dark:bg-gray-800 dark:text-red-400',
-                alert: 'bg-yellow-50 text-yellow-800 dark:bg-gray-800 dark:text-yellow-400',
-                success: 'bg-green-50 text-green-800 dark:bg-gray-800 dark:text-green-400',
-                info: 'bg-blue-50 text-blue-800 dark:bg-gray-800 dark:text-blue-400',
-            };
-            return colors[type] || colors.info;
-        }
-
-        // Fungsi untuk menentukan judul alert berdasarkan type
-        function getAlertTitle(type) {
-            const titles = {
-                danger: 'Please fix the following errors:',
-                alert: 'Attention needed:',
-                success: 'Success!',
-                info: 'Info:',
-            };
-            return titles[type] || 'Info';
-        }
-</script>
 </x-layoutdsbd>

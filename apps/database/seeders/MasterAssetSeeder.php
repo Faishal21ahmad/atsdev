@@ -41,7 +41,6 @@ class MasterAssetSeeder extends Seeder
             $item['updated_at'] = now();
             return $item;
         }, $masterAssets);
-
         MasterAsset::insert($masterAssets);
     }
 }

@@ -1,6 +1,9 @@
 <?php
 namespace Database\Seeders;
+
+use App\Models\Permission;
 use Illuminate\Database\Seeder;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -11,18 +14,19 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             DepartmentsSeeder::class,
-            // CategorySeeder::class,
-            // VendorSeeder::class,
-            // LocationSeeder::class,
+                // CategorySeeder::class,
+                // VendorSeeder::class,
+                // LocationSeeder::class,
             UsersTableSeeder::class,
-            // MasterAssetSeeder::class,
-            // CheckinSeeder::class,
-            // CheckinMasterDetailSeeder::class,
-            // CheckoutSeeder::class,
-            // ItemAssetsSeeder::class,
-            // MaintenanceSeeder::class,
-            // FileMaintenSeeder::class,
-            // UserOtpSeeder::class,
+                // MasterAssetSeeder::class,
+                // CheckinSeeder::class,
+                // CheckinMasterDetailSeeder::class,
+                // CheckoutSeeder::class,
+                // ItemAssetsSeeder::class,
+                // MaintenanceSeeder::class,
+                // FileMaintenSeeder::class,
+                // UserOtpSeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }

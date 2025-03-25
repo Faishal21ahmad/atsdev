@@ -18,20 +18,22 @@ class CheckinMasterDetail extends Model
     ];
     protected $dates = ['deleted_at'];
 
+    // Relasi ke item_assets
+    public function itemAssets(){
+        return $this->hasMany(ItemAsset::class);
+    }
+
     // Relasi ke Checkin
-    public function checkin()
-    {
+    public function checkin(){
         return $this->belongsTo(Checkin::class);
     }
 
     // Relasi ke MasterAsset
-    public function masterAsset()
-    {
+    public function masterAsset(){
         return $this->belongsTo(MasterAsset::class);
     }
 
-    public function scopeActive($query)
-    {
+    public function scopeActive($query){
         return $query->whereNull('deleted_at');
     }
 }

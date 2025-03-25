@@ -38,10 +38,12 @@ class LocationCtrl extends Controller
     public function actionAddLocation(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nameLocation' => 'required',
-            'description' => 'nullable',
+            'nameLocation' => 'required|max:60',
+            'description' => 'nullable|max:300',
         ], [
             'nameLocation.required' => 'Name Location is required',
+            'nameLocation.max' => 'Name Location maximal 60 characters',
+            'description.max' => 'Description maximal 300 characters'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -49,7 +51,7 @@ class LocationCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataLocation = [
@@ -71,19 +73,22 @@ class LocationCtrl extends Controller
     public function actionUpdateLocation(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'modalId' => 'required',
-            'nameLocation' => 'nullable',
-            'description' => 'nullable',
+            'modalId' => 'required|numeric',
+            'nameLocation' => 'nullable|max:60',
+            'description' => 'nullable|max:300',
         ], [
-            'modalId.required' => 'Modal Id is required',
+            'modalId.required' => 'Location is not valid !!.',
+            'modalId.numeric' => 'Location is not valid !!.',
+            'nameLocation.max' => 'Name Location maximal 60 characters !!.',
+            'description.max' => 'Description maximal 300 characters !!.'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
         if ($validator->fails()) {
-            return back()->with('alert', [
+            return back()->with('alert !!.', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataLocation = [
@@ -110,8 +115,6 @@ class LocationCtrl extends Controller
                 'type' => 'danger',
                 'messages' => ['400 Bad Request: HTTP method is required.'],
             ]);
-            
-            // abort(400, 'Bad Request: HTTP method is required.');
         }
         
         $location = Location::findOrFail($id);
@@ -134,9 +137,21 @@ class LocationCtrl extends Controller
     }
 
     public function importLocationExcel(Request $request){
-        $request->validate([
-            'file' => 'required|mimes:xls,xlsx,csv'
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls,csv|max:500',
+        ],[
+            'file.required' => 'File tidak boleh kosong',
+            'file.mimes' => 'File harus berupa excel',
+            'file.max' => 'File maksimal 500KB',
         ]);
+
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ]);
+        }
 
         try {
             Excel::import(new LocationsImport, $request->file('file'));

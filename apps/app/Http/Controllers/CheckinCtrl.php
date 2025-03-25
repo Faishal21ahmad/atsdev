@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Imports\CheckinImport;
 use Illuminate\Support\Facades\DB;
 use App\Models\CheckinMasterDetail;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -19,9 +20,13 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class CheckinCtrl extends Controller
 {
     // Show Check In
-    public function showCheckin(){
+    public function showCheckin($slug = null){
+        if($slug) $nameMastarAsset = MasterAsset::where('slug', $slug)->first();
+        else $nameMastarAsset = '';
+
         $user = Auth::user();
         $assetMaster = MasterAsset::active()->get();
+        $vendors = Vendor::active()->get();
 
         $cart = session()->get('cart', []);
         $total = $this->calculateTotal($cart);
@@ -29,9 +34,12 @@ class CheckinCtrl extends Controller
         $data = [
             'title' => 'Check In',
             'assetMaster' => $assetMaster,
+            'nameMastarAsset' => $nameMastarAsset,
+            'vendors' => $vendors,
             'cart' => $cart,
             'total' => $total,
             'user' => [
+                'id' => $user->id,
                 'name' => $user->username,
                 'role' => $user->department->department_name,
                 ]
@@ -39,10 +47,36 @@ class CheckinCtrl extends Controller
         return view('checkin', $data);
     }
 
-    // Menampilkan halaman check-in
     // Menambahkan asset ke keranjang
     public function actionAddCheckinCart(Request $request)
     {
+        // Validasi data
+        $validator = Validator::make($request->all(),[
+            'nameAsset' =>'required|max:60',
+            'slug' =>'nullable',
+            'unitPrice' =>'required|numeric',
+            'quantity' =>'required|numeric|max:500',
+            'condition' =>'required|max:60',
+        ], [
+            'nameAsset.required' => 'Name Asset is required',
+            'nameAsset.max' => 'Name Asset maximal 60 characters',
+            'unitPrice.required' => 'Unit Price is required',
+            'unitPrice.numeric' => 'Unit Price is number',
+            'quantity.required' => 'Quantity is required',
+            'quantity.numeric' => 'Quantity is number',
+            'quantity.max' => 'Quantity max 500',
+            'condition.required' => 'Condition is required',
+            'condition.max' => 'Condition maximal 60 characters',
+        ]);
+
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ]);
+        }
+
         $asset = [
             'id' => uniqid(), // ID unik untuk setiap item
             'slug' => $request->slug,
@@ -58,10 +92,8 @@ class CheckinCtrl extends Controller
 
         return back()->with('alert', [
             'type' => 'success',
-            'messages' => [],
+            'messages' => ['Asset berhasil ditambahkan'],
         ]);
-
-        // return redirect()->route('showCheckIn')->with('success', 'Asset berhasil ditambahkan ke keranjang!');
     }
 
     // Menghapus asset dari keranjang
@@ -74,37 +106,40 @@ class CheckinCtrl extends Controller
         session()->put('cart', $cart);
         return back()->with('alert', [
             'type' => 'success',
-            'messages' => ['remove'],
+            'messages' => ['Asset berhasil Remove'],
         ]);
-        // return redirect()->route('showCheckIn')->with('success', 'Asset berhasil dihapus dari keranjang!');
     }
 
     public function actionSaveCheckinCart(Request $request){
         // Validasi data
         $validator = Validator::make($request->all(),[
-            'description' => 'nullable',
+            'description' => 'nullable|max:300',
+            'vendor' =>'required|numeric',
             'total' => 'required|numeric',
         ], [
-            'total.required' => 'Name total is required',
-            'total.numeric' => 'Name total is number',
+            'description.max' => 'Description maximal 300 characters',
+            'vendor.numeric' => 'Vendor tidak valid !!.',
+            'vendor.required' => 'Vendor is required !!.',
+            'total.required' => 'Total is required !!.',
+            'total.numeric' => 'Total tidak valid !!.',
         ]);
 
-         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
         if ($validator->fails()) {
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $cart = session()->get('cart', []);
-        // dd($cart);
+
         // Jika keranjang kosong, kembalikan ke halaman sebelumnya dengan pesan error
         if (count($cart) == 0) {
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => ['Keranjang kosong, tidak ada asset yang dipilih.'],
-            ])->onlyInput();
+            ]);
         }
 
         // Mulai database transaction
@@ -117,6 +152,8 @@ class CheckinCtrl extends Controller
             // Data Checkin
             $dataCheckin = [
                 'codecheckin' => $docCode,
+                'user_id' => Auth::id(),
+                'vendor_id' => $request->vendor,
                 'description' => $request->description,
                 'total' => $request->total,
                 'created_at' => now(),
@@ -156,10 +193,8 @@ class CheckinCtrl extends Controller
                 $itemAssets = [];
                 for ($i = 0; $i < $item['quantity']; $i++) {
                     $codeAsset = DocService::generateCodeAssets();
-
                     $qrPath = 'fileQR/' . $codeAsset . '.svg';
                     QrCode::size(300)->format('svg')->generate($codeAsset, storage_path('app/public/' . $qrPath));
-
                     $itemAssets[] = [
                         'master_asset_id' => $dataMasterAsset->id,
                         'checkin_master_detail_id' => $dataCheckinMasterDetail->id,
@@ -181,7 +216,7 @@ class CheckinCtrl extends Controller
 
             return redirect()->route('asset')->with('alert', [
                 'type' => 'success',
-                'messages' => ['Check IN Berhasil'],
+                'messages' => ['Check In Berhasil'],
             ]);
         } catch (\Exception $e) {
             // Rollback transaksi jika terjadi error
@@ -196,9 +231,21 @@ class CheckinCtrl extends Controller
     // Import data excel ke cart
     public function importCheckinExcel(Request $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls,csv|max:500',
+        ],[
+            'file.required' => 'File tidak boleh kosong',
+            'file.mimes' => 'File harus berupa excel',
+            'file.max' => 'File maksimal 500KB',
         ]);
+
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ]);
+        }
 
         try {
             Excel::import(new CheckinImport, $request->file('file'));
@@ -207,7 +254,6 @@ class CheckinCtrl extends Controller
             return back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-
 
     // Menghitung total harga
     private function calculateTotal($cart)
@@ -218,102 +264,4 @@ class CheckinCtrl extends Controller
         }
         return $total;
     }
-
 }
-
-
-
-// Menyimpan keranjang (checkout)
-    // public function actionSaveCheckinCart(Request $request)
-    // {
-    //     // get data cart form session
-    //     $cart = session()->get('cart', []);
-
-    //     // Jika keranjang kosong, kembalikan ke halaman sebelumnya dengan pesan error
-    //     if(count($cart) == 0){
-    //         return back()->with('alert', [
-    //             'type' => 'danger',
-    //             'messages' => ['Keranjang kosong, tidak ada asset yang dipilih.'],
-    //         ])->onlyInput();
-    //     }
-    //     // generate code check in
-    //     $docCode = DocService::generateDocumentCodeCheckin();
-
-    //     $dataCheckin = [
-    //         'codecheckin' => $docCode,
-    //         'description' => $request['description'],
-    //         'total' => $request['total'],
-    //         'created_at' => now(),
-    //         'updated_at' => now(),
-    //     ];
-    //     // Input data Checkin ke tabel checkin
-    //     $checkin = Checkin::create($dataCheckin);
-
-    //     // Loop data cart untuk input data dan pengecekan data master asset
-    //     foreach ($cart as $item) {
-    //         // Cek apakah slug ada di tabel master asset
-    //         // Untuk keperluan penambahan data master aset baru maupun pembaruan data yang sudah ada.
-    //         if ($item['slug']) {
-    //             // Slug ada Update data master asset
-    //             $dataMasterAsset = MasterAsset::where('slug', $item['slug'])->first();
-    //             // Susunan data Update master asset
-    //             $dataMaster = [
-    //                 'current_stock' => $dataMasterAsset->current_stock + $item['quantity'],
-    //                 'updated_at' => now(),
-    //             ];
-    //             // Update data master asset
-    //             $dataMasterAsset->update($dataMaster);
-
-    //         } else { // Slug = null
-    //             // Generate slug
-    //             $slug = Str::slug($item['nameAsset']);
-    //             // Susunan data input master asset
-    //             $dataMaster = [
-    //                 'asset_name' => $item['nameAsset'],
-    //                 'slug' => $slug,
-    //                 'category_id' => null,
-    //                 'interval_maintence' => null,
-    //                 'min_stock' => null,
-    //                 'current_stock' => $item['quantity'],
-    //                 'description' => null,
-    //                 'created_at' => now(),
-    //                 'updated_at' => now(),
-    //             ];
-    //             // Input data ke master asset 
-    //             $dataMasterAsset = MasterAsset::create($dataMaster);
-    //         }
-    //         // Susunan data checkin_master_detail
-    //         $dataCheckinMasterDetail = [
-    //             'check_in_id' => $checkin['id'],
-    //             'master_asset_id' => $dataMasterAsset['id'],
-    //             'quantity' => $item['quantity'],
-    //             'unit_price' => $item['unitPrice'],
-    //             'sub_total' => $item['quantity'] * $item['unitPrice'],
-    //             'created_at' => now(),
-    //         ];
-    //         // Input data Tabel Privot checkin_master_detail
-    //         $dataCheckinMasterDetail = CheckinMasterDetail::create($dataCheckinMasterDetail);
-
-    //         // Looping sebanyak nilai $item['quantity']
-    //         for ($i = 0; $i < $item['quantity']; $i++) {
-    //             // Susunan data item asset
-    //             $dataNewItemAsset = [
-    //                 'master_asset_id' => $dataMasterAsset['id'],
-    //                 'checkin_master_detail_id' => $dataCheckinMasterDetail['id'],
-    //                 'code_assets' => DocService::generateCodeAssets(), // Generate kode unik untuk setiap item
-    //                 'status' => 'Available',
-    //                 'condition' => $item['condition'],
-    //                 'created_at' => now(),
-    //                 'updated_at' => now(),
-    //             ];
-    //             // Input data item asset
-    //             ItemAsset::create($dataNewItemAsset);
-    //         }
-    //     };
-    //     session()->forget('cart'); // Kosongkan keranjang setelah checkout
-
-    //     return redirect()->route('asset')->with('alert', [
-    //         'type' => 'success',
-    //         'messages' => ['Check IN Berhasil'],
-    //     ]);
-    // }

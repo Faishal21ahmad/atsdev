@@ -16,13 +16,13 @@ return new class extends Migration
             $table->string('code_maintenance', 15)->unique();
             $table->unsignedBigInteger('item_asset_id');
             $table->unsignedBigInteger('vendor_id')->nullable();
-            $table->unsignedBigInteger('master_asset_id')->nullable();
-            $table->unsignedBigInteger('location_id')->nullable();
+            $table->unsignedBigInteger('user_id_report')->nullable();
+            $table->unsignedBigInteger('user_id_resolve')->nullable();
             $table->dateTime('date_mainten')->nullable();
             $table->enum('report_type', ['Repair', 'Maintenance'])->nullable();
-            $table->text('problem_detail')->nullable();
-            $table->text('repaire_detail')->nullable();
-            $table->decimal('cost', 10, 2)->nullable();
+            $table->text('problem_detail', 400)->nullable();
+            $table->text('repaire_detail', 400)->nullable();
+            $table->decimal('cost', 40, 2)->nullable();
             $table->enum('status_mainten', ['Reported', 'Proses', 'Finish']);
             $table->timestamps();
             $table->softDeletes();
@@ -30,14 +30,11 @@ return new class extends Migration
             // Foreign Keys
             $table->foreign('item_asset_id')->references('id')->on('item_assets')->onDelete('cascade');
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
-            $table->foreign('master_asset_id')->references('id')->on('master_assets')->onDelete('cascade');
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
-
+            $table->foreign('user_id_report')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id_resolve')->references('id')->on('users')->onDelete('cascade');
+            
             // Indexes
             $table->index('item_asset_id');
-            $table->index('vendor_id');
-            $table->index('master_asset_id');
-            $table->index('location_id');
             $table->index('status_mainten');
         });
     }

@@ -33,6 +33,7 @@ class AssetsCtrl extends Controller
         ];
         return view('asset', $data);
     }
+
     // Show Master Asset
     public function showMasterAsset(string $slug)
     {
@@ -59,17 +60,22 @@ class AssetsCtrl extends Controller
     {
         $validator = Validator::make($request->all(), [
             'slug' => 'required',
-            'nameAsset' => 'required',
-            'category' => 'nullable',
-            'maintenInterval' => 'nullable',
-            'stockMinimum' => 'nullable',
+            'nameAsset' => 'required|max:60',
+            'category' => 'nullable|numeric',
+            'maintenInterval' => 'nullable|numeric',
+            'stockMinimum' => 'nullable|numeric',
             'fileImg' => 'nullable|mimes:pdf,png,jpg,jpeg|max:2048',
-            'description' => 'nullable',
+            'description' => 'nullable|max:300',
         ], [
             'slug.required' => 'Slug wajib diisi !!.',
             'nameAsset.required' => 'Name Asset wajib diisi !!.',
+            'nameAsset.max' => 'Name Asset maksimal 60 karakter !!.',
+            'category.numeric' => 'Category tidak valid!!.',
+            'maintenInterval.numeric' => 'Interval Maintenence harus berupa angka!!.',
+            'stockMinimum.numeric' => 'Stock Minimum harus berupa angka!!.',
             'fileImg.mimes' => 'Image Upload harus berupa pdf, png, jpg, jpeg !!.',
             'fileImg.max' => 'Image Upload maksimal 2MB !!.',
+            'description.max' => 'Description maksimal 300 karakter !!.',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -77,7 +83,7 @@ class AssetsCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
         
         $slugNew = Str::slug($request->nameAsset);
@@ -109,7 +115,6 @@ class AssetsCtrl extends Controller
             'image_name' => $fileName,
             'updated_at' => now(),
         ];
-
         MasterAsset::where('slug', $request->slug)->update($dataUpdateMasterAsset);
 
         return redirect()->route('masterAsset', $slugNew )->with('alert', [
@@ -153,13 +158,18 @@ class AssetsCtrl extends Controller
     public function actionEditItemAsset(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'codeAsset' => 'required',
-            'condition' => 'nullable',
-            'location' => 'nullable',
-            'departement' => 'nullable',
-            'description' => 'nullable'
+            'codeAsset' => 'required|max:8',
+            'condition' => 'nullable|max:100',
+            'location' => 'nullable|numeric',
+            'departement' => 'nullable|numeric',
+            'description' => 'nullable|max:300',
         ], [
-            'codeAsset.required' => 'Code Asset wajib diisi !!.'
+            'codeAsset.required' => 'Code Asset wajib diisi !!.',
+            'codeAsset.max' => 'Code Asset tidak valid !!.',
+            'condition.max' => 'Condition maksimal 100 karakter !!.',
+            'location.numeric' => 'Location tidak valid !!.',
+            'departement.numeric' => 'Departement tidak valid !!.',
+            'description.max' => 'Description maksimal 300 karakter !!.',
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -167,7 +177,7 @@ class AssetsCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataUpdateItemAsset = [
@@ -177,7 +187,6 @@ class AssetsCtrl extends Controller
             'description' => $request->description,
             'updated_at' => now(),
         ];
-
         ItemAsset::where('code_assets', $request->codeAsset)->update($dataUpdateItemAsset);
 
         return redirect()->route('itemAsset', $request->codeAsset )->with('alert', [
@@ -185,5 +194,4 @@ class AssetsCtrl extends Controller
             'messages' => ['Update Berhasil'],
         ]);
     }
-
 }

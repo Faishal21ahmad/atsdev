@@ -31,14 +31,14 @@ class UsersCtrl extends Controller
     public function actionUpdateProfile(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255',
-            'bio' => 'nullable|string|max:500'
+            'username' => 'required|string|max:100',
+            'bio' => 'nullable|string|max:400'
         ], [
             'username.required' => 'Username tidak boleh kosong',
             'username.string' => 'Username harus berupa string',
-            'username.max' => 'Username tidak boleh lebih dari 255 karakter',
+            'username.max' => 'Username tidak boleh lebih dari 100 karakter',
             'bio.string' => 'bio harus berupa string',
-            'bio.max' => 'bio tidak boleh lebih dari 500 karakter'
+            'bio.max' => 'bio tidak boleh lebih dari 400 karakter'
         ]);
 
          // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -46,7 +46,7 @@ class UsersCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $users = Auth::user();
@@ -85,7 +85,7 @@ class UsersCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
         $user = Auth::user();
 

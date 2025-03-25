@@ -13,14 +13,21 @@ return new class extends Migration
     {
         Schema::create('checkins', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('vendor_id')->nullable();
             $table->string('codecheckin', 15)->unique();
-            $table->text('description', 255)->nullable();
-            $table->integer('total');
+            $table->text('description', 300)->nullable();
+            $table->decimal('total', 40, 2);
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
+            
             // Indexes
             $table->index('codecheckin');
+            $table->index('vendor_id');
+            $table->index('user_id');
         });
     }
 

@@ -14,7 +14,6 @@ class DepartmentsSeeder extends Seeder
     public function run()
     {
         $departments = ['IT','HR', 'Finance', 'Marketing', 'Production'];
-
         foreach ($departments as $department) {
             Department::create([
                 'department_name' => $department,

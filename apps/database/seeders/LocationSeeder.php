@@ -30,15 +30,12 @@ class LocationSeeder extends Seeder
             ['location_name' => 'Archive Room F3 R3', 'description' => 'Archive Room Floor 3 Room 3'],
             ['location_name' => 'IT Room F2 R4', 'description' => 'IT Room Floor 2 Room 4'],
         ];
-
         // Menambahkan created_at dan updated_at ke setiap elemen
         $locations = array_map(function($item) {
             $item['created_at'] = now();
             $item['updated_at'] = now();
             return $item;
         }, $locations);
-
         Location::insert($locations);
-        
     }
 }

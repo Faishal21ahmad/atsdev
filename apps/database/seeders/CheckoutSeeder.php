@@ -14,11 +14,11 @@ class CheckoutSeeder extends Seeder
     public function run(): void
     {
         $checkouts = [
-            ['vendor_id' => 1, 'codecheckout' => 'CHO25052024A001', 'description' => 'Checkout for vendor 1'],
-            ['vendor_id' => 2, 'codecheckout' => 'CHO25052024A002', 'description' => 'Checkout for vendor 2'],
-            ['vendor_id' => 3, 'codecheckout' => 'CHO25052024A003', 'description' => 'Checkout for vendor 3'],
-            ['vendor_id' => 4, 'codecheckout' => 'CHO25052024A004', 'description' => 'Checkout for vendor 4'],
-            ['vendor_id' => 5, 'codecheckout' => 'CHO25052024A005', 'description' => 'Checkout for vendor 5'],
+            ['vendor_id' => 1, 'user_id' => 1, 'codecheckout' => 'CHO25052024A001', 'description' => 'Checkout for vendor 1'],
+            ['vendor_id' => 2, 'user_id' => 1, 'codecheckout' => 'CHO25052024A002', 'description' => 'Checkout for vendor 2'],
+            ['vendor_id' => 3, 'user_id' => 1, 'codecheckout' => 'CHO25052024A003', 'description' => 'Checkout for vendor 3'],
+            ['vendor_id' => 4, 'user_id' => 1, 'codecheckout' => 'CHO25052024A004', 'description' => 'Checkout for vendor 4'],
+            ['vendor_id' => 5, 'user_id' => 1, 'codecheckout' => 'CHO25052024A005', 'description' => 'Checkout for vendor 5'],
         ];
 
         // Menambahkan created_at dan updated_at ke setiap elemen
@@ -29,13 +29,5 @@ class CheckoutSeeder extends Seeder
         }, $checkouts);
         
         Checkout::insert($checkouts);
-        // foreach ($checkouts as $checkouts) {
-        //     Checkout::create([
-        //         'vendor_id' => $checkouts['vendor_id'],
-        //         'codecheckout' => $checkouts['codecheckout'],
-        //         'check_out_date' => $checkouts['check_out_date'],
-        //         'description' => $checkouts['description']
-        //     ]);
-        // }
     }
 }

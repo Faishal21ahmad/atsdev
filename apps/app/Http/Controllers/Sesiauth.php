@@ -45,7 +45,7 @@ class Sesiauth extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $user = User::where('email', $request->email)->first();
@@ -69,7 +69,7 @@ class Sesiauth extends Controller
             $otp = UserOtp::generateOtp($user->id, 'verify_email');
             session(['email' => $user->email]);
 
-            // Mail::to($user->email)->send(new SendOtp($otp));
+            Mail::to($user->email)->send(new SendOtp($otp));
             return redirect()->route('otp.form')->with('alert', [
                 'type' => 'alert',
                 'messages' => ['Hai, ' . $user->username . ' Akun mu belum aktif !!','Masukkan OTP yang telah dikirimkan ke email Anda.'],
@@ -94,6 +94,8 @@ class Sesiauth extends Controller
      */
     public function showOtpForm()
     {
+        $email = session()->get('email');
+        if (!$email) abort(403, 'Access Forbidden');
         $data = [
             'title' => 'OTP',
         ];
@@ -109,16 +111,19 @@ class Sesiauth extends Controller
         $validator = Validator::make($request->all(), [
             'otpfull' => 'required|numeric',
         ], [
-            'otpfull.required' => 'Email wajib diisi server.',
-            'otpfull.numeric' => 'Email tidak valid server.',
+            'otpfull.required' => 'Email wajib diisi .',
+            'otpfull.numeric' => 'Email tidak valid .',
         ]);
+
+        $email = session()->get('email');
+        if (!$email) abort(403, 'Access Forbidden');
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
         if ($validator->fails()) {
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         // Cari user berdasarkan email
@@ -176,18 +181,15 @@ class Sesiauth extends Controller
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Email tidak valid.',
         ]);
-
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
         if ($validator->fails()) {
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
-
         // Cari user berdasarkan email
         $user = User::where('email', $request->email)->first();
-
         // Jika user tidak ditemukan
         if (!$user) {
             return back()->with('alert', [
@@ -195,7 +197,6 @@ class Sesiauth extends Controller
                 'messages' => ['Email tidak terdaftar.'],
             ])->onlyInput('email');
         }
-
         // Jika user is_disable
         if ($user->is_disable) {
             return back()->with('alert', [
@@ -203,15 +204,11 @@ class Sesiauth extends Controller
                 'messages' => ['Akun Anda dinonaktifkan. Harap hubungi administrator.'],
             ])->onlyInput('email');
         }
-
         session(['email' => $request->email]);
-
         // Generate OTP
         $otp = UserOtp::generateOtp($user->id, 'forgot_password');
-
         // Kirim email
-        // Mail::to($user->email)->send(new SendOtp($otp));
-
+        Mail::to($user->email)->send(new SendOtp($otp));
         return redirect()->route('otp.form')->with('alert', [
             'type' => 'success',
             'messages' => ['Masukkan OTP yang telah dikirimkan ke email Anda.'],
@@ -223,6 +220,8 @@ class Sesiauth extends Controller
      */
     public function showForgotPassword()
     {
+        $email = session()->get('email');
+        if (!$email) abort(403, 'Access Forbidden');
         $data = [
             'title' => 'Lupa Password',
         ];
@@ -242,12 +241,14 @@ class Sesiauth extends Controller
             'newPassword.required' => 'New Password wajib diisi.',
             'passwordConfirm.required' => 'Confirm Password wajib diisi.',
         ]);
+        $email = session()->get('email');
+        if (!$email) abort(403, 'Access Forbidden');
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
         if ($validator->fails()) {
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
         // Jika password dan konfirmasi password tidak sama
         if ($request->newPassword !== $request->passwordConfirm) {
@@ -256,8 +257,6 @@ class Sesiauth extends Controller
                 'messages' => ['Password dan konfirmasi password tidak sama.'],
             ])->onlyInput('newPassword', 'passwordConfirm');
         }
-
-        $email = session()->get('email');
         // Cari user berdasarkan email
         $user = User::where('email', $email)->first();
         session()->forget('email');
@@ -277,12 +276,10 @@ class Sesiauth extends Controller
                 'messages' => ['Akun Anda dinonaktifkan. Harap hubungi administrator.'],
             ])->onlyInput('email');
         }
-
         $user->update([
             'password' => Hash::make($request->newPassword),
             'updated_at' => now(),
         ]);
-
         return redirect()->route('login')->with('alert', [
             'type' => 'success',
             'messages' => ['Password berhasil diubah. Silahkan login.'],

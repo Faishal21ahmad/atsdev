@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Checkin;
 use App\Models\Checkout;
+use App\Models\ItemAsset;
+use App\Models\FileMainten;
 use App\Models\Maintenance;
 use Illuminate\Http\Request;
+use App\Models\CheckoutItemDetail;
+use App\Models\CheckinMasterDetail;
 use Illuminate\Support\Facades\Auth;
 
 class AuditCtrl extends Controller
@@ -16,12 +20,9 @@ class AuditCtrl extends Controller
     public function showAudit()
     {
         $user = Auth::user();
-        // $dataCheckin = Checkin::active()->get();
-        // $dataCheckout = Checkout::active()->get();
-
         $dataCheckinDetail = Checkin::getAllWithAssetTotals()->get();
         $dataCheckoutDetail = Checkout::getAllWithItemAssetCount()->get();
-        $dataMaintenance = Maintenance::active()->get();
+        $dataMaintenance = Maintenance::where('status_mainten', 'Finish')->get();
         
         $data = [
             'title' => 'Audit',
@@ -37,63 +38,63 @@ class AuditCtrl extends Controller
         return view('audit', $data);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function showAuditCheckin(string $codecheckin) {
+        $user = Auth::user();
+        $datacheckin = Checkin::where('codecheckin', $codecheckin)->first();
+        $datadetailcheckin = CheckinMasterDetail::where('check_in_id', $datacheckin->id)->get();
+        $iddetailchk = $datadetailcheckin->pluck('id')->toArray();
+        $dataitemasset = ItemAsset::whereIn('checkin_master_detail_id', $iddetailchk)->get();
+        $data = [
+            'title' => 'Audit Checkin',
+            'codecheckin' => $codecheckin,
+            'datacheckin' => $datacheckin,
+            'datadetailcheckin' => $datadetailcheckin,
+            'dataitemasset' => $dataitemasset,
+            'user' => [
+                'name' => $user->username,
+                'role' => $user->department->department_name,
+            ]
+        ];
+        return view('detailAuditCheckin', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function showAuditCheckout(string $codecheckout) {
+        $user = Auth::user();
+        $datacheckout = Checkout::where('codecheckout', $codecheckout)->first();
+        $datadetailcheckout = CheckoutItemDetail::where('checkout_id', $datacheckout->id)->get();
+
+        $data = [
+            'title' => 'Audit Checkout',
+            'codecheckout' => $codecheckout,
+            'datacheckout' => $datacheckout,
+            'datadetailcheckout' => $datadetailcheckout,
+            'user' => [
+                'name' => $user->username,
+                'role' => $user->department->department_name,
+            ]
+        ];
+        return view('detailAuditCheckout', $data);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function showAuditMaintenance(string $codeMainten) {
+        $user = Auth::user();
+        $mainten = Maintenance::getByCodeMainten($codeMainten)->first();
+        $fileProblem = FileMainten::getFileProblem($mainten->id);
+        $fileRepaire = FileMainten::getFileRepaire($mainten->id);
+        // Jika kosong, ubah menjadi null
+        $fileProblem = $fileProblem->isEmpty() ? null : $fileProblem;
+        $fileRepaire = $fileRepaire->isEmpty() ? null : $fileRepaire;
+        
+        $data = [
+            'title' => 'Detail Maintenance',
+            'mainten'  => $mainten,
+            'fileProblem' => $fileProblem,
+            'fileRepaire' => $fileRepaire,
+            'user' => [
+                'name' => $user->username,
+                'role' => $user->department->department_name,
+                ]
+        ];
+        return view('detailmaintenance', $data);
     }
 }

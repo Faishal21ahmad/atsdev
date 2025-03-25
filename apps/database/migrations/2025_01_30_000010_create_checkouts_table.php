@@ -14,16 +14,21 @@ return new class extends Migration
         Schema::create('checkouts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vendor_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->string('codecheckout', 15)->unique();
-            $table->text('description')->nullable();
+            $table->string('reason', 50)->nullable();
+            $table->text('description', 300)->nullable();
+            $table->decimal('total', 40, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             // Foreign Key
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             // Indexes
             $table->index('vendor_id');
+            $table->index('user_id');
             $table->index('codecheckout');
         });
     }

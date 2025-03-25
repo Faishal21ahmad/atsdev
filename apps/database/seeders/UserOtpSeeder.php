@@ -32,7 +32,6 @@ class UserOtpSeeder extends Seeder
             $item['updated_at'] = now();
             return $item;
         }, $UserOtps);
-
         UserOtp::insert($UserOtps);
     }
 }

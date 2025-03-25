@@ -18,7 +18,6 @@ class VendorCtrl extends Controller
      */
     public function showVendor()
     {
-
         $user = Auth::user();
         $vendors = Vendor::active()->get();
 
@@ -37,14 +36,20 @@ class VendorCtrl extends Controller
     public function actionAddVendor(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'vendorName' => 'required',
-            'contact' => 'required',
-            'address' => 'required',
-            'description' => 'nullable'
+            'vendorName' => 'required|max:60',
+            'contact' => 'required|string|max:20',
+            'address' => 'required|string|max:300',
+            'description' => 'nullable|max:300',
         ], [
             'vendorName.required' => 'Vendor Name is required',
+            'vendorName.max' => 'Vendor Name maximal 60 characters',
             'contact.required' => 'Contact is required',
-            'address.required' => 'Address is required'
+            'contact.max' => 'Contact maximal 20 characters',
+            'contact.string' => 'Contact must be a string',
+            'address.required' => 'Address is required',
+            'address.max' => 'Address maximal 300 characters',
+            'address.string' => 'Address must be a string',
+            'description.max' => 'Description maximal 300 characters'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -52,7 +57,7 @@ class VendorCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataVendor = [
@@ -63,7 +68,6 @@ class VendorCtrl extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ];
-
         Vendor::create($dataVendor);
 
         return redirect()->route('vendor')->with('alert', [
@@ -76,13 +80,23 @@ class VendorCtrl extends Controller
     public function actionUpdateVendor(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'modalId' => 'required',
-            'vendorName' => 'nullable',
-            'contact' => 'nullable',
-            'address' => 'nullable',
-            'description' => 'nullable',
+            'modalId' => 'required|numeric',
+            'vendorName' => 'nullable|string|max:60',
+            'contact' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:300',
+            'description' => 'nullable|string|max:300',
         ], [
-            'modalId.required' => 'Modal ID is required'
+            'modalId.required' => 'Vendor is not valid',
+            'modalId.numeric' => 'Vendor is not valid',
+            'vendorName.required' => 'Vendor Name is required',
+            'vendorName.max' => 'Vendor Name maximal 60 characters',
+            'contact.required' => 'Contact is required',
+            'contact.max' => 'Contact maximal 20 characters',
+            'contact.string' => 'Contact must be a string',
+            'address.required' => 'Address is required',
+            'address.max' => 'Address maximal 300 characters',
+            'address.string' => 'Address must be a string',
+            'description.max' => 'Description maximal 300 characters'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -90,7 +104,7 @@ class VendorCtrl extends Controller
             return back()->with('alert', [
                 'type' => 'danger',
                 'messages' => $validator->errors()->all(),
-            ])->onlyInput();
+            ]);
         }
 
         $dataVendor = [
@@ -131,9 +145,21 @@ class VendorCtrl extends Controller
     }
 
     public function importVendorExcel(Request $request){
-        $request->validate([
-            'file' => 'required|mimes:xls,xlsx,csv'
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xls,xlsx,csv|max:500',
+        ], [
+            'file.required' => 'File is required',
+            'file.mimes' => 'File must be a file of type: xls, xlsx, csv',
+            'file.max' => 'File size must be less than 500 KB',
         ]);
+
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ]);
+        }
 
         try {
             Excel::import(new VendorsImport, $request->file('file'));

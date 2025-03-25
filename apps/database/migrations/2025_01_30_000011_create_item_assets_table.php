@@ -17,11 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('checkin_master_detail_id');
             $table->unsignedBigInteger('location_id')->nullable();
             $table->unsignedBigInteger('department_id')->nullable();
-            $table->unsignedBigInteger('vendor_id')->nullable();
-            $table->unsignedBigInteger('check_out_id')->nullable();
             $table->string('code_assets', 8)->unique();
-            $table->text('description')->nullable();
-            $table->string('condition')->nullable();
+            $table->text('description', 300)->nullable();
+            $table->string('condition', 100)->nullable();
             $table->enum('status', ['Available', 'Maintenance', 'Damaged', 'Checked_out']);
             $table->timestamps();
             $table->softDeletes();
@@ -31,8 +29,6 @@ return new class extends Migration
             $table->foreign('checkin_master_detail_id')->references('id')->on('checkin_master_details')->onDelete('cascade');
             $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
-            $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
-            $table->foreign('check_out_id')->references('id')->on('checkouts')->onDelete('cascade');
 
             // Indexes
             $table->index('master_asset_id');
@@ -40,7 +36,6 @@ return new class extends Migration
             $table->index('location_id');
             $table->index('department_id');
             $table->index('vendor_id');
-            $table->index('check_out_id');
             $table->index('status');
         });
     }

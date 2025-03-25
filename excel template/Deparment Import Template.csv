@@ -1,6 +1,5 @@
 department_name,description
 Operations,Departemen Operasional
-Sales,Departemen Penjualan
 Customer Service,Departemen Layanan Pelanggan
 Research & Development,Departemen Penelitian dan Pengembangan
 Quality Assurance,Departemen Jaminan Kualitas
@@ -10,7 +9,6 @@ Public Relations,Departemen Hubungan Masyarakat
 Training & Development,Departemen Pelatihan dan Pengembangan
 Logistics,Departemen Logistik
 Security,Departemen Keamanan
-Administration,Departemen Administrasi
 Compliance,Departemen Kepatuhan
 Engineering,Departemen Teknik
 Design,Departemen Desain

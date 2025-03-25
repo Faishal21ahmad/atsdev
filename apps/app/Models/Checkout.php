@@ -11,28 +11,38 @@ class Checkout extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'vendor_id',
         'codecheckout',
+        'user_id',
+        'vendor_id',
+        'reason',
+        'total',
         'description',
     ];
     protected $dates = ['deleted_at'];
 
+    // Relasi ke CheckoutItemDetail
+    public function checkoutItemDetail()
+    {
+        return $this->hasMany(CheckoutItemDetail::class);
+    }
     // Relasi ke Vendor
     public function vendor()
     {
         return $this->belongsTo(Vendor::class);
     }
-
-    // Relasi ke ItemAsset
-    public function itemAssets()
+    // Relasi ke User
+    public function user()
     {
-        return $this->hasMany(ItemAsset::class);
+        return $this->belongsTo(User::class);
     }
+    
+
+    // Scope untuk mendapatkan Checkout yang aktif
     public function scopeActive($query)
     {
         return $query->whereNull('deleted_at');
     }
-
+    // Scope untuk mendapatkan Checkout dengan jumlah ItemAsset terkait
     public static function getAllWithItemAssetCount(): Builder
     {
         return self::query()
@@ -40,12 +50,14 @@ class Checkout extends Model
                 'checkouts.id',
                 'checkouts.vendor_id',
                 'checkouts.codecheckout',
-                'checkouts.created_at'
+                'checkouts.created_at',
+                'vendors.vendor_name',
             ])
+            ->leftJoin('vendors','vendors.id', '=', 'checkouts.vendor_id')
             ->selectRaw('(
                 SELECT COUNT(*) 
-                FROM item_assets 
-                WHERE check_out_id = checkouts.id
+                FROM checkout_item_details 
+                WHERE checkout_id = checkouts.id
             ) as total_item_asset');
     }
 }

@@ -13,7 +13,6 @@ class Category extends Model
         'category_name',
         'description',
     ];
-    
     protected $dates = ['deleted_at'];
 
     // Relasi ke MasterAsset

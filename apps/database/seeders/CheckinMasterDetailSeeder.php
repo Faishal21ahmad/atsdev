@@ -13,7 +13,6 @@ class CheckinMasterDetailSeeder extends Seeder
      */
     public function run(): void
     {
-
         $checkindetails = [
             ['check_in_id' => 1, 'master_asset_id' => 1, 'quantity' => 5, 'unit_price' => 1500000, 'sub_total' => 7500000],
             ['check_in_id' => 1, 'master_asset_id' => 2, 'quantity' => 3, 'unit_price' => 2000000, 'sub_total' => 6000000],
@@ -26,17 +25,6 @@ class CheckinMasterDetailSeeder extends Seeder
             $item['updated_at'] = now();
             return $item;
         }, $checkindetails);
-
         CheckinMasterDetail::insert($checkindetails);
-
-        // foreach ($checkindetails as $checkindetail) {
-        //     CheckinMasterDetail::create([
-        //         'check_in_id' => $checkindetail['check_in_id'],
-        //         'master_asset_id' => $checkindetail['master_asset_id'],
-        //         'quantity' => $checkindetail['quantity'],
-        //         'unit_price' => $checkindetail['unit_price'],
-        //         'total_price' => $checkindetail['total_price']
-        //     ]);
-        // }
     }
 }

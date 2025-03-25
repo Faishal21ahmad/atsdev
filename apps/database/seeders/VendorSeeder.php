@@ -32,16 +32,6 @@ class VendorSeeder extends Seeder
             $item['updated_at'] = now();
             return $item;
         }, $vendors);
-        
         Vendor::insert($vendors);
-
-        // foreach ($vendors as $vendor) {
-        //     Vendor::create([
-        //         'vendor_name' => $vendor['name'],
-        //         'contact' => $vendor['contact'],
-        //         'address' => $vendor['address'],
-        //         'description' => $vendor['description'],
-        //     ]);
-        // }
     }
 }

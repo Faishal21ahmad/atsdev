@@ -11,24 +11,36 @@ class Checkin extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'user_id',
+        'vendor_id',
         'codecheckin',
         'description',
         'total',
     ];
-
     protected $dates = ['deleted_at'];
 
+    // Relasi ke User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    // Relasi ke Vendor
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
     // Relasi ke CheckinMasterDetail
     public function checkinMasterDetails()
     {
         return $this->hasMany(CheckinMasterDetail::class);
     }
 
+    // 
     public function scopeActive($query)
     {
         return $query->whereNull('deleted_at');
     }
-
+    
     public static function getAllWithAssetTotals(): Builder
     {
         return self::query()

@@ -1,14 +1,16 @@
-*
+
 !.gitignore
-!fileMainten/
+!fileMainten/*
 !fileMainten/Default.jpg
-!fileMasterAsset/
+!fileMasterAsset/*
 !fileMasterAsset/Default.jpg
-!fileQR/
+!fileQR/*
 !Default.jpg
-!audio/
+!audio/*
 !audio/beep1.wav
-!asset/
+!asset/*
 !asset/print.css
+!asset/ATS_dark.png
+!asset/ATS_light.png
 
 

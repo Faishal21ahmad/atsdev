@@ -6,7 +6,6 @@ use App\Models\Checkin;
 use App\Models\Checkout;
 use App\Models\Maintenance;
 use Illuminate\Support\Carbon;
-
 use App\Models\ItemAsset;
 use Illuminate\Support\Str;
 
@@ -15,7 +14,6 @@ class DocService
     public static function generateDocumentCodeMaintenance(): string
     {
         $today = Carbon::now()->format('dmY');
-
         // Ambil dokumen terakhir dari database
         $lastDocument = Maintenance::where('code_maintenance', 'LIKE', "MTN{$today}%")
             ->orderBy('code_maintenance', 'desc')
@@ -24,7 +22,6 @@ class DocService
         if ($lastDocument) {
             // Pecah kode menggunakan regex untuk mengambil bagian-bagian
             preg_match('/MTN(\d{8})([A-Z])(\d{3})/', $lastDocument->code_maintenance, $matches);
-            
             $lastSeries = $matches[2];  // Ambil huruf seri
             $lastNumber = intval($matches[3]);  // Ambil nomor urutan terakhir
         } else {
@@ -40,28 +37,21 @@ class DocService
         if ($newNumber > 999) {
             $lastSeries = chr(ord($lastSeries) + 1); // Naik huruf
             $newNumber = 1; // Reset ke 001
-
             // Jika huruf seri melebihi 'Z', reset ke 'A'
-            if (ord($lastSeries) > ord('Z')) {
-                $lastSeries = 'A';
-            }
+            if (ord($lastSeries) > ord('Z')) $lastSeries = 'A';
         }
 
         // Format nomor menjadi 3 digit (001, 002, ..., 999)
         $docNumber = str_pad($newNumber, 3, '0', STR_PAD_LEFT);
-
         // Buat kode dokumen dalam format yang diinginkan
         $newDocumentCode = "MTN{$today}{$lastSeries}{$docNumber}";
-
         // Simpan ke database
-
         return $newDocumentCode;
     }
 
     public static function generateDocumentCodeCheckin(): string
     {
         $today = Carbon::now()->format('dmY');
-
         // Ambil dokumen terakhir dari database
         $lastDocument = Checkin::where('codecheckin', 'LIKE', "CHI{$today}%")
             ->orderBy('codecheckin', 'desc')
@@ -70,7 +60,6 @@ class DocService
         if ($lastDocument) {
             // Pecah kode menggunakan regex untuk mengambil bagian-bagian
             preg_match('/CHI(\d{8})([A-Z])(\d{3})/', $lastDocument->codecheckin, $matches);
-            
             $lastSeries = $matches[2];  // Ambil huruf seri
             $lastNumber = intval($matches[3]);  // Ambil nomor urutan terakhir
         } else {
@@ -78,7 +67,6 @@ class DocService
             $lastSeries = 'A';
             $lastNumber = 0;
         }
-
         // Tambahkan nomor
         $newNumber = $lastNumber + 1;
 
@@ -88,19 +76,14 @@ class DocService
             $newNumber = 1; // Reset ke 001
 
             // Jika huruf seri melebihi 'Z', reset ke 'A'
-            if (ord($lastSeries) > ord('Z')) {
-                $lastSeries = 'A';
-            }
+            if (ord($lastSeries) > ord('Z')) $lastSeries = 'A';
         }
 
         // Format nomor menjadi 3 digit (001, 002, ..., 999)
         $docNumber = str_pad($newNumber, 3, '0', STR_PAD_LEFT);
-
         // Buat kode dokumen dalam format yang diinginkan
         $newDocumentCode = "CHI{$today}{$lastSeries}{$docNumber}";
-
         // Simpan ke database
-
         return $newDocumentCode;
     }
 
@@ -113,7 +96,6 @@ class DocService
             // Cek apakah kode sudah ada di database
             $exists = ItemAsset::where('code_assets', $code)->exists();
         } while ($exists); // Ulangi jika kode sudah ada
-
         return $code;
     }
 
@@ -129,7 +111,6 @@ class DocService
         if ($lastDocument) {
             // Pecah kode menggunakan regex untuk mengambil bagian-bagian
             preg_match('/CHO(\d{8})([A-Z])(\d{3})/', $lastDocument->codecheckin, $matches);
-            
             $lastSeries = $matches[2];  // Ambil huruf seri
             $lastNumber = intval($matches[3]);  // Ambil nomor urutan terakhir
         } else {
@@ -137,7 +118,6 @@ class DocService
             $lastSeries = 'A';
             $lastNumber = 0;
         }
-
         // Tambahkan nomor
         $newNumber = $lastNumber + 1;
 
@@ -145,21 +125,14 @@ class DocService
         if ($newNumber > 999) {
             $lastSeries = chr(ord($lastSeries) + 1); // Naik huruf
             $newNumber = 1; // Reset ke 001
-
             // Jika huruf seri melebihi 'Z', reset ke 'A'
-            if (ord($lastSeries) > ord('Z')) {
-                $lastSeries = 'A';
-            }
+            if (ord($lastSeries) > ord('Z')) $lastSeries = 'A';
         }
-
         // Format nomor menjadi 3 digit (001, 002, ..., 999)
         $docNumber = str_pad($newNumber, 3, '0', STR_PAD_LEFT);
-
         // Buat kode dokumen dalam format yang diinginkan
         $newDocumentCode = "CHO{$today}{$lastSeries}{$docNumber}";
-
         // Simpan ke database
-
         return $newDocumentCode;
     }
 }

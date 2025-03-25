@@ -16,8 +16,6 @@ class ItemAsset extends Model
         'checkin_master_detail_id',
         'location_id',
         'department_id',
-        'vendor_id',
-        'check_out_id',
         'code_assets',
         'description',
         'condition',
@@ -25,6 +23,17 @@ class ItemAsset extends Model
     ];
 
     protected $dates = ['deleted_at'];
+
+    // Relasi ke Maintenance
+    public function maintenances()
+    {
+        return $this->hasMany(Maintenance::class);
+    }
+    // Relasi ke CheckoutItemDetail
+    public function checkoutItemDetail()
+    {
+        return $this->hasMany(CheckoutItemDetail::class);
+    }
     
     // Relasi ke MasterAsset
     public function masterAsset()
@@ -50,29 +59,16 @@ class ItemAsset extends Model
         return $this->belongsTo(Department::class);
     }
 
-    // Relasi ke Vendor
-    public function vendor()
-    {
-        return $this->belongsTo(Vendor::class);
-    }
 
-    // Relasi ke Checkout
-    public function checkout()
-    {
-        return $this->belongsTo(Checkout::class);
-    }
 
-    // Relasi ke Maintenance
-    public function maintenances()
-    {
-        return $this->hasMany(Maintenance::class);
-    }
+
+
+
 
     public function scopeActive($query)
     {
         return $query->whereNull('deleted_at');
     }
-
 
     public static function countNotCheckedOut()
     {

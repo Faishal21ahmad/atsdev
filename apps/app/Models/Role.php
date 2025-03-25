@@ -20,12 +20,24 @@ class Role extends Model
     /**
      * Relasi ke tabel users (one-to-many).
      */
-    public function users()
+    public function user()
     {
         return $this->hasMany(User::class);
     }
+    public function permissions() {
+        return $this->belongsToMany(Permission::class, 'permission_role')->withPivot('role_id');
+    }
+
+
     public function scopeActive($query)
     {
         return $query->whereNull('deleted_at');
+    }
+    public static function getDataClear() {
+        return self::select('id', 'role_name', 'description')->get();
+    }
+    public static function getRoleandPivot($id) {
+        return self::where('id', $id)
+            ->get();
     }
 }

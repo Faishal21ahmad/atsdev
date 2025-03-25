@@ -14,8 +14,8 @@ class Maintenance extends Model
         'code_maintenance',
         'item_asset_id',
         'vendor_id',
-        'master_asset_id',
-        'location_id',
+        'user_id_report',
+        'user_id_resolve',
         'date_mainten',
         'report_type',
         'problem_detail',
@@ -35,16 +35,18 @@ class Maintenance extends Model
     {
         return $this->belongsTo(Vendor::class);
     }
-    // Relasi ke Vendor
-    public function masterAsset()
+
+    public function reportedBy()
     {
-        return $this->belongsTo(MasterAsset::class);
+        return $this->belongsTo(User::class, 'user_id_report');
     }
-    // Relasi ke Vendor
-    public function location()
+
+    // Relasi ke User yang menyelesaikan (user_id_resolve)
+    public function resolvedBy()
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(User::class, 'user_id_resolve');
     }
+    
     // Relasi ke Filemainten
     public function fileMainten()
     {
@@ -57,7 +59,7 @@ class Maintenance extends Model
      */
     public static function getReportedMaintenances()
     {
-        return self::where('status_mainten', 'Reported')->whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
+        return self::whereIn('status_mainten', ['Proses','Reported'])->whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
     }
     public static function getByIditemAsset($id)
     {

@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('master_assets', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id')->nullable();
-            $table->string('asset_name', 30);
-            $table->string('slug')->unique();
+            $table->string('asset_name', 60);
+            $table->string('slug', 65)->unique();
             $table->integer('interval_maintence')->nullable();
             $table->integer('min_stock')->default(1)->nullable();
             $table->integer('current_stock')->default(0)->nullable();
-            $table->string('image_name')->nullable();
-            $table->text('description')->nullable();
+            $table->string('image_name', 255)->nullable();
+            $table->text('description', 300)->nullable();
             $table->timestamps();
             $table->softDeletes();
 

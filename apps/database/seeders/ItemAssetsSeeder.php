@@ -38,8 +38,6 @@ class ItemAssetsSeeder extends Seeder
                     'checkin_master_detail_id' => ($i <= 3) ? 1 : 2,
                     'location_id' => rand(1, 15),
                     'department_id' => rand(1, 5),
-                    'vendor_id' => rand(1, 10),
-                    'check_out_id' => $isCheckedOut ? rand(1, 5) : null, // Jika termasuk 30 data, isi check_out_id
                     'code_assets' => $codeAssets, // Gunakan format baru
                     'description' => 'Asset description for ' . $codeAssets,
                     'condition' => 'New',
@@ -49,7 +47,6 @@ class ItemAssetsSeeder extends Seeder
                 ];
             }
         }
-
         ItemAsset::insert($itemAssets);
     }
 }

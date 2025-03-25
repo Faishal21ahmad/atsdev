@@ -29,19 +29,18 @@ class CategoriesCtrl extends Controller
                 'role' => $user->department->department_name,
                 ]
         ];
-
         return view('category', $data);
     }
-
-
 
     public function actionAddCategory(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nameCategory' => 'required',
-            'description' => 'nullable'
+            'nameCategory' => 'required|max:60',
+            'description' => 'nullable|max:300'
         ], [
-            'nameCategory.required' => 'Name Category is required'
+            'nameCategory.required' => 'Name Category is required',
+            'nameCategory.max' => 'Name Category maximal 60 characters',
+            'description.max' => 'Description maximal 300 characters'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -58,7 +57,6 @@ class CategoriesCtrl extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ];
-
         Category::create($dataCategory);
 
         return redirect()->route('category')->with('alert', [
@@ -71,12 +69,15 @@ class CategoriesCtrl extends Controller
     public function actionUpdateCategory(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'modalId' => 'required',
-            'nameCategory' => 'required',
-            'description' => 'nullable'
+            'modalId' => 'required|numeric',
+            'nameCategory' => 'required|max:60',
+            'description' => 'nullable|max:300'
         ], [
-            'modalId.required' => 'Modal Id is required',
-            'nameCategory.required' => 'Name Category is required'
+            'modalId.required' => 'Category is required !!.',
+            'modalId.numeric' => 'Category tidak valid !!.',
+            'nameCategory.required' => 'Name Category is required',
+            'nameCategory.max' => 'Name Category maximal 60 characters',
+            'description.max' => 'Description maximal 300 characters'
         ]);
 
         // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
@@ -92,7 +93,6 @@ class CategoriesCtrl extends Controller
             'description' => $request->description,
             'updated_at' => now(),
         ];
-
         Category::where('id', $request->modalId)->update($dataCategory);
 
         return redirect()->route('category')->with('alert', [
@@ -112,7 +112,6 @@ class CategoriesCtrl extends Controller
             ]);
             
         }
-
         // Hapus dengan soft delete
         $category->delete();
 
@@ -123,9 +122,21 @@ class CategoriesCtrl extends Controller
     }
 
     public function importCategoryExcel(Request $request){
-        $request->validate([
-            'file' => 'required|mimes:xls,xlsx,csv'
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls,csv|max:500',
+        ],[
+            'file.required' => 'File tidak boleh kosong',
+            'file.mimes' => 'File harus berupa excel',
+            'file.max' => 'File maksimal 500KB',
         ]);
+
+        // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+        if ($validator->fails()) {
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => $validator->errors()->all(),
+            ]);
+        }
 
         try {
             Excel::import(new CategoriesImport, $request->file('file'));
