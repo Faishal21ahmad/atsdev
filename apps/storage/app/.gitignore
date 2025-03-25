@@ -1,4 +1,8 @@
-*
+
 !private/
 !public/*
 !.gitignore
+!public/audio/beep1.wav
+!public/asset/print.css
+!public/asset/ATS_dark.png
+!public/asset/ATS_light.png
