@@ -65,7 +65,6 @@
         </div>
     </div>
 
-
     <script>
         // Event listener untuk Search
         document.addEventListener('DOMContentLoaded', function () {
@@ -84,7 +83,6 @@
                 
                 for (let row of rows) {
                     if (row === noResultsMessage) continue;
-                    
                     const asset = row.cells[1]?.textContent.toLowerCase().trim() || '';
                     const category = row.cells[2]?.textContent.toLowerCase().trim() || '';
                     const description = row.cells[3]?.textContent.toLowerCase().trim() || '';
@@ -98,10 +96,8 @@
                         row.style.display = 'none';
                     }
                 }
-                
                 noResultsMessage.style.display = found ? 'none' : '';
             });
         });
     </script>
-    
 </x-layoutdsbd> 

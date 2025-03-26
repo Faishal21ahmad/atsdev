@@ -68,11 +68,9 @@
                     <tr class="sticky top-0 border-b border-slate-200 bg-white dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100 dark:bg-slate-900">
                         <th class="py-3 px-1 whitespace-nowrap">No</th>
                         <th class="py-3 px-1 whitespace-nowrap">Name Asset</th>
-
                         <th class="py-3 px-1 whitespace-nowrap">Code Asset</th>
                         <th class="py-3 px-1 whitespace-nowrap">Location</th>
                         <th class="py-3 px-1 whitespace-nowrap">Departement</th>
-                        {{-- <th class="py-3 px-1 whitespace-nowrap">Sub Total</th> --}}
                     </tr>
                 </thead>
                 <tbody id="tableBody" class="border-b border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100">

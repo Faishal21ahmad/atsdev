@@ -108,7 +108,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form id="formVendor" class="p-3 md:p-4" action="" method="">
+                    <form id="formVendor" class="p-3 md:p-4" action="" method="POST">
                         @csrf
                         <div class="grid gap-3 mb-3 grid-cols-1">
                             <input hidden  name="modalId" id="modalVendorId" value="">
@@ -126,8 +126,8 @@
                                 <input type="text" id="address" name="address" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Write vendor address here">                   
                             </div>
                             <div class="col-span-2">
-                                <label for="description" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">Category Description</label>
-                                <textarea id="description" name="description" rows="4" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Write Category description here"></textarea>                    
+                                <label for="description" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">Vendor Description</label>
+                                <textarea id="description" name="description" rows="4" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Write Vendor description here"></textarea>                    
                             </div>
                         </div>
                         <button type="submit" class="p-2 w-full text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-white rounded-md">
@@ -234,7 +234,6 @@
                     document.getElementById('description').value = description;
                     const form = document.getElementById('formVendor');
                     form.action = `{{ route('vendor.edit.action') }}`;
-                    form.method = `POST`;
                 });
             });
         });
@@ -247,7 +246,6 @@
                     document.getElementById('labelModalVendor').textContent = `Add Vendor`;
                     const form = document.getElementById('formVendor');
                     form.action = `{{ route('vendor.add.action') }}`;
-                    form.method = `POST`;
                     document.getElementById('modalVendorId').value = ''; 
                     document.getElementById('vendorName').value = '';
                     document.getElementById('contact').value = '';

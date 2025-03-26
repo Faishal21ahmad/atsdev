@@ -108,7 +108,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form id="formRole" class="p-3 md:p-4" action="" method="">
+                    <form id="formRole" class="p-3 md:p-4" action="" method="POST">
                         @csrf
                         <div class="grid gap-3 mb-3 grid-cols-2">
                             <input hidden  name="modalId" id="modalId" value="">
@@ -184,15 +184,12 @@ document.addEventListener('DOMContentLoaded', function () {
     editButtons.forEach(button => {
         button.addEventListener('click', function () {
             const { id, name, description } = this.dataset;
-
             document.getElementById('labelModal').textContent = 'Edit Roles';
             document.getElementById('modalId').value = id;
             document.getElementById('nameRole').value = name;
             document.getElementById('description').value = description;
-
             const form = document.getElementById('formRole');
-            form.action = `{{ route('role.edit.action') }}`; 
-            form.method = `POST`; 
+            form.action = `{{ route('role.edit.action') }}`;
         });
     });
 });
@@ -205,8 +202,6 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('labelModal').textContent = 'Add Roles';
             const form = document.getElementById('formRole');
             form.action = `{{ route('role.add.action') }}`; 
-            form.method = `POST`;
-
             document.getElementById('modalId').value = ''; 
             document.getElementById('nameRole').value = '';
             document.getElementById('description').value = '';

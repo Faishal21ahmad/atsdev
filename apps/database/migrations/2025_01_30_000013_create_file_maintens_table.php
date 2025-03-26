@@ -24,6 +24,7 @@ return new class extends Migration
 
             // Indexes
             $table->index('maintenance_id');
+            $table->index('type');
         });
     }
 

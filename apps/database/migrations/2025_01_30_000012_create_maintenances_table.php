@@ -36,6 +36,9 @@ return new class extends Migration
             // Indexes
             $table->index('item_asset_id');
             $table->index('status_mainten');
+            $table->index('vendor_id');
+            $table->index('user_id_report');
+            $table->index('user_id_resolve');
         });
     }
 

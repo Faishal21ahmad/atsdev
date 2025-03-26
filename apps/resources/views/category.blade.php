@@ -101,7 +101,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form id="formCategory" class="p-3 md:p-4" action="" method="">
+                    <form id="formCategory" class="p-3 md:p-4" action="" method="POST">
                         @csrf
                         <div class="grid gap-3 mb-3 grid-cols-2">
                             <input hidden name="modalId" id="modalId" value="">
@@ -222,8 +222,7 @@
                     document.getElementById('description').value = description;
                     // Update action form (jika diperlukan)
                     const form = document.getElementById('formCategory');
-                    form.action = `{{ route('category.edit.action') }}`; // Sesuaikan dengan route Anda
-                    form.method = `POST` ; // Sesuaikan dengan method yang Anda inginkan
+                    form.action = `{{ route('category.edit.action') }}`;
                 });
             });
         });
@@ -238,9 +237,7 @@
                     document.getElementById('labelModal').textContent = 'Add Category';
                     // Update action form (jika diperlukan)
                     const form = document.getElementById('formCategory');
-                    form.action = `{{ route('category.add.action') }}`; // Sesuaikan dengan route Anda
-                    form.method = `POST`; // Sesuaikan dengan method yang Anda inginkan
-                    // Kosongkan inputan modal (karena ini untuk Add)
+                    form.action = `{{ route('category.add.action') }}`; 
                     document.getElementById('modalId').value = ''; 
                     document.getElementById('nameCategory').value = '';
                     document.getElementById('description').value = '';
@@ -269,7 +266,6 @@
         });
     });
 
-
     // Event listener untuk Search
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('inputSearch');
@@ -277,7 +273,6 @@
         const rows = tableBody.getElementsByTagName('tr');
         const noResultsMessage = document.createElement('tr');
         noResultsMessage.innerHTML = '<td colspan="4" class="text-center py-3 text-slate-500 dark:text-slate-400">Data not found</td>';
-
         noResultsMessage.style.display = 'none';
         tableBody.appendChild(noResultsMessage);
 
@@ -287,10 +282,8 @@
             
             for (let row of rows) {
                 if (row === noResultsMessage) continue;
-                
                 const categoryName = row.cells[1]?.textContent.toLowerCase().trim() || '';
                 const description = row.cells[2]?.textContent.toLowerCase().trim() || '';
-                
                 if (categoryName.includes(searchText) || description.includes(searchText)) {
                     row.style.display = '';
                     found = true;
@@ -298,7 +291,6 @@
                     row.style.display = 'none';
                 }
             }
-            
             noResultsMessage.style.display = found ? 'none' : '';
         });
     });

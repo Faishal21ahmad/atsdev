@@ -35,7 +35,6 @@ return new class extends Migration
             $table->index('checkin_master_detail_id');
             $table->index('location_id');
             $table->index('department_id');
-            $table->index('vendor_id');
             $table->index('status');
         });
     }
@@ -53,8 +52,4 @@ return new class extends Migration
             Schema::dropIfExists('item_assets'); // Hapus tabel jika tidak ada deleted_at
         }
     }
-
-
-
-    
 };

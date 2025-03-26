@@ -104,7 +104,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form id="formDepartment" class="p-3 md:p-4" action="" method="">
+                    <form id="formDepartment" class="p-3 md:p-4" action="" method="POST">
                         @csrf
                         <div class="grid gap-3 mb-3 grid-cols-2">
                             <input hidden  name="modalId" id="modalId" value="">
@@ -112,7 +112,6 @@
                                 <label for="nameDepartment" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">Name Department</label>
                                 <input type="text" name="nameDepartment" id="nameDepartment" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Name Department Items">
                             </div>
-                        
                             <div class="col-span-2">
                                 <label for="description" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">Department Description</label>
                                 <textarea id="description" name="description" rows="4" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Write Department description here"></textarea>                    
@@ -219,7 +218,6 @@
                     document.getElementById('description').value = description;
                     const form = document.getElementById('formDepartment');
                     form.action = `{{ route('department.edit.action') }}`;
-                    form.method = `POST` ;
                 });
             });
         });
@@ -232,7 +230,6 @@
                     document.getElementById('labelModal').textContent = "Add Department";
                     const form = document.getElementById('formDepartment');
                     form.action = `{{ route('department.add.action') }}`;
-                    form.method = `POST`; 
                     document.getElementById('modalId').value = ''; 
                     document.getElementById('nameDepartment').value = '';
                     document.getElementById('description').value = '';

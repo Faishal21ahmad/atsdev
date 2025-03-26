@@ -114,7 +114,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form id="formAccount" class="p-3 md:p-4" action="" method="">
+                    <form id="formAccount" class="p-3 md:p-4" action="" method="POST">
                         @csrf
                         <div class="grid gap-3 mb-3 grid-cols-1">
                             <input hidden  name="modalId" id="modalId" value="">
@@ -206,7 +206,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
                         <h3 id="labelexe" class="mb-5 text-lg font-normal text-slate-500 dark:text-slate-400"></h3>
-                        <form id="dataExeForm" action="" method="">
+                        <form id="dataExeForm" action="" method="POST">
                             @csrf
                             <input type="hidden" name="idexedata" id="idexedata" value="">
                             <div class="space-x-2">

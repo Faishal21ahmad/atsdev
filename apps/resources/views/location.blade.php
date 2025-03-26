@@ -102,7 +102,7 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form id="formLocation" class="p-3 md:p-4" action="" method="">
+                <form id="formLocation" class="p-3 md:p-4" action="" method="POST">
                     @csrf
                     <div class="grid gap-3 mb-3 grid-cols-2">
                         <input hidden  name="modalId" id="modalId" value="">
@@ -215,8 +215,7 @@
                     document.getElementById('nameLocation').value = name;
                     document.getElementById('description').value = description;
                     const form = document.getElementById('formLocation');
-                    form.action = `{{ route('location.edit.action') }}`; 
-                    form.method = `POST` ; 
+                    form.action = `{{ route('location.edit.action') }}`;
                 });
             });
         });
@@ -230,7 +229,6 @@
                     document.getElementById('labelModal').textContent = "Add Location";
                     const form = document.getElementById('formLocation');
                     form.action = `{{ route('location.add.action') }}`;
-                    form.method = `POST`; 
                     document.getElementById('modalId').value = ''; 
                     document.getElementById('nameLocation').value = '';
                     document.getElementById('description').value = '';

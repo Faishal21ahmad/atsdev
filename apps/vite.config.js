@@ -9,10 +9,4 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    // server: {
-    //     host: '30.30.30.33',
-    //     hmr: {
-    //         host: '30.30.30.33'
-    //     },
-    // },
 });
