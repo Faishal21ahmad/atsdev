@@ -60,19 +60,35 @@ class Sesiauth extends Controller
         if ($user->is_disable) {
             return back()->with('alert', [
                 'type' => 'danger',
-                'messages' => ['Akun Anda dinonaktifkan. Harap hubungi administrator.'],
+                'messages' => ['Akun Anda dinonaktifkan. hubungi tim support.'],
             ])->onlyInput('email');
         }
         // Cek apakah account is_active
         if (!$user->is_active) {
-            //  Jika akun belum aktif, generate OTP melalui Model
+            // Jika akun belum aktif, generate OTP melalui Model
             $otp = UserOtp::generateOtp($user->id, 'verify_email');
             session(['email' => $user->email]);
-
-            Mail::to($user->email)->send(new SendOtp($otp));
+            try {
+                // Kirim email
+                Mail::to($user->email)->send(new SendOtp($otp));
+              	$alerttype = 'alert';
+                $alertMessages = ['Hai, ' . $user->username . ' Akun mu belum aktif !!']; 
+                $alertMessages[] = 'Masukkan OTP yang telah dikirimkan ke email Anda.';
+            } catch (\Exception $e) {
+                // Log error untuk debugging
+                // Log::error('Gagal mengirim OTP email: ' . $e->getMessage());
+                $alerttype = 'danger';
+                // Tambahkan pesan error yang user-friendly
+                $alertMessages[] = 'Gagal mengirim OTP ke email Anda.';
+                $alertMessages[] = 'Jika masalah berlanjut, hubungi tim support.';
+                
+                // Anda bisa menambahkan opsi alternatif di sini, misalnya:
+                // $alertMessages[] = 'Atau klik <a href="'.route('otp.resend').'">di sini</a> untuk mengirim ulang OTP.';
+            }
+        
             return redirect()->route('otp.form')->with('alert', [
-                'type' => 'alert',
-                'messages' => ['Hai, ' . $user->username . ' Akun mu belum aktif !!','Masukkan OTP yang telah dikirimkan ke email Anda.'],
+                'type' => $alerttype,
+                'messages' => $alertMessages,
             ]);
         }
 
@@ -150,6 +166,7 @@ class Sesiauth extends Controller
             $route = 'login';
             $messages = ['Akun Anda berhasil diaktifkan.','Silahkan login kembali.'];
         } elseif ($otpValidationResult['purpose'] == 'forgot_password') {
+            session(['forgot_password' => true]);
             $route = 'show.forgot.password';
             $messages = ['OTP Berhasil di verifikasi.'];
         }
@@ -201,18 +218,33 @@ class Sesiauth extends Controller
         if ($user->is_disable) {
             return back()->with('alert', [
                 'type' => 'danger',
-                'messages' => ['Akun Anda dinonaktifkan. Harap hubungi administrator.'],
+                'messages' => ['Akun Anda dinonaktifkan. hubungi tim support.'],
             ])->onlyInput('email');
         }
         session(['email' => $request->email]);
         // Generate OTP
         $otp = UserOtp::generateOtp($user->id, 'forgot_password');
-        // Kirim email
-        Mail::to($user->email)->send(new SendOtp($otp));
+        try {
+            // Kirim email
+            Mail::to($user->email)->send(new SendOtp($otp));
+            $alerttype = 'alert';
+            $alertMessages[] = 'Masukkan OTP yang telah dikirimkan ke email Anda.';
+        } catch (\Exception $e) {
+            // Log error untuk debugging
+            // Log::error('Gagal mengirim OTP email: ' . $e->getMessage());
+			$alerttype = 'danger';
+            // Tambahkan pesan error yang user-friendly
+            $alertMessages[] = 'Gagal mengirim OTP ke email Anda.';
+            $alertMessages[] = 'Jika masalah berlanjut, hubungi tim support.';
+
+            // Anda bisa menambahkan opsi alternatif di sini, misalnya:
+            // $alertMessages[] = 'Atau klik <a href="'.route('otp.resend').'">di sini</a> untuk mengirim ulang OTP.';
+        }
+
         return redirect()->route('otp.form')->with('alert', [
-            'type' => 'success',
-            'messages' => ['Masukkan OTP yang telah dikirimkan ke email Anda.'],
-        ]);
+            'type' => $alerttype,
+            'messages' => $alertMessages,
+        ]);	
     }
 
     /**
@@ -220,11 +252,13 @@ class Sesiauth extends Controller
      */
     public function showForgotPassword()
     {
+        $forgot = session()->get('forgot_password');
         $email = session()->get('email');
-        if (!$email) abort(403, 'Access Forbidden');
+        if ($forgot == false || !$email) abort(403, 'Access Forbidden');
         $data = [
             'title' => 'Lupa Password',
         ];
+        session()->forget(['forgot_password']);
         return view('forgotpassword', $data);
     }
 
@@ -260,7 +294,6 @@ class Sesiauth extends Controller
         // Cari user berdasarkan email
         $user = User::where('email', $email)->first();
         session()->forget('email');
-
         // Jika user tidak ditemukan
         if (!$user) {
             return back()->with('alert', [
@@ -268,12 +301,11 @@ class Sesiauth extends Controller
                 'messages' => ['Email tidak terdaftar.'],
             ])->onlyInput('email');
         }
-
         // Jika user is_disable
         if ($user->is_disable) {
             return back()->with('alert', [
                 'type' => 'danger',
-                'messages' => ['Akun Anda dinonaktifkan. Harap hubungi administrator.'],
+                'messages' => ['Akun Anda dinonaktifkan. hubungi tim support.'],
             ])->onlyInput('email');
         }
         $user->update([

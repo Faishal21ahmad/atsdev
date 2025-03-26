@@ -8,7 +8,6 @@
         </div>
     </div>
 
-
     <section id="checkin" class="mx-auto w-full text-white overflow-hidden">
         <div class="w-full flex justify-between">
             <h1 class="text-2xl py-2 font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap">Check in</h1>
@@ -16,8 +15,8 @@
         <div class="w-full overflow-x-auto max-h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-slate-300  scrollbar-track-slate-100  dark:scrollbar-thumb-slate-300  dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full  scrollbar-track-rounded-full">
             <table id="tableList" class="table-auto w-full text-left overflow-x-auto">
                 <thead>
-                    <tr class="sticky top-0 border-b border-slate-200 bg-white dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100 dark:bg-slate-900">
-                        <th class="py-3 px-1 whitespace-nowrap">No</th>
+                    <tr class="sticky top-0 text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-800 shadow-md">
+                        <th class="py-3 px-1 whitespace-nowrap text-center">No</th>
                         <th class="py-3 px-1 whitespace-nowrap">Code Checkin</th>
                         <th class="py-3 px-1 whitespace-nowrap">Date In</th>
                         <th class="py-3 px-1 whitespace-nowrap">Master Asset</th>
@@ -33,8 +32,8 @@
                         </tr>
                     @else
                         @foreach ($dataCheckinDetail as $index => $item)
-                            <tr class="border-b border-slate-200 dark:border-slate-700">
-                                <td class="py-3 px-1 whitespace-nowrap">{{ $loop->iteration }}</td>
+                            <tr class="text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 rounded-md">
+                                <td class="py-3 px-1 whitespace-nowrap text-center">{{ $loop->iteration }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item->codecheckin }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->created_at)->format('d / M / Y') }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item->total_master_asset }}</td>
@@ -58,8 +57,8 @@
         <div class="w-full overflow-x-auto max-h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-slate-300  scrollbar-track-slate-100  dark:scrollbar-thumb-slate-300  dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full  scrollbar-track-rounded-full">
             <table id="tableList" class="table-auto w-full text-left">
                 <thead>
-                    <tr class="sticky top-0 border-b border-slate-200 bg-white dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100 dark:bg-slate-900">
-                        <th class="py-3 px-1 whitespace-nowrap">No</th>
+                    <tr class="sticky top-0 text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-800 shadow-md">
+                        <th class="py-3 px-1 whitespace-nowrap text-center">No</th>
                         <th class="py-3 px-1 whitespace-nowrap">Code Checkout</th>
                         <th class="py-3 px-1 whitespace-nowrap">Item Asset</th>
                         <th class="py-3 px-1 whitespace-nowrap">Date out</th>
@@ -100,14 +99,14 @@
         <div class="w-full overflow-x-auto max-h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-slate-300  scrollbar-track-slate-100  dark:scrollbar-thumb-slate-300  dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full  scrollbar-track-rounded-full">
             <table id="tableList" class="table-auto w-full text-left">
                 <thead>
-                    <tr class="sticky top-0 border-b border-slate-200 bg-white dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100 dark:bg-slate-900">
-                        <th class="py-3 px-1 whitespace-nowrap">No</th>
+                    <tr class="sticky top-0 text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-800 shadow-md">
+                        <th class="py-3 px-1 whitespace-nowrap text-center">No</th>
                         <th class="py-3 px-1 whitespace-nowrap">Code Maintenance</th>
                         <th class="py-3 px-1 whitespace-nowrap">Date Report</th>
                         <th class="py-3 px-1 whitespace-nowrap">Name Asset</th>
                         <th class="py-3 px-1 whitespace-nowrap">Code Asset</th>
                         <th class="py-3 px-1 whitespace-nowrap">Status</th>
-                        <th class="py-3 px-1 whitespace-nowrap">Action</th>
+                        <th class="py-3 px-1 whitespace-nowrap text-center">Action</th>
                     </tr>
                 </thead>
                
@@ -119,7 +118,7 @@
                     @else
                         @foreach ($dataMaintenance as $index => $item)
                             <tr class="border-b border-slate-200 dark:border-slate-700">
-                                <td class="py-3 px-1 whitespace-nowrap">{{ $loop->iteration }}</td>
+                                <td class="py-3 px-1 whitespace-nowrap text-center">{{ $loop->iteration }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item['code_maintenance'] }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->created_at)->format('d / m / Y') }}</td>
                                 <td class="py-3 px-1 whitespace-nowrap">{{ $item->itemAsset->masterAsset->asset_name }}</td>

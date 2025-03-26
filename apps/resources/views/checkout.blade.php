@@ -29,12 +29,12 @@
                     <div class="overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300 scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
                         <table id="tableList" class="table-auto w-full text-left">
                             <thead>
-                                <tr class="border-b border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100">
-                                    <th class="py-3 px-1 whitespace-nowrap">No</th>
+                                <tr class="sticky top-0 text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-800 shadow-md">
+                                    <th class="py-3 px-1 whitespace-nowrap text-center">No</th>
                                     <th class="py-3 px-1 whitespace-nowrap">Code Asset</th>
                                     <th class="py-3 px-1 whitespace-nowrap">Nama Asset</th>
                                     <th class="py-3 px-1 whitespace-nowrap">Price</th>
-                                    <th class="py-3 px-1 whitespace-nowrap">Action</th>
+                                    <th class="py-3 px-1 whitespace-nowrap text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody" class="border-b border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100">
@@ -44,12 +44,12 @@
                                     </tr>
                                 @else
                                     @foreach ($itemCheckout as $item)
-                                        <tr class="border-b border-slate-200 dark:border-slate-700">
-                                            <td class="py-3 px-1 whitespace-nowrap">{{ $loop->iteration }}</td>
+                                        <tr class="text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 rounded-md">
+                                            <td class="py-3 px-1 whitespace-nowrap text-center">{{ $loop->iteration }}</td>
                                             <td class="py-3 px-1 whitespace-nowrap">{{ $item['codeAsset'] ?? '' }}</td>
                                             <td class="py-3 px-1 whitespace-nowrap">{{ $item['nameAsset'] ?? '' }}</td>
                                             <td class="py-3 px-1 whitespace-nowrap">Rp. {{ number_format($item['price'], 0, ',', '.') ?? '' }}</td>
-                                            <td class="py-3 px-1 whitespace-nowrap">
+                                            <td class="py-3 px-1 whitespace-nowrap text-center">
                                                 <form action="{{ route('checkout.remove.action', $item['id']) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="px-4 sm:px-5 py-1 shadow-md bg-red-100 hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 dark:text-white rounded-md">Delete</button>
@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div id="formContent" class="order-1 lg:order-2 space-y-2">
-                <div class="w-full p-4 rounded-md space-y-2 shadow-md bg-slate-100 dark:bg-slate-800">
+                <div class="w-full p-4 border dark:border-0 shadow-md bg-white dark:bg-slate-800 rounded-lg space-y-2">
                     <div class="col-span-2">
                         <label for="reason" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">Reason</label>
                         <input type="text" id="reason" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Ex: grant, disposed, sold " />
@@ -84,7 +84,7 @@
                         <textarea id="description" rows="3" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Write your thoughts here..."></textarea>
                     </div>
                 </div>
-                <div class="hidden lg:block w-full p-4 space-y-3 rounded-md shadow-md bg-slate-100 dark:bg-slate-800">
+                <div class="hidden lg:block w-full p-4 shadow-md border dark:border-0 bg-white dark:bg-slate-800 rounded-lg space-y-2">
                     <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">Input Asset</h1>
                     <div id="containerFormCheckoutAsset" class="">
                         <form id="checkoutAsset" action="{{ route('checkout.add.action') }}" method="POST" class="space-y-2">

@@ -94,8 +94,8 @@ class AccountCtrl extends Controller
             'role' => 'required|numeric',
             'department' => 'required|numeric',
         ], [
-            'modalId.required' => 'ID tidak boleh kosong',
-            'modalId.numeric' => 'ID tidak valid',
+            'modalId.required' => 'Account boleh kosong',
+            'modalId.numeric' => 'Account valid',
             'username.max' => 'Username maksimal 100 karakter',
             'username.required' => 'Username tidak boleh kosong',
             'role.required' => 'Role tidak boleh kosong',

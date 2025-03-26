@@ -27,29 +27,29 @@
                 <div class="overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300 scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
                     <table id="tableList" class="table-auto w-full text-left">
                         <thead>
-                            <tr class="border-b border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100">
-                                <th class="py-3 px-1 whitespace-nowrap">No</th>
+                            <tr class="sticky top-0 text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-800 shadow-md">
+                                <th class="py-3 px-1 whitespace-nowrap text-center">No</th>
                                 <th class="py-3 px-1 whitespace-nowrap">Nama Asset</th>
                                 <th class="py-3 px-1 whitespace-nowrap">Unit Price</th>
                                 <th class="py-3 px-1 whitespace-nowrap text-center">Quantity</th>
                                 <th class="py-3 px-1 whitespace-nowrap">Price</th>
-                                <th class="py-3 px-1 whitespace-nowrap">Action</th>
+                                <th class="py-3 px-1 whitespace-nowrap text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody" class="border-b border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100">
-                            @if (empty($cart))
+                        @if (empty($cart))
                             <tr>
                                 <td colspan="6" class="py-3 px-1 text-center">Empty Data</td>
                             </tr>
                         @else
                             @foreach ($cart as $index => $item)
-                                <tr class="border-b border-slate-200 dark:border-slate-700">
-                                    <td class="py-3 px-1 whitespace-nowrap">{{ $loop->iteration }}</td>
+                                <tr class="text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 rounded-md">
+                                    <td class="py-3 px-1 whitespace-nowrap text-center">{{ $loop->iteration }}</td>
                                     <td class="py-3 px-1 whitespace-nowrap">{{ $item['nameAsset'] ?? '' }}</td>
                                     <td class="py-3 px-1 whitespace-nowrap">Rp {{ number_format($item['unitPrice'], 0, ',', '.') ?? '' }}</td>
                                     <td class="py-3 px-1 whitespace-nowrap text-center">{{ $item['quantity'] ?? '' }}</td>
                                     <td class="py-3 px-1 whitespace-nowrap">Rp {{ number_format($item['unitPrice'] * $item['quantity'], 0, ',', '.') ?? '' }}</td>
-                                    <td class="py-3 px-1 whitespace-nowrap">
+                                    <td class="py-3 px-1 whitespace-nowrap text-center">
                                         <form action="{{ route('checkin.remove.action', $item['id']) }}" method="POST">
                                             @csrf
                                             <button type="submit" class="px-4 sm:px-5 py-1 shadow-md bg-red-100 hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 dark:text-white rounded-md">Delete</button>
@@ -62,7 +62,7 @@
                     </table>
                 </div>
             </div>
-            <div class=" space-y-2">
+            <div id="formContent" class=" space-y-2">
                 <div class="w-full p-4 border dark:border-0 shadow-md bg-white dark:bg-slate-800 rounded-lg space-y-2">
                     <div class="col-span-2">
                         <label for="vendor" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">vendor</label>
