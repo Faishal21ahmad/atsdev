@@ -19,7 +19,6 @@
                         placeholder="xxxxxx@gmail.com">
                 </div>
             </div>
-
             <div class="">
                 <button type="submit" class="flex w-[50%] px-3 py-3 shadow-md text-sm mx-auto justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">
                     Confirm 
@@ -36,9 +35,7 @@
         function validateForm() {
             const email = document.getElementById('email').value.trim();
             const errors = [];
-
             if (!email) errors.push('Email tidak boleh kosong');
-
             return errors;
         }
 

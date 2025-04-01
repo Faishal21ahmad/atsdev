@@ -6,7 +6,6 @@ use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionSeeder extends Seeder
 {
@@ -32,7 +31,6 @@ class PermissionSeeder extends Seeder
             ['permission_name' => 'Checkin'],
             ['permission_name' => 'Checkout'],
             
-
             ['permission_name' => 'Category Management'],
             ['permission_name' => 'Edit Category'],
             ['permission_name' => 'Delete Category'],
@@ -99,57 +97,132 @@ class PermissionSeeder extends Seeder
         $superAdmin = Role::where('role_name', 'Super Admin')->first();
         $superAdmin->permissions()->attach(Permission::all());
 
-        // $admin = Role::where('role_name', 'Admin')->first();
-        // $admin->permissions()->attach(Permission::all());
+        $admin = Role::where('role_name', 'Admin')->first();
+        $admin->permissions()->attach(
+            Permission::whereIn('slug', [
+                'asset-management',
+                'detail-master-asset',
+                'edit-master-asset',
+                'printqr-master-asset',
+                'detail-item-asset',
+                'edit-item-asset',
+                'printqr-item-asset',
+                'scan-item-asset',
+                'checkin',
+                'checkout',
+                'category-management',
+                'edit-category',
+                'delete-category',
+                'add-category',
+                'import-category',
+                'location-management',
+                'edit-location',
+                'delete-location',
+                'add-location',
+                'import-location',
+                'department-management',
+                'edit-department',
+                'delete-department',
+                'add-department',
+                'import-department',
+                'vendor-management',
+                'edit-vendor',
+                'delete-vendor',
+                'add-vendor',
+                'import-vendor',
+                'maintenance-management',
+                'maintenance-schedule',
+                'scan-maintenance-report',
+                'refresh-scheduler-maintenance',
+                'report-maintenance',
+                'resolve-maintenance',
+                'detail-maintenance',
+                'account-management',
+                'disable-account',
+                'reset-account',
+                'edit-account',
+                'add-account',
+                'import-account',
+                'audit-management',
+            ])->pluck('id')
+        );
 
-        // $manager = Role::where('role_name', 'Manager')->first();
-        // $manager->permissions()->attach(
-        //     Permission::whereIn('slug', [
-        //         'asset-management',
-        //         'edit-master-asset',
-        //         'edit-item-asset',
-        //         'checkin',
-        //         'checkout',
-        //         'scan-item-asset',
-        //         'scan-maintenance-report',
-        //         'category-management',
-        //         'edit-category',
-        //         'delete-category',
-        //         'add-category',
-        //         'import-category',
-        //         'location-management',
-        //         'edit-location',
-        //         'delete-location',
-        //         'add-location',
-        //         'import-location',
-        //         'department-management',
-        //         'edit-department',
-        //         'delete-department',
-        //         'add-department',
-        //         'import-department',
-        //         'vendor-management',
-        //         'edit-vendor',
-        //         'delete-vendor',
-        //         'add-vendor',
-        //         'import-vendor',
-        //         'maintenance-management',
-        //         'refresh-scheduler-maintenance',
-        //         'report-maintenance',
-        //         'resolve-maintenance',
-        //         'audit-management',
-        //     ])->pluck('id')
-        // );
+        $manager = Role::where('role_name', 'Manager')->first();
+        $manager->permissions()->attach(
+            Permission::whereIn('slug', [
+                'asset-management',
+                'detail-master-asset',
+                'edit-master-asset',
+                'printqr-master-asset',
+                'detail-item-asset',
+                'edit-item-asset',
+                'printqr-item-asset',
+                'scan-item-asset',
+                'checkin',
+                'checkout',
+                'category-management',
+                'edit-category',
+                'delete-category',
+                'add-category',
+                'import-category',
+                'location-management',
+                'edit-location',
+                'delete-location',
+                'add-location',
+                'import-location',
+                'department-management',
+                'edit-department',
+                'delete-department',
+                'add-department',
+                'import-department',
+                'vendor-management',
+                'edit-vendor',
+                'delete-vendor',
+                'add-vendor',
+                'import-vendor',
+                'maintenance-management',
+                'maintenance-schedule',
+                'scan-maintenance-report',
+                'refresh-scheduler-maintenance',
+                'report-maintenance',
+                'resolve-maintenance',
+                'detail-maintenance',
+            ])->pluck('id')
+        );
 
-        // $employee = Role::where('role_name', 'Employee')->first();
-        // $employee->permissions()->attach(
-        //     Permission::whereIn('slug', [
-        //         'asset-management',
-        //         'scan-item-asset',
-        //         'scan-maintenance-report',
-        //         'maintenance-management',
-        //         'report-maintenance',
-        //         'resolve-maintenance'
-        //     ])->pluck('id')
-        // );
+        $employee = Role::where('role_name', 'Employee')->first();
+        $employee->permissions()->attach(
+            Permission::whereIn('slug', [
+                'asset-management',
+                'detail-master-asset',
+                'edit-master-asset',
+                'printqr-master-asset',
+                'detail-item-asset',
+                'edit-item-asset',
+                'printqr-item-asset',
+                'scan-item-asset',
+                'checkin',
+                'checkout',
+                'category-management',
+                'edit-category',
+                'add-category',
+                'location-management',
+                'edit-location',
+                'add-location',
+                'department-management',
+                'edit-department',
+                'add-department',
+                'vendor-management',
+                'edit-vendor',
+                'add-vendor',
+                'maintenance-management',
+                'maintenance-schedule',
+                'scan-maintenance-report',
+                'refresh-scheduler-maintenance',
+                'report-maintenance',
+                'resolve-maintenance',
+                'detail-maintenance',
+            ])->pluck('id')
+        );
     }
 }

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Checkin;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CheckinSeeder extends Seeder
 {

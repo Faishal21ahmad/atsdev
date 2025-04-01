@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\UserOtp;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserOtpSeeder extends Seeder
 {

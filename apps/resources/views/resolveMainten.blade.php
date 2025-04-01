@@ -133,7 +133,7 @@
         </div>
 
         <div class="mt-3">
-            <span class="block text-lg font-medium text-slate-900 dark:text-white">Repare Upload</span>
+            <span class="block text-lg font-medium text-slate-900 dark:text-white">Upload Photo</span>
             <div class="flex items-center mt-3 justify-center w-full">
                 <label for="fileReport" class="flex flex-col items-center justify-center w-full h-64 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 dark:hover:bg-slate-800 dark:bg-slate-800 hover:bg-slate-100 dark:border-slate-600 dark:hover:border-slate-500 transition overflow-hidden">
                     <div id="contentUpload" class="justify-center pt-5 pb-6">

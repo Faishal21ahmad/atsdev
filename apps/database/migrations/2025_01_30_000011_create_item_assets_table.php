@@ -23,13 +23,11 @@ return new class extends Migration
             $table->enum('status', ['Available', 'Maintenance', 'Damaged', 'Checked_out']);
             $table->timestamps();
             $table->softDeletes();
-
             // Foreign Keys
             $table->foreign('master_asset_id')->references('id')->on('master_assets')->onDelete('cascade');
             $table->foreign('checkin_master_detail_id')->references('id')->on('checkin_master_details')->onDelete('cascade');
             $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
-
             // Indexes
             $table->index('master_asset_id');
             $table->index('checkin_master_detail_id');

@@ -451,14 +451,12 @@
             
             for (let row of rows) {
                 if (row === noResultsMessage) continue;
-                
                 const name = row.cells[1]?.textContent.toLowerCase() || '';
                 const email = row.cells[2]?.textContent.toLowerCase() || '';
                 const role = row.cells[3]?.textContent.toLowerCase() || '';
                 const department = row.cells[4]?.textContent.toLowerCase() || '';
                 const status = row.cells[5]?.textContent.toLowerCase() || '';
                 const isDisable = row.cells[6]?.textContent.toLowerCase() || '';
-
                 
                 if (name.includes(searchText) || email.includes(searchText) || role.includes(searchText) || department.includes(searchText) || status.includes(searchText) || isDisable.includes(searchText)) {
                     row.style.display = '';
@@ -470,7 +468,6 @@
             noResultsMessage.style.display = found ? 'none' : '';
         });
     });
-
 </script>
 </x-layoutdsbd>
 

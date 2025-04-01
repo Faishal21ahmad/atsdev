@@ -23,11 +23,9 @@ return new class extends Migration
             $table->boolean('is_disable')->default(false);
             $table->timestamps();
             $table->softDeletes();
-            
             // Foreign Keys
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
-
             // Indexes
             $table->index('role_id');
             $table->index('department_id');

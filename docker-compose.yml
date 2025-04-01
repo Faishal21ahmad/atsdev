@@ -1,30 +1,4 @@
-version: '3.9'
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: atsapp
-    restart: always
-    ports:
-      - "7774:80"
-      - "884:443"
-      - "884:443/udp"
-    volumes:
-      - ./apps:/var/www/html
-      - ./ssl:/etc/ssl/certs
-    environment:
-      - DB_CONNECTION=mysql
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=atsdb
-      - DB_USERNAME=root
-      - DB_PASSWORD=secret
-    depends_on:
-      - db
-    networks:
-      - atsLaravel
-
   db:
     image: mariadb:latest
     container_name: atsdb
@@ -52,6 +26,37 @@ services:
       - db
     networks:
       - atsLaravel
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: atsapp
+    restart: always
+    ports:
+      - "7774:80"
+      - "884:443"
+      - "884:443/udp"
+    volumes:
+      - ./apps:/var/www/html
+      - ./ssl:/etc/ssl/certs
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=atsdb
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+    depends_on:
+      - db
+    networks:
+      - atsLaravel
+    command: >
+      sh -c "
+      sleep 15 &&
+      php artisan migrate:fresh --seed &&
+      service nginx start &&
+      php-fpm"
 
 networks:
   atsLaravel:

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->decimal('unit_price', 40, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
-
             // Foreign Keys
             $table->foreign('checkout_id')->references('id')->on('checkouts')->onDelete('cascade');
             $table->foreign('item_asset_id')->references('id')->on('item_assets')->onDelete('cascade');

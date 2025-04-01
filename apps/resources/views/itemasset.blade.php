@@ -1,6 +1,5 @@
 <x-layoutdsbd title="{{ $title }}" user="{{ $user['name'] }}" role="{{ $user['role'] }}">
     <x-btnback href="javascript:history.back()" />
-
     <div class="container mx-auto w-full mt-5">
         {{-- {{ $dataItem }} --}}
         <div class="flex gap-4 justify-between">
@@ -176,7 +175,6 @@
                                 @endforeach
                             </select>
                         </div>
-                    
                         <div class="sm:col-span-2">
                             <label for="description" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">Description</label>
                             <textarea id="description" name="description" rows="5" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Write a description...">{{ $dataItem->description }}</textarea>                    
@@ -186,7 +184,6 @@
                         <button type="submit" class="p-2 w-full text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-white rounded-md">
                             Submit
                         </button>
-                        
                     </div>
                 </form>
             </div>
@@ -205,7 +202,6 @@
         const condition = document.getElementById('condition').value.trim();
         const location = document.getElementById('location').value.trim();
         const departement = document.getElementById('departement').value.trim();
-        
         const errors = [];
 
         if (!codeAsset) errors.push('Item Asset tidak valid');
@@ -224,8 +220,5 @@
             else this.submit();
         });
     });
-
-    
 </script>
-
 </x-layoutdsbd>

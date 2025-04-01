@@ -99,7 +99,7 @@
                     <input type="text" id="inputSearch" class="block p-2 ps-10 text-sm border rounded-lg w-40 lg:w-80 border-slate-300 text-slate-900 bg-slate-50 focus:ring-slate-300 focus:border-slate-300 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Search Asset">
                 </div>
             </div>
-            -
+            
             {{-- <h1 class="text-xl py-2 font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap overflow-hidden">Asset</h1> --}}
             @can('checkin')
                 <a href="{{ route('showCheckIn', $assetMaster->slug) }}">
@@ -271,7 +271,6 @@
         const maintenInterval = document.getElementById('maintenInterval').value.trim();
         const stockMinimum = document.getElementById('stockMinimum').value.trim();
         const fileImg = document.getElementById('fileImg').files;
-        
         const errors = [];
 
         if (slug === '') errors.push('Slug tidak boleh kosong');

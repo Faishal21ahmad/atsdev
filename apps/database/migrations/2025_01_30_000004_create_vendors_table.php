@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('description', 300)->nullable();
             $table->timestamps();
             $table->softDeletes();
-
             // Indexes
             $table->index('vendor_name');
         });

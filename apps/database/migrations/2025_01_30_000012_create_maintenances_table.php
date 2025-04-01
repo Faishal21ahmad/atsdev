@@ -26,13 +26,11 @@ return new class extends Migration
             $table->enum('status_mainten', ['Reported', 'Proses', 'Finish']);
             $table->timestamps();
             $table->softDeletes();
-
             // Foreign Keys
             $table->foreign('item_asset_id')->references('id')->on('item_assets')->onDelete('cascade');
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
             $table->foreign('user_id_report')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_id_resolve')->references('id')->on('users')->onDelete('cascade');
-            
             // Indexes
             $table->index('item_asset_id');
             $table->index('status_mainten');

@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\MasterAsset;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class MasterAssetSeeder extends Seeder
 {

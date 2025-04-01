@@ -95,7 +95,6 @@
         <div class="w-full flex justify-between">
             <h1 class="text-2xl py-2 font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap overflow-hidden">Maintenance</h1>
         </div>
-
         <div class="w-full overflow-x-auto max-h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-slate-300  scrollbar-track-slate-100  dark:scrollbar-thumb-slate-300  dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full  scrollbar-track-rounded-full">
             <table id="tableList" class="table-auto w-full text-left">
                 <thead>
@@ -109,7 +108,6 @@
                         <th class="py-3 px-1 whitespace-nowrap text-center">Action</th>
                     </tr>
                 </thead>
-               
                 <tbody id="tableBody" class="border-b  border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-slate-100  ">
                     @if (empty($dataMaintenance))
                         <tr>
@@ -138,13 +136,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const buttons = document.querySelectorAll('.tab-button');
-
-            // Ambil tab terakhir dari localStorage, jika tidak ada default ke 'checkinbtn'
             let activeTab = localStorage.getItem('activeTab') || 'checkinbtn';
 
-            // Fungsi untuk mengaktifkan tab berdasarkan ID
             function activateTab(tabId) {
-                // Simpan status ke localStorage
                 localStorage.setItem('activeTab', tabId);
 
                 // Reset semua tombol ke warna default

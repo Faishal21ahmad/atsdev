@@ -6,7 +6,6 @@
                 <h1 class="text-2xl py-2 font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap overflow-hidden">{{ $user['name'] }}</h1>
                 <p class="text-3xl font-semibold">Total : <span id="totalCheckIN">Rp. {{ number_format($total, 0, ',', '.') ?? '' }}</span></p>
             </div>
-            
             <div class="inline-flex flex-col gap-2 text-black ">
                 <form id="submitCheckin" action="{{ route('checkout.save.action') }}" method="POST">
                     @csrf

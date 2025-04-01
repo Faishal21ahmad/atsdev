@@ -110,52 +110,67 @@ class MaintenenceCtrl extends Controller
             ]);
         }
 
-        $codeAsset = $request->codeAsset;
-        $documentCode = DocService::generateDocumentCodeMaintenance();
-        $dataItemAsset = ItemAsset::where('code_assets', $codeAsset)->first();
-        $dataItemAsset->update(['status' => 'Maintenance', 'updated_at' => now()]);
-    
-        $dataMainten = [
-            'code_maintenance' => $documentCode,
-            'item_asset_id' => $dataItemAsset->id,
-            'user_id_report' => Auth::id(),
-            'report_type' => $request->reportType,
-            'problem_detail' => $request->problemDetail,
-            'status_mainten' => 'Reported',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ];
+        DB::beginTransaction();
 
-        // Input data Maintenance ke database
-        $maintenance = Maintenance::create($dataMainten);
-
-        // Jika ada file yang diunggah
-        if ($request->hasFile('fileReport')) {
-            $counter = 1; // Selalu mulai dari 1 untuk setiap request upload baru
-
-            foreach ($request->file('fileReport') as $file) {
-                // Generate nama file berdasarkan nomor urut dalam request
-                $fileName = $codeAsset . '_1_' . $documentCode . '_' . $counter . '.' . $file->getClientOriginalExtension();
-
-                // Simpan file ke storage/app/public/fileMainten
-                $file->storeAs('fileMainten', $fileName, 'public');
-
-                // Simpan informasi file ke database
-                FileMainten::create([
-                    'maintenance_id' => $maintenance->id,
-                    'nameFile' => $fileName,
-                    'type' => '1', // 1 = dokumen report
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-                $counter++; // Tambah nomor urut untuk file berikutnya
-            }
-        }
+        try {
+            $codeAsset = $request->codeAsset;
+            $documentCode = DocService::generateDocumentCodeMaintenance();
+            $dataItemAsset = ItemAsset::where('code_assets', $codeAsset)->first();
+            $dataItemAsset->update(['status' => 'Maintenance', 'updated_at' => now()]);
         
-        return redirect()->route('itemAsset', $codeAsset )->with('alert', [
-            'type' => 'success',
-            'messages' => ['Permasalahan Berhasil di laporkan'],
-        ]);
+            $dataMainten = [
+                'code_maintenance' => $documentCode,
+                'item_asset_id' => $dataItemAsset->id,
+                'user_id_report' => Auth::id(),
+                'report_type' => $request->reportType,
+                'problem_detail' => $request->problemDetail,
+                'status_mainten' => 'Reported',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            // Input data Maintenance ke database
+            $maintenance = Maintenance::create($dataMainten);
+
+            // Jika ada file yang diunggah
+            if ($request->hasFile('fileReport')) {
+                $counter = 1; // Selalu mulai dari 1 untuk setiap request upload baru
+
+                foreach ($request->file('fileReport') as $file) {
+                    // Generate nama file berdasarkan nomor urut dalam request
+                    $fileName = $codeAsset . '_1_' . $documentCode . '_' . $counter . '.' . $file->getClientOriginalExtension();
+
+                    // Simpan file ke storage/app/public/fileMainten
+                    $file->storeAs('fileMainten', $fileName, 'public');
+
+                    // Simpan informasi file ke database
+                    FileMainten::create([
+                        'maintenance_id' => $maintenance->id,
+                        'nameFile' => $fileName,
+                        'type' => '1', // 1 = dokumen report
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                    $counter++; // Tambah nomor urut untuk file berikutnya
+                }
+            }
+
+            // Commit transaksi
+            DB::commit();
+            
+            return redirect()->route('itemAsset', $codeAsset )->with('alert', [
+                'type' => 'success',
+                'messages' => ['Permasalahan Berhasil di laporkan'],
+            ]);
+        
+        } catch (\Exception $e) {
+            // Rollback Upload jika terjadi error
+            DB::rollBack();
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => ['Terjadi kesalahan Proses Upload: ' . $e->getMessage()],
+            ]);
+        }
     }
 
     
@@ -206,13 +221,7 @@ class MaintenenceCtrl extends Controller
             'fileReport.*.mimes' => 'Image Upload harus berupa pdf, png, jpg, jpeg !!.',
             'fileReport.*.max' => 'Image Upload maksimal 2MB !!.',
         ]);
-
-        if ($request->statusResolve == 'Finish') $statusItemAsset = 'Available';
-        else if ($request->statusResolve == 'Damaged') $statusItemAsset = 'Damaged';
-
-        $dataMainten = Maintenance::where('code_maintenance', $request->codeMaintence)->first();
-        $dataItemAsset = ItemAsset::where('id', $dataMainten->item_asset_id)->first();
-
+        
         if ($validator->fails()) {
             return back()->with('alert', [
                 'type' => 'danger',
@@ -220,47 +229,68 @@ class MaintenenceCtrl extends Controller
             ]);
         }
 
-        $dataMaintenRepare = [
-            'vendor_id' => $request->vendor,
-            'user_id_resolve' => Auth::id(),
-            'repaire_detail' => $request->repairDetail,
-            'cost' => $request->cost,
-            'status_mainten' => 'Finish',
-            'date_mainten' => now(),
-            'updated_at' => now(),
-        ];
+        // Mulai database transaction
+        DB::beginTransaction();
+        
+        try {
 
-        // Jika ada file yang diunggah
-        if ($request->hasFile('fileReport')) {
-            $counter = 1; // Selalu mulai dari 1 untuk setiap request upload baru
+            if ($request->statusResolve == 'Finish') $statusItemAsset = 'Available';
+            else if ($request->statusResolve == 'Damaged') $statusItemAsset = 'Damaged';
+            $dataMainten = Maintenance::where('code_maintenance', $request->codeMaintence)->first();
+            $dataItemAsset = ItemAsset::where('id', $dataMainten->item_asset_id)->first();
+            $dataMaintenRepare = [
+                'vendor_id' => $request->vendor,
+                'user_id_resolve' => Auth::id(),
+                'repaire_detail' => $request->repairDetail,
+                'cost' => $request->cost,
+                'status_mainten' => 'Finish',
+                'date_mainten' => now(),
+                'updated_at' => now(),
+            ];
 
-            foreach ($request->file('fileReport') as $file) {
-                // Generate nama file berdasarkan nomor urut dalam request
-                $fileName = $dataItemAsset->code_assets . '_2_' . $request->codeMaintence . '_' . $counter . '.' . $file->getClientOriginalExtension();
+            // Jika ada file yang diunggah
+            if ($request->hasFile('fileReport')) {
+                $counter = 1; // Selalu mulai dari 1 untuk setiap request upload baru
 
-                // Simpan file ke storage/app/public/fileMainten
-                $file->storeAs('fileMainten', $fileName, 'public');
+                foreach ($request->file('fileReport') as $file) {
+                    // Generate nama file berdasarkan nomor urut dalam request
+                    $fileName = $dataItemAsset->code_assets . '_2_' . $request->codeMaintence . '_' . $counter . '.' . $file->getClientOriginalExtension();
 
-                // Simpan informasi file ke database
-                FileMainten::create([
-                    'maintenance_id' => $dataMainten->id,
-                    'nameFile' => $fileName,
-                    'type' => '2', // 1 = dokumen report
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                    // Simpan file ke storage/app/public/fileMainten
+                    $file->storeAs('fileMainten', $fileName, 'public');
 
-                $counter++; // Tambah nomor urut untuk file berikutnya
+                    // Simpan informasi file ke database
+                    FileMainten::create([
+                        'maintenance_id' => $dataMainten->id,
+                        'nameFile' => $fileName,
+                        'type' => '2', // 1 = dokumen report
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+
+                    $counter++; // Tambah nomor urut untuk file berikutnya
+                }
             }
+
+            $dataMainten->update($dataMaintenRepare);
+            $dataItemAsset->update(['status' => $statusItemAsset, 'updated_at' => now()]);
+
+            // Commit transaksi
+            DB::commit();
+
+            return redirect()->route('dashboard')->with('alert', [
+                'type' => 'success',
+                'messages' => ['Permasalahan Berhasil di Perbaiki'],
+            ]);
+
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi error
+            DB::rollBack();
+            return back()->with('alert', [
+                'type' => 'danger',
+                'messages' => ['Terjadi kesalahan: ' . $e->getMessage()],
+            ]);
         }
-
-        $dataMainten->update($dataMaintenRepare);
-        $dataItemAsset->update(['status' => $statusItemAsset, 'updated_at' => now()]);
-
-        return redirect()->route('dashboard')->with('alert', [
-            'type' => 'success',
-            'messages' => ['Permasalahan Berhasil di Perbaiki'],
-        ]);
     }
 
     public function refreshSchedule()

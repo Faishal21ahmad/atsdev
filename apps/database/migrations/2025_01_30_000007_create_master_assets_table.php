@@ -23,10 +23,8 @@ return new class extends Migration
             $table->text('description', 300)->nullable();
             $table->timestamps();
             $table->softDeletes();
-
             // Foreign Key
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-
             // Indexes
             $table->index('category_id');
             $table->index('asset_name');

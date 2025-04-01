@@ -3,12 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\ItemAsset;
-use Illuminate\Support\Str;
 use App\Services\DocService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ItemAssetsSeeder extends Seeder
 {

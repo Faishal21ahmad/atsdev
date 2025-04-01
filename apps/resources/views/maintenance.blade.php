@@ -23,7 +23,6 @@
                         <th class="py-3 px-2 whitespace-nowrap">Type Report</th>
                         {{-- <th class="py-3 px-2 whitespace-nowrap">Problem Detail</th> --}}
                         <th class="py-3 px-2 whitespace-nowrap">Status Mainten</th>
-
                         @can('resolve-maintenance')
                             <th class="py-3 px-2 whitespace-nowrap text-center">Action</th>
                         @endcan
@@ -45,9 +44,7 @@
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->itemasset->location->location_name ?? 'Unknown' }}</td>
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ \Carbon\Carbon::parse($maintenance->created_at)->format('d/M/Y') }}</td>
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->report_type }}</td>
-                        {{-- <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->problem_detail ?? '-' }}</td> --}}
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate">{{ $maintenance->status_mainten ?? '-' }}</td>
-                        
                         @can('resolve-maintenance')
                         <td class="py-3 px-2 whitespace-nowrap max-w-[20ch] truncate text-center">
                             <a href="{{ route('mainten.resolve', $maintenance->code_maintenance ) }}" class="py-2 px-4 text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">handle</a>
@@ -65,6 +62,4 @@
             </table>
         </div>
     </div>
-
-
 </x-layoutdsbd>

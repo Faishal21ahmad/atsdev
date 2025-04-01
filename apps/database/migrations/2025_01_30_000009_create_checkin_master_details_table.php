@@ -20,11 +20,9 @@ return new class extends Migration
             $table->decimal('sub_total', 40, 2);
             $table->timestamps();
             $table->softDeletes();
-
             // Foreign Keys
             $table->foreign('check_in_id')->references('id')->on('checkins')->onDelete('cascade');
             $table->foreign('master_asset_id')->references('id')->on('master_assets')->onDelete('cascade');
-
             // Indexes
             $table->index('check_in_id');
             $table->index('master_asset_id');

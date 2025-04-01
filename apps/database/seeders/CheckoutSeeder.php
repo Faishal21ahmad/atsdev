@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Checkout;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CheckoutSeeder extends Seeder
 {
@@ -20,14 +19,12 @@ class CheckoutSeeder extends Seeder
             ['vendor_id' => 4, 'user_id' => 1, 'codecheckout' => 'CHO25052024A004', 'description' => 'Checkout for vendor 4'],
             ['vendor_id' => 5, 'user_id' => 1, 'codecheckout' => 'CHO25052024A005', 'description' => 'Checkout for vendor 5'],
         ];
-
         // Menambahkan created_at dan updated_at ke setiap elemen
         $checkouts = array_map(function($item) {
             $item['created_at'] = now();
             $item['updated_at'] = now();
             return $item;
         }, $checkouts);
-        
         Checkout::insert($checkouts);
     }
 }

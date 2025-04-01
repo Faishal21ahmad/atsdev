@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\CheckinMasterDetail;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CheckinMasterDetailSeeder extends Seeder
@@ -18,7 +17,6 @@ class CheckinMasterDetailSeeder extends Seeder
             ['check_in_id' => 1, 'master_asset_id' => 2, 'quantity' => 3, 'unit_price' => 2000000, 'sub_total' => 6000000],
             ['check_in_id' => 2, 'master_asset_id' => 3, 'quantity' => 4, 'unit_price' => 1200000, 'sub_total' => 4800000],
         ];
-
         // Menambahkan created_at dan updated_at ke setiap elemen
         $checkindetails = array_map(function($item) {
             $item['created_at'] = now();

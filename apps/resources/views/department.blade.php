@@ -13,7 +13,6 @@
                     <input type="text" id="inputSearch" class="block p-2 ps-10 text-sm text-slate-900 border border-slate-300 rounded-lg w-40 lg:w-80  bg-slate-50 focus:ring-slate-300 focus:border-slate-300 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Search Department">
                 </div>
             </div>
-            
             <div class="flex items-center space-x-2">
                 @can('add-department')
                     <button id="addButton"

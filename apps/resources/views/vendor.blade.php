@@ -120,7 +120,6 @@
                                 <label for="contact" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">Contact</label>
                                 <input type="number" name="contact" id="contact" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Contact">
                             </div>
-
                             <div class="col-span-2">
                                 <label for="address" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">Address</label>
                                 <input type="text" id="address" name="address" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-slate-50 focus:border-slate-600 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500" placeholder="Write vendor address here">                   

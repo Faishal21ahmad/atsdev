@@ -21,7 +21,6 @@
                         >
                 </div>
             </div>
-
             <div>
                 <label for="password" class="block text-sm font-medium text-slate-900 dark:text-slate-200">Password</label>
                 <div class="mt-2 relative">
@@ -39,7 +38,6 @@
                     </button>
                 </div>
             </div>
-
             <div class="">
                 <button type="submit" class="flex w-[50%] px-3 py-3 shadow-md text-sm mx-auto justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-0 dark:text-white rounded-md">
                     Log in

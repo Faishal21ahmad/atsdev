@@ -20,10 +20,9 @@ return new class extends Migration
             $table->decimal('total', 40, 2);
             $table->timestamps();
             $table->softDeletes();
-
+            // Foreign Keys
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
-            
             // Indexes
             $table->index('codecheckin');
             $table->index('vendor_id');

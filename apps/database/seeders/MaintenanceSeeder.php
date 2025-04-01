@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\ItemAsset;
 use App\Models\Maintenance;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class MaintenanceSeeder extends Seeder
 {
