@@ -53,4 +53,3 @@ https://<ip-device>:884
 ```
 
 Your application is now ready to use!
-

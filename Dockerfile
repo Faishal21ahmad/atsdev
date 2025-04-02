@@ -19,14 +19,6 @@ COPY apps .
 
 # Install PHP dependencies and generate key
 RUN composer install --no-dev --optimize-autoloader
-RUN php artisan key:generate
-
-# Set permissions untuk storage dan cache Laravel
-RUN chmod -R 775 storage bootstrap/cache
-RUN chown -R $USER:www-data storage bootstrap/cache
-
-# Link storage and migrate database
-RUN php artisan storage:link
 
 # Copy konfigurasi Nginx
 COPY nginx.conf /etc/nginx/sites-available/default
