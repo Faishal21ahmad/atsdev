@@ -13,6 +13,7 @@ Ensure you have the following installed on your system:
 ### 1. Set Up Application Dependencies
 ```sh
 cd apps/
+composer install
 npm install
 ```
 

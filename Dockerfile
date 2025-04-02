@@ -21,10 +21,6 @@ COPY apps .
 RUN composer install --no-dev --optimize-autoloader
 RUN php artisan key:generate
 
-# optimize laravel
-RUN php artisan config:clear
-RUN php artisan config:cache
-
 # Set permissions untuk storage dan cache Laravel
 RUN chmod -R 775 storage bootstrap/cache
 RUN chown -R $USER:www-data storage bootstrap/cache
@@ -37,3 +33,6 @@ COPY nginx.conf /etc/nginx/sites-available/default
 
 # Expose port yang diperlukan
 EXPOSE 80 443 7774 884 9000 3306
+
+# Start Nginx dan PHP-FPM
+CMD service nginx start && php-fpm
