@@ -5,7 +5,7 @@ FROM php:8.4-fpm
 WORKDIR /var/www/html
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade && apt-get install -y \
     nano git unzip libzip-dev libonig-dev libxml2-dev libssl-dev \
     libpng-dev libjpeg-dev libfreetype6-dev nginx curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \

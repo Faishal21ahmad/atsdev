@@ -1,19 +1,18 @@
 <x-layoutdsbd title="{{ $title }}" user="{{ $user['name'] }}" role="{{ $user['role'] }}">
     <x-btnback href="javascript:history.back()" />
     <div class="container mx-auto w-full mt-5">
-        {{-- {{ $dataItem }} --}}
-        <div class="flex gap-4 justify-between">
+        <div class="flex gap-4">
             <div id="qrmain" class="hidden lg:block flex-none">
                 <img width="200" height="200" src="{{ asset('storage/fileQR/' . $dataItem->code_assets .'.svg'); }}" class="p-2 object-contain rounded-md bg-white" alt="">
             </div>
             <!-- Left Section -->
-            <div class="w-3/4 text-slate-900 dark:text-slate-100">
+            <div class="relative w-full text-slate-900 dark:text-slate-100">
                 <div class="flex gap-4">
                     <p class="text-lg">{{ $dataItem->code_assets }}</p>
                     <p class="text-lg">{{ $dataItem->location->location_name ?? 'Unknown' }}</p>
                 </div>
                 <p class="text-3xl font-semibold">{{ $dataItem->masterAsset->asset_name }}</p>
-                <div class="flex w-full text-lg text-slate-600 dark:text-slate-200 space-x-1">
+                <div class="flex w-full text-base text-slate-600 dark:text-slate-200 space-x-1">
                     <div class="">
                         <p class="truncate">Date In </p>
                         <p class="truncate">Date Out </p>
@@ -36,37 +35,36 @@
                         </p>
                     </div>
                 </div>
-            </div>
-        
-            <!-- Right Section -->
-            <div class="w-1/2 lg:w-1/4">
-                <div class="flex flex-col items-start gap-2 text-lg">
-                    @can('edit-item-asset')
-                    <button id="updateItemAssetButton" data-modal-target="updateItemAssetModal" data-modal-toggle="updateItemAssetModal" class="p-2 w-full text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">Edit</button>
-                    @endcan
-                    @can('printqr-item-asset')
-                        <a href="{{ route('printbycode', $dataItem->code_assets ) }}"  target="blank"  class="w-full">
-                            <button class="p-2 w-full  text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">Print QR</button>
-                        </a>
-                    @endcan
-                    @can('report-maintenance')
-                        @if ($dataItem->status == 'Available')
-                            <a href="{{ route('mainten.report', $dataItem->code_assets ) }}" 
-                                class="p-2 w-full truncate text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">
-                                Report Mainten
+            
+              	 <!-- Right Section -->
+                <div class="absolute right-0  top-0">
+                    <div class="flex flex-col items-start gap-2 text-base md:text-lg">
+                        @can('edit-item-asset')
+                        <button id="updateItemAssetButton" data-modal-target="updateItemAssetModal" data-modal-toggle="updateItemAssetModal" class="p-2 w-full text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">Edit</button>
+                        @endcan
+                        @can('printqr-item-asset')
+                            <a href="{{ route('printbycode', $dataItem->code_assets ) }}"  target="blank"  class="w-full">
+                                <button class="p-2 w-full  text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">Print QR</button>
                             </a>
-                        @endif
-                    @endcan
+                        @endcan
+                        @can('report-maintenance')
+                            @if ($dataItem->status == 'Available')
+                                <a href="{{ route('mainten.report', $dataItem->code_assets ) }}" 
+                                    class="p-2 w-full truncate text-center shadow-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white rounded-md">
+                                    Report Mainten
+                                </a>
+                            @endif
+                        @endcan
+                    </div>
                 </div>
             </div>
-            
         </div>
     </div>
     <div class="w-full h-1 my-4 bg-slate-200 dark:bg-slate-800 rounded-md"></div>
     <div class="container mx-auto w-full flex">
         <div class="w-full">
-            <h1 class="font-semibold text-2xl text-slate-900 dark:text-slate-100">Deskripsi</h1>
-            <p class="text-lg text-slate-900 dark:text-slate-100">{{ $dataItem->description ?? 'Unknown'}}</p>
+            <h1 class="font-semibold text-xl text-slate-900 dark:text-slate-100">Deskripsi</h1>
+            <p class="text-base text-slate-900 dark:text-slate-100">{{ $dataItem->description ?? 'Unknown'}}</p>
         </div>
         <div id="qr" class="flex-non lg:hidden block">
         </div>
@@ -76,13 +74,12 @@
     <!-- Asset List -->
     <div class="container mx-auto w-full">
         <div class="w-full flex justify-between mb-2">
-            <h1 class="text-2xl py-2 font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap overflow-hidden">Maintenance History</h1>
+            <h1 class="text-xl py-2 font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap overflow-hidden">Maintenance History</h1>
         </div>
-    
-        <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300 scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+        <div class="w-full overflow-x-auto text-base scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300 scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
             <table class="table-auto w-full text-left">
                 <thead>
-                    <tr class="sticky top-0 text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-700 shadow-md">
+                    <tr class="sticky top-0 text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-700 shadow-md ">
                         <th class="py-3 px-1 whitespace-nowrap text-center">No</th>
                         <th class="py-3 px-1 whitespace-nowrap">Code Mantence</th>
                         <th class="py-3 px-1 whitespace-nowrap">Date</th>

@@ -1,5 +1,4 @@
 <x-layoutdsbd title="{{ $title }}" user="{{ $user['name'] }}" role="{{ $user['role'] }}">
-    
     <div class="flex justify-between">
         <x-btnback href="{{ route('asset') }}" /> 
         <div class="flex items-center space-x-2">
@@ -21,9 +20,9 @@
     <div class="container mx-auto w-full mt-5">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 items-start">
             <!-- Kotak 1 (Info) -->
-            <div class="order-1 md:order-1 lg:order-1">
+            <div class="order-1 md:order-1 lg:order-1 space-y-2">
                 <h1 class="text-3xl font-semibold text-slate-900 dark:text-slate-100">{{ $assetMaster->asset_name }}</h1>
-                <div class="flex w-full text-lg text-slate-600 dark:text-slate-200 space-x-1">
+                <div class="flex w-full text-base text-slate-600 dark:text-slate-200 space-x-1">
                     <div class="">
                         <p class="truncate">Mainten Interval </p>
                         <p class="truncate">Stock Minimum </p>
@@ -35,15 +34,14 @@
                         <p class="truncate">: {{ $assetMaster->min_stock ?? '-' }}</p>
                         <p class="truncate">: {{ $assetMaster->current_stock ?? '-' }}</p>
                         <p class="truncate">: {{ $assetMaster->category->category_name ?? '-' }}</p>
-
                     </div>
                 </div>
             </div>
         
             <!-- Kotak 2 (Deskripsi) -->
-            <div class="order-2 md:order-2 lg:order-2">
-                <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">Deskripsi</h1>
-                <div class="h-56 text-slate-600 dark:text-slate-200 overflow-y-auto rounded-md
+            <div class="order-2 md:order-2 lg:order-2 space-y-2">
+                <h1 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Deskripsi</h1>
+                <div class="h-56 text-base text-slate-600 dark:text-slate-200 overflow-y-auto rounded-md
                     scrollbar-thin scrollbar-thumb-rounded-full 
                     scrollbar-thumb-slate-300 scrollbar-track-slate-100 
                     dark:scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500">
@@ -78,7 +76,6 @@
                         </button>
                     </div>
                 @endif
-
             </div>
         </div>
         
@@ -111,7 +108,7 @@
         <div class="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-slate-300  scrollbar-track-slate-100 dark:scrollbar-thumb-slate-300  dark:scrollbar-track-slate-500 scrollbar-thumb-rounded-full  scrollbar-track-rounded-full h-screen">
             <table class="table-auto w-full text-left">
                 <thead>
-                    <tr class="sticky top-0 text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-700 shadow-md">
+                    <tr class="sticky top-0 text-base text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-200 dark:border-slate-700 shadow-md">
                         <th class="py-3 px-1 whitespace-nowrap text-center">No</th>
                         <th class="py-3 px-1 whitespace-nowrap">Code Asset</th>
                         <th class="py-3 px-1 whitespace-nowrap">Location</th>

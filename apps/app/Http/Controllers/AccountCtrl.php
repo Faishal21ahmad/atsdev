@@ -86,7 +86,6 @@ class AccountCtrl extends Controller
         ]);
     }
 
-
     public function actionUpdateAccount(Request $request){
         $validator = Validator::make($request->all(), [
             'modalId' => 'required|numeric',
