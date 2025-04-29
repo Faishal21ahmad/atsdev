@@ -1,4 +1,3 @@
-version: '3.9'
 services:
   db:
     image: mariadb:latest
@@ -55,7 +54,6 @@ services:
     command: >
       sh -c "
       sleep 15 &&
-      php artisan migrate:fresh --seed &&
       chmod -R 775 storage bootstrap/cache &&
       chown -R $USER:www-data storage bootstrap/cache &&
       php artisan key:generate &&

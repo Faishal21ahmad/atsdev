@@ -46,7 +46,13 @@ nano docker-compose.yml  # Edit configuration
 sudo docker-compose up -d
 ```
 
-### 7. Access the Application 
+### 7. Store Database
+```sh
+docker exec -it atsapp bash
+php artisan migrate:fresh --seed 
+```
+
+### 8. Access the Application 
 Open your web browser and access the application at:
 ```sh
 https://<ip-device>:884

@@ -9,3 +9,4 @@
 /ssl/key.pem
 /mysql/*
 coret.txt
+copy-docker-compose.yml
