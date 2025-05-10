@@ -54,10 +54,6 @@ services:
     command: >
       sh -c "
       sleep 15 &&
-      chmod -R 775 storage bootstrap/cache &&
-      chown -R $USER:www-data storage bootstrap/cache &&
-      php artisan key:generate &&
-      php artisan storage:link &&
       service nginx start &&
       php-fpm"
 

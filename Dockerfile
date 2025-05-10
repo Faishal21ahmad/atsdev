@@ -5,8 +5,8 @@ FROM php:8.4-fpm
 WORKDIR /var/www/html
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    nano git unzip libzip-dev libonig-dev libxml2-dev libssl-dev \
+RUN apt-get update && apt-get install -y ca-certificates \
+    update-ca-certificates nano git unzip libzip-dev libonig-dev libxml2-dev libssl-dev \
     libpng-dev libjpeg-dev libfreetype6-dev nginx curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd pdo_mysql zip exif pcntl bcmath

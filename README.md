@@ -46,9 +46,13 @@ nano docker-compose.yml  # Edit configuration
 sudo docker-compose up -d
 ```
 
-### 7. Store Database
+### 7. Run Command 
 ```sh
 docker exec -it atsapp bash
+chmod -R 775 storage bootstrap/cache
+chown -R $USER:www-data storage bootstrap/cache
+php artisan key:generate
+php artisan storage:link
 php artisan migrate:fresh --seed 
 ```
 
