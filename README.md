@@ -54,6 +54,7 @@ chown -R $USER:www-data storage bootstrap/cache
 php artisan key:generate
 php artisan storage:link
 php artisan migrate:fresh --seed 
+update-ca-certificates
 ```
 
 ### 8. Access the Application 
